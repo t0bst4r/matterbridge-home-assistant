@@ -36,6 +36,10 @@ const project = new typescript.TypeScriptProject({
     },
   },
 
+  githubOptions: {
+    mergify: false,
+  },
+
   gitignore: [
     '.idea',
     '/.env',
