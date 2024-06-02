@@ -6,8 +6,9 @@ This **Matterbridge Home Assistant** package provides bindings to connect [HomeA
 
 ## Installation
 - Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to setup `matterbridge`.
-- Run `npm install -g matterbridge-home-assistant` and  `matterbridge -add matterbridge-home-assistant`
-- Make the plugin is configured properly using environment variables.
+- Install the plugin `npm install -g matterbridge-home-assistant` 
+- Make sure the plugin is configured properly using environment variables (see [Configuration](#configuration)).
+- Activate the plugin `matterbridge -add matterbridge-home-assistant`
 - Start matterbridge using `matterbridge -bridge`
 
 ## Configuration
