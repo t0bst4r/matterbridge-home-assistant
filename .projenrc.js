@@ -23,6 +23,8 @@ const project = new typescript.TypeScriptProject({
     '@dotenvx/dotenvx',
   ],
 
+  releaseToNpm: true,
+
   tsconfig: {
     compilerOptions: {
       target: 'esnext',
