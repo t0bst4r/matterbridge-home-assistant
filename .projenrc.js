@@ -24,6 +24,7 @@ const project = new typescript.TypeScriptProject({
   ],
 
   releaseToNpm: true,
+  npmProvenance: false,
 
   tsconfig: {
     compilerOptions: {

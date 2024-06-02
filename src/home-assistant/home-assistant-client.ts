@@ -18,6 +18,7 @@ export interface HomeAssistantClientConfig {
 
 export class HomeAssistantClient {
   public static async create(url: string, accessToken: string, config?: HomeAssistantClientConfig): Promise<HomeAssistantClient> {
+    url = url.replace(/\/$/, '');
     const auth = createLongLivedTokenAuth(url, accessToken);
     const connection = await createConnection({ auth });
     return new HomeAssistantClient(connection, config ?? {});
