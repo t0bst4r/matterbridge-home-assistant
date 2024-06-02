@@ -1,12 +1,24 @@
 {
   "dependencies": [
     {
+      "name": "@dotenvx/dotenvx",
+      "type": "build"
+    },
+    {
+      "name": "@types/glob-to-regexp",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
     {
       "name": "@types/node",
       "version": "^18",
+      "type": "build"
+    },
+    {
+      "name": "@types/ws",
       "type": "build"
     },
     {
@@ -76,7 +88,19 @@
       "type": "peer"
     },
     {
+      "name": "glob-to-regexp",
+      "type": "runtime"
+    },
+    {
+      "name": "home-assistant-js-websocket",
+      "type": "runtime"
+    },
+    {
       "name": "node-ansi-logger",
+      "type": "runtime"
+    },
+    {
+      "name": "ws",
       "type": "runtime"
     }
   ],

@@ -1,20 +1,64 @@
-import { Matterbridge, MatterbridgeDevice, MatterbridgeDynamicPlatform, PlatformConfig } from 'matterbridge';
+import { HassEntities, HassEntity } from 'home-assistant-js-websocket';
+import { Matterbridge, MatterbridgeDynamicPlatform, PlatformConfig } from 'matterbridge';
 import { AnsiLogger } from 'node-ansi-logger';
+import { HomeAssistantDevice } from './devices/home-assistant-device.js';
 import { LightDevice } from './devices/light-device.js';
+import { SwitchDevice } from './devices/switch-device.js';
+import { HomeAssistantClient, HomeAssistantClientConfig } from './home-assistant/home-assistant-client.js';
+
+export interface HomeAssistantPlatformConfig extends PlatformConfig {
+  homeAssistantUrl: string;
+  homeAssistantAccessToken: string;
+  homeAssistantClientConfig: HomeAssistantClientConfig;
+}
 
 export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
 
-  private light: MatterbridgeDevice | undefined;
+  private client!: HomeAssistantClient;
+  private unsupportedEntities = new Set<string>();
+  private devices = new Map<string, HomeAssistantDevice>();
 
-  constructor(matterbridge: Matterbridge, log: AnsiLogger, config: PlatformConfig) {
-    super(matterbridge, log, config);
+  private deviceFactories: Record<string, (entity: HassEntity) => HomeAssistantDevice> = {
+    light: entity => new LightDevice(this.client, entity),
+    switch: entity => new SwitchDevice(this.client, entity),
+    media_player: entity => new SwitchDevice(this.client, entity, state => state.state !== 'off'),
+  };
+
+  constructor(matterbridge: Matterbridge, log: AnsiLogger, private readonly platformConfig: HomeAssistantPlatformConfig) {
+    super(matterbridge, log, platformConfig);
   }
 
   override async onStart(reason?: string) {
     this.log.info('onStart called with reason:', reason ?? 'none');
+    this.client = await HomeAssistantClient.create(
+      this.platformConfig.homeAssistantUrl,
+      this.platformConfig.homeAssistantAccessToken,
+      this.platformConfig.homeAssistantClientConfig,
+    );
+    this.client.subscribe(this.updateEntities.bind(this));
+  }
 
-    this.light = new LightDevice('Light 1', 'light.couch');
-    await this.registerDevice(this.light);
+  private updateEntities(entities: HassEntities): void {
+    Object.entries(entities)
+      .filter(([key]) => !this.unsupportedEntities.has(key))
+      .forEach(([, entity]) => this.updateEntity(entity));
+  }
+
+  private async updateEntity(entity: HassEntity): Promise<void> {
+    let device = this.devices.get(entity.entity_id);
+    if (!device) {
+      const domain = entity.entity_id.split('.')[0];
+      if (this.deviceFactories[domain]) {
+        device = this.deviceFactories[domain](entity);
+        await this.registerDevice(device);
+        this.devices.set(entity.entity_id, device);
+      } else {
+        this.unsupportedEntities.add(entity.entity_id);
+        this.log.debug(`Entity ${entity.entity_id} is not supported`);
+        return;
+      }
+    }
+    await device.updateState(entity);
   }
 
   override async onShutdown(reason?: string) {

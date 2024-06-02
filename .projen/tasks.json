@@ -192,7 +192,7 @@
           "exec": "matterbridge -add ./"
         },
         {
-          "exec": "matterbridge -bridge"
+          "exec": "dotenvx run -f .env.local -- matterbridge -bridge"
         }
       ]
     },
@@ -242,13 +242,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,eslint-import-resolver-typescript,eslint-plugin-import,jest,projen,ts-jest,typescript,@project-chip/matter-node.js,@project-chip/matter.js,matterbridge,node-ansi-logger"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@dotenvx/dotenvx,@types/glob-to-regexp,@types/jest,@types/ws,eslint-import-resolver-typescript,eslint-plugin-import,jest,projen,ts-jest,typescript,@project-chip/matter-node.js,@project-chip/matter.js,matterbridge,glob-to-regexp,home-assistant-js-websocket,node-ansi-logger,ws"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit projen standard-version ts-jest typescript @project-chip/matter-node.js @project-chip/matter.js matterbridge node-ansi-logger"
+          "exec": "yarn upgrade @dotenvx/dotenvx @types/glob-to-regexp @types/jest @types/node @types/ws @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit projen standard-version ts-jest typescript @project-chip/matter-node.js @project-chip/matter.js matterbridge glob-to-regexp home-assistant-js-websocket node-ansi-logger ws"
         },
         {
           "exec": "npx projen"

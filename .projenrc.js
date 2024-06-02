@@ -7,12 +7,20 @@ const project = new typescript.TypeScriptProject({
   projenrcJs: true,
 
   deps: [
+    'home-assistant-js-websocket',
+    'glob-to-regexp',
     'node-ansi-logger',
+    'ws',
   ],
   peerDeps: [
     '@project-chip/matter.js',
     '@project-chip/matter-node.js',
     'matterbridge',
+  ],
+  devDeps: [
+    '@types/glob-to-regexp',
+    '@types/ws',
+    '@dotenvx/dotenvx',
   ],
 
   tsconfig: {
@@ -25,7 +33,11 @@ const project = new typescript.TypeScriptProject({
     },
   },
 
-  gitignore: ['.idea'],
+  gitignore: [
+    '.idea',
+    '/.env',
+    '/.env.*',
+  ],
 });
 project.package.addField('type', 'module');
 
@@ -34,7 +46,7 @@ project.addTask('serve', {
     { spawn: 'compile' },
     { exec: 'matterbridge -factoryreset' },
     { exec: 'matterbridge -add ./' },
-    { exec: 'matterbridge -bridge' },
+    { exec: 'dotenvx run -f .env.local -- matterbridge -bridge' },
   ],
 });
 
