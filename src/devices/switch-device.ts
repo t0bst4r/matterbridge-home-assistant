@@ -11,7 +11,7 @@ export class SwitchDevice extends HomeAssistantDevice {
   constructor(homeAssistantClient: HomeAssistantClient, entity: HassEntity, isOn?: (state: HassEntity) => boolean) {
     super(homeAssistantClient, entity, DeviceTypes.ON_OFF_PLUGIN_UNIT);
 
-    this.isOn = isOn ?? (state => state.state === 'on');
+    this.isOn = isOn ?? (state => state.state !== 'off');
 
     this.createDefaultIdentifyClusterServer();
     this.addCommandHandler('identify', this.identify.bind(this));

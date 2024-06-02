@@ -21,7 +21,8 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
   private deviceFactories: Record<string, (entity: HassEntity) => HomeAssistantDevice> = {
     light: entity => new LightDevice(this.client, entity),
     switch: entity => new SwitchDevice(this.client, entity),
-    media_player: entity => new SwitchDevice(this.client, entity, state => state.state !== 'off'),
+    media_player: entity => new SwitchDevice(this.client, entity),
+    scene: entity => new SwitchDevice(this.client, entity),
   };
 
   constructor(matterbridge: Matterbridge, log: AnsiLogger, private readonly platformConfig: HomeAssistantPlatformConfig) {
