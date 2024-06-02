@@ -15,7 +15,7 @@ This **Matterbridge Home Assistant** package provides bindings to connect [HomeA
 This package can be configured using environment variables.
 
 - `HOME_ASSISTANT_URL` - the home assistant url (e.g. `http://192.168.178.23:8123`)
-- `HOME_ASSISTANT_ACCSESS_TOKEN` - a long living access token created in Home Assistant
+- `HOME_ASSISTANT_ACCESS_TOKEN` - a long living access token created in Home Assistant
 - `HOME_ASSISTANT_CLIENT_CONFIG` - a json string containing the client config (see below)
 
 ### Client Config
@@ -54,7 +54,7 @@ interface HomeAssistantClientConfig {
 ### Example Configuration
 ```
 HOME_ASSISTANT_URL=http://192.168.178.23:8123
-HOME_ASSISTANT_ACCSESS_TOKEN=ey....yQ
+HOME_ASSISTANT_ACCESS_TOKEN=ey....yQ
 HOME_ASSISTANT_CLIENT_CONFIG={ "includeDomains": ["light", "media_player"], "excludePatterns": ["media_player.*echo*"] }
 ```
 

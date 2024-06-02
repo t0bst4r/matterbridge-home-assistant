@@ -5,7 +5,7 @@ import { HomeAssistantClientConfig } from './home-assistant/home-assistant-clien
 import { HomeAssistantPlatform } from './platform.js';
 
 const homeAssistantUrl = process.env.HOME_ASSISTANT_URL!;
-const homeAssistantAccessToken = process.env.HOME_ASSISTANT_ACCSESS_TOKEN!;
+const homeAssistantAccessToken = process.env.HOME_ASSISTANT_ACCESS_TOKEN!;
 const homeAssistantClientConfig = JSON.parse(process.env.HOME_ASSISTANT_CLIENT_CONFIG ?? '{}') as HomeAssistantClientConfig;
 
 (global as any).WebSocket = ws.WebSocket;
