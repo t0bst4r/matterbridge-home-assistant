@@ -63,3 +63,7 @@ HOME_ASSISTANT_CLIENT_CONFIG={ "includeDomains": ["light", "media_player"], "exc
 - Switch entities (`switch.`) including on-off control
 - Media Players (`media_player.`) are mapped to Switches and currently only support on-off control
 
+---
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/t0bst4r)
+
