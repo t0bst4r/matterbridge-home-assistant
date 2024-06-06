@@ -242,7 +242,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@dotenvx/dotenvx,@types/glob-to-regexp,@types/jest,@types/ws,eslint-import-resolver-typescript,eslint-plugin-import,jest,projen,ts-jest,typescript,@project-chip/matter-node.js,@project-chip/matter.js,matterbridge,glob-to-regexp,home-assistant-js-websocket,node-ansi-logger,ws"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@dotenvx/dotenvx,@types/glob-to-regexp,@types/jest,@types/ws,eslint-import-resolver-typescript,eslint-plugin-import,jest,projen,ts-jest,typescript,glob-to-regexp,home-assistant-js-websocket,node-ansi-logger,ws"
         },
         {
           "exec": "yarn install --check-files"

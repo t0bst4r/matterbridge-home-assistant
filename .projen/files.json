@@ -13,7 +13,6 @@
     ".projen/files.json",
     ".projen/tasks.json",
     "LICENSE",
-    "renovate.json5",
     "tsconfig.dev.json",
     "tsconfig.json"
   ],
