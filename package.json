@@ -38,7 +38,7 @@
     "jest": "^29.7.0",
     "jest-junit": "^15",
     "matterbridge": "1.2.19",
-    "projen": "^0.82.2",
+    "projen": "^0.82.4",
     "standard-version": "^9",
     "ts-jest": "^29.1.4",
     "typescript": "^5.4.5"
@@ -46,7 +46,7 @@
   "peerDependencies": {
     "@project-chip/matter-node.js": "^0.9.1",
     "@project-chip/matter.js": "^0.9.1",
-    "matterbridge": "^1.2.19"
+    "matterbridge": "^1.2.21"
   },
   "dependencies": {
     "glob-to-regexp": "^0.4.1",
