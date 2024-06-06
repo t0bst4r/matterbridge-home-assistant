@@ -13,9 +13,9 @@ const project = new typescript.TypeScriptProject({
     'ws',
   ],
   peerDeps: [
-    '@project-chip/matter.js',
-    '@project-chip/matter-node.js',
-    'matterbridge',
+    '@project-chip/matter.js@^0.9.1',
+    '@project-chip/matter-node.js@^0.9.1',
+    'matterbridge@^1.2.19',
   ],
   devDeps: [
     '@types/glob-to-regexp',
@@ -25,7 +25,6 @@ const project = new typescript.TypeScriptProject({
 
   releaseToNpm: true,
   npmProvenance: false,
-  renovatebot: true,
 
   tsconfig: {
     compilerOptions: {
