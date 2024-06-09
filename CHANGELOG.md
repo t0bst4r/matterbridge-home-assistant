@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.1](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.1.0...matterbridge-home-assistant-v0.1.1) (2024-06-09)
+
+
+### Bug Fixes
+
+* **deps:** update amannn/action-semantic-pull-request action to v5.5.2 ([#19](https://github.com/t0bst4r/matterbridge-home-assistant/issues/19)) ([f0cd9a6](https://github.com/t0bst4r/matterbridge-home-assistant/commit/f0cd9a6dab2a536f9d2e803f75fb2d6b955f3ca6))
+* **deps:** update dependency jest-junit to v16 ([#20](https://github.com/t0bst4r/matterbridge-home-assistant/issues/20)) ([a088ffa](https://github.com/t0bst4r/matterbridge-home-assistant/commit/a088ffa9a3c5d9ef8550eeec2005f4362808afce))
+* **deps:** update dependency matterbridge to v1.2.22 ([#18](https://github.com/t0bst4r/matterbridge-home-assistant/issues/18)) ([57fac30](https://github.com/t0bst4r/matterbridge-home-assistant/commit/57fac30af4a0219654900edc45d286e3f228f3f0))
+* pin node version to 18.x ([#22](https://github.com/t0bst4r/matterbridge-home-assistant/issues/22)) ([4d010e6](https://github.com/t0bst4r/matterbridge-home-assistant/commit/4d010e6b807bf1d81134ae925420d77f3dd9db85))
+
 ## [0.1.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.0.10...matterbridge-home-assistant-v0.1.0) (2024-06-09)
 
 
