@@ -30,25 +30,11 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
     private readonly platformConfig: HomeAssistantPlatformConfig,
   ) {
     super(matterbridge, log, platformConfig);
-    this.validateConfig();
-  }
-
-  private validateConfig(): void {
-    const errors: string[] = [];
-    if (!(this.platformConfig.homeAssistantUrl?.startsWith('http') ?? false)) {
-      errors.push(
-        `Home Assistant URL is not set. It must start with 'http', but was: '${this.platformConfig.homeAssistantUrl}'`,
-      );
-    }
-    if (!this.platformConfig.homeAssistantAccessToken) {
-      errors.push('Home Assistant Access Token is not set.');
-    }
-    if (errors.length > 0) {
-      throw new Error(errors.join('\n'));
-    }
+    log.setLogName('HomeAssistantPlatform');
   }
 
   override async onStart(reason?: string) {
+    this.validateConfig();
     this.log.info('onStart called with reason:', reason ?? 'none');
     this.client = await HomeAssistantClient.create(
       this.platformConfig.homeAssistantUrl,
@@ -84,5 +70,20 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
   override async onShutdown(reason?: string) {
     this.log.info('onShutdown called with reason:', reason ?? 'none');
     if (this.config.unregisterOnShutdown === true) await this.unregisterAllDevices();
+  }
+
+  private validateConfig(): void {
+    const errors: string[] = [];
+    if (!(this.platformConfig.homeAssistantUrl?.startsWith('http') ?? false)) {
+      errors.push(
+        `Home Assistant URL is not set. It must start with 'http', but was: '${this.platformConfig.homeAssistantUrl}'`,
+      );
+    }
+    if (!this.platformConfig.homeAssistantAccessToken) {
+      errors.push('Home Assistant Access Token is not set.');
+    }
+    if (errors.length > 0) {
+      throw new Error(errors.join('\n'));
+    }
   }
 }
