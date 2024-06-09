@@ -12,11 +12,13 @@
 /src/
 
 # Configs
-/tsconfig.base.json
-/tsconfig.dev.json
-/tsconfig.json
+.prettierrc.json
+eslint.config.js
+jest.config.cjs
+tsconfig.base.json
+tsconfig.dev.json
+tsconfig.json
 tsconfig.tsbuildinfo
-/eslint.config.js
 
 # Keep
 !/lib/
