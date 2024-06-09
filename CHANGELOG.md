@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.1.1...matterbridge-home-assistant-v0.2.0) (2024-06-09)
+
+
+### Features
+
+* added docker build and publish ([#23](https://github.com/t0bst4r/matterbridge-home-assistant/issues/23)) ([77daa30](https://github.com/t0bst4r/matterbridge-home-assistant/commit/77daa3084b67238317004251c692c7d2c71916f8))
+
 ## [0.1.1](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.1.0...matterbridge-home-assistant-v0.1.1) (2024-06-09)
 
 
