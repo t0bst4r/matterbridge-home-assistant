@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.1...matterbridge-home-assistant-v0.2.2) (2024-06-09)
+
+
+### Bug Fixes
+
+* **docker:** use GitHub token ([9236767](https://github.com/t0bst4r/matterbridge-home-assistant/commit/9236767fe465ba64ffa8edd13b9dc5cf606848ab))
+
 ## [0.2.1](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.0...matterbridge-home-assistant-v0.2.1) (2024-06-09)
 
 
