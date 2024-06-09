@@ -8,6 +8,11 @@
     {
       "matchPackagePatterns": ["*"],
       "groupName": "{{manager}}"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["@types/node"],
+      "allowedVersions": "/^18\\.[0-9]+\\.[0-9]+$/"
     }
   ]
 }
