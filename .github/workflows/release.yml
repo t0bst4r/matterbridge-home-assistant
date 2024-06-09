@@ -85,7 +85,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.docker-token }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: ℹ️ Compose build flags
         id: flags
         run: echo "version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
