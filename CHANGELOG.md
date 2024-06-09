@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.0...matterbridge-home-assistant-v0.2.1) (2024-06-09)
+
+
+### Bug Fixes
+
+* remove conditional docker login ([#26](https://github.com/t0bst4r/matterbridge-home-assistant/issues/26)) ([fa3547f](https://github.com/t0bst4r/matterbridge-home-assistant/commit/fa3547f450a5658356f6706c0409c6748c0f395f))
+
 ## [0.2.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.1.1...matterbridge-home-assistant-v0.2.0) (2024-06-09)
 
 
