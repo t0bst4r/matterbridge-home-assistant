@@ -2,15 +2,72 @@
 
 ---
 
-This **Matterbridge Home Assistant** package provides bindings to connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket) to [Matterbridge](https://github.com/Luligu/matterbridge/).
+This **Matterbridge Home Assistant** package provides bindings to
+connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket)
+to [Matterbridge](https://github.com/Luligu/matterbridge/).
 
 ## Installation
 
-- Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to setup `matterbridge`.
+### Manual Setup
+
+- Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to
+  setup `matterbridge`.
 - Install the plugin `npm install -g matterbridge-home-assistant`
 - Make sure the plugin is configured properly using environment variables (see [Configuration](#configuration)).
 - Activate the plugin `matterbridge -add matterbridge-home-assistant`
 - Start matterbridge using `matterbridge -bridge`
+
+### Home Assistant Add-On
+
+Follow the [Home Assistant Add-On Repository](https://github.com/t0bst4r/matterbridge-home-assistant-addon) to install
+Matterbridge with Home Assistant.
+
+### Custom Docker Deployment
+
+There is a [ready-to-use docker image](https://github.com/t0bst4r?tab=packages&repo_name=matterbridge-home-assistant)
+built with this project.
+
+Running it is as easy as starting any other Docker container. Just make sure to run the container with the host network,
+since that is required for matter clients to connect.
+
+The docker image is configured using environment variables (see [Configuration](#configuration)).
+
+```bash
+# Create a volume to persist the data written by matterbridge (optional)
+docker volume create matterbridge-data
+
+# Start the container
+docker run -d \
+  --network host \
+  --volume matterbridge-data:/root/.matterbridge \
+  --env HOME_ASSISTANT_URL="http://192.168.178.23:8123" \
+  --env HOME_ASSISTANT_ACCESS_TOKEN="ey....yQ" \
+  --env HOME_ASSISTANT_CLIENT_CONFIG='{ "includeDomains": ["light", "media_player"], "excludePatterns": ["media_player.*echo*"] }' \
+  --name matterbridge
+  ghcr.io/t0bst4r/matterbridge-home-assistant:latest
+```
+
+Or using docker-compose.yaml
+
+```yaml
+services:
+  matterbridge:
+    image: ghcr.io/t0bst4r/matterbridge-home-assistant:latest
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      HOME_ASSISTANT_URL: "http://192.168.178.23:8123"
+      HOME_ASSISTANT_ACCESS_TOKEN: "ey....yQ"
+      HOME_ASSISTANT_CLIENT_CONFIG: |
+        {
+          "includeDomains": ["light", "media_player"],
+          "excludePatterns": ["media_player.*echo*"]
+        }
+    volumes:
+      - data:/root/.matterbridge
+volumes:
+  data:
+```
 
 ## Configuration
 

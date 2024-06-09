@@ -12,6 +12,7 @@
 /src/
 
 # Configs
+/docker/
 .prettierrc.json
 eslint.config.js
 jest.config.cjs

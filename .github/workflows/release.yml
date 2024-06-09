@@ -25,9 +25,9 @@ jobs:
           config-file: .github/release-please-config.json
           manifest-file: .github/release-please-manifest.json
 
-  release:
+  node:
+    name: 🚀 Release Node
     if: ${{ needs.release-please.outputs.release_created }}
-    name: 🚀 Release
     needs: [ release-please ]
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +46,70 @@ jobs:
         run: yarn build
       - name: 🔎 Test
         run: yarn test
+      - name: 🚚 Package
+        run: yarn pack --filename matterbridge-home-assistant.tgz
       - name: 🚀 Publish
-        run: npm publish
+        run: yarn publish matterbridge-home-assistant.tgz
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: ⤴️ Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-package
+          path: matterbridge-home-assistant.tgz
+
+  docker:
+    name: 🚀 Release Docker
+    if: ${{ needs.release-please.outputs.release_created }}
+    needs: [ release-please, node ]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: ⤵️ Checkout
+        uses: actions/checkout@v4
+      - name: 🏗 Set up build cache
+        id: cache
+        uses: actions/cache@v4.0.2
+        with:
+          path: /tmp/.docker-cache
+          key: docker-${{ github.sha }}
+          restore-keys: |
+            docker
+      - name: 🏗 Set up QEMU
+        uses: docker/setup-qemu-action@v3.0.0
+      - name: 🏗 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.3.0
+      - name: 🏗 Login to ghcr.io
+        if: ${{ inputs.docker-push }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.docker-token }}
+      - name: ℹ️ Compose build flags
+        id: flags
+        run: echo "version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
+      - name: ⤴️ Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: npm-package
+          path: docker
+      - name: 🚀 Build
+        uses: docker/build-push-action@v5.3.0
+        with:
+          push: true
+          context: ./docker
+          cache-from: |
+            type=local,src=/tmp/.docker-cache
+            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.version }}
+            ghcr.io/${{github.repository}}:latest
+          tags: |
+            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.version }}
+            ghcr.io/${{github.repository}}:latest
+          cache-to: type=local,mode=max,dest=/tmp/.docker-cache-new
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
+      - name: 🚚 Swap build cache
+        run: |
+          rm -rf /tmp/.docker-cache
+          mv /tmp/.docker-cache-new /tmp/.docker-cache
