@@ -6,11 +6,18 @@ import { HomeAssistantPlatform } from './platform.js';
 
 const homeAssistantUrl = process.env.HOME_ASSISTANT_URL!;
 const homeAssistantAccessToken = process.env.HOME_ASSISTANT_ACCESS_TOKEN!;
-const homeAssistantClientConfig = JSON.parse(process.env.HOME_ASSISTANT_CLIENT_CONFIG ?? '{}') as HomeAssistantClientConfig;
+const homeAssistantClientConfig = JSON.parse(
+  process.env.HOME_ASSISTANT_CLIENT_CONFIG ?? '{}',
+) as HomeAssistantClientConfig;
 
-(global as any).WebSocket = ws.WebSocket;
+const wnd = globalThis as Record<string, unknown>;
+wnd.WebSocket = ws.WebSocket;
 
-export default function initializePlugin(matterbridge: Matterbridge, log: AnsiLogger, config: PlatformConfig): HomeAssistantPlatform {
+export default function initializePlugin(
+  matterbridge: Matterbridge,
+  log: AnsiLogger,
+  config: PlatformConfig,
+): HomeAssistantPlatform {
   return new HomeAssistantPlatform(matterbridge, log, {
     ...config,
     homeAssistantUrl,

@@ -5,13 +5,15 @@
 This **Matterbridge Home Assistant** package provides bindings to connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket) to [Matterbridge](https://github.com/Luligu/matterbridge/).
 
 ## Installation
+
 - Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to setup `matterbridge`.
-- Install the plugin `npm install -g matterbridge-home-assistant` 
+- Install the plugin `npm install -g matterbridge-home-assistant`
 - Make sure the plugin is configured properly using environment variables (see [Configuration](#configuration)).
 - Activate the plugin `matterbridge -add matterbridge-home-assistant`
 - Start matterbridge using `matterbridge -bridge`
 
 ## Configuration
+
 This package can be configured using environment variables.
 
 - `HOME_ASSISTANT_URL` - the home assistant url (e.g. `http://192.168.178.23:8123`)
@@ -19,7 +21,9 @@ This package can be configured using environment variables.
 - `HOME_ASSISTANT_CLIENT_CONFIG` - a json string containing the client config (see below)
 
 ### Client Config
+
 The client config has to be a json string and can have the following properties:
+
 ```typescript
 interface HomeAssistantClientConfig {
   /**
@@ -52,6 +56,7 @@ interface HomeAssistantClientConfig {
 ```
 
 ### Example Configuration
+
 ```
 HOME_ASSISTANT_URL=http://192.168.178.23:8123
 HOME_ASSISTANT_ACCESS_TOKEN=ey....yQ
@@ -59,6 +64,7 @@ HOME_ASSISTANT_CLIENT_CONFIG={ "includeDomains": ["light", "media_player"], "exc
 ```
 
 ## Supported Entities
+
 - Light entities (`light.`) including on-off, brightness and hue & saturation control
 - Switch entities (`switch.`) including on-off control
 - Media Players (`media_player.`) are mapped to Switches and currently only support on-off control
@@ -66,4 +72,3 @@ HOME_ASSISTANT_CLIENT_CONFIG={ "includeDomains": ["light", "media_player"], "exc
 ---
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/t0bst4r)
-
