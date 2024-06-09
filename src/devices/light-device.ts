@@ -1,11 +1,16 @@
 import { HassEntity } from 'home-assistant-js-websocket';
-import { ColorControl as MColorControl, ColorControlCluster, DeviceTypes, LevelControlCluster, OnOffCluster } from 'matterbridge';
+import {
+  ColorControl as MColorControl,
+  ColorControlCluster,
+  DeviceTypes,
+  LevelControlCluster,
+  OnOffCluster,
+} from 'matterbridge';
 import { HomeAssistantDevice } from './home-assistant-device.js';
 import { HomeAssistantClient } from '../home-assistant/home-assistant-client.js';
 import { MatterbridgeDeviceCommands } from '../util/matterbrigde-device-commands.js';
 
 export class LightDevice extends HomeAssistantDevice {
-
   private readonly supportsLevelControl: boolean;
   private readonly supportsColorControl: boolean;
 
@@ -79,29 +84,34 @@ export class LightDevice extends HomeAssistantDevice {
   }) => {
     this.getClusterServer(LevelControlCluster)?.setCurrentLevelAttribute(level);
     this.log.debug(`moveToLevel: ${level}, current level: ${currentLevel?.getLocal()}`);
-    await this.callService('light', 'turn_on', {
-      brightness: level,
-    }, { entity_id: this.entityId });
+    await this.callService(
+      'light',
+      'turn_on',
+      {
+        brightness: level,
+      },
+      { entity_id: this.entityId },
+    );
   };
 
   private moveToHueAndSaturation: MatterbridgeDeviceCommands['moveToHueAndSaturation'] = async ({
-    request: {
-      hue,
-      saturation,
-    },
-    attributes: {
-      currentHue,
-      currentSaturation,
-    },
+    request: { hue, saturation },
+    attributes: { currentHue, currentSaturation },
   }) => {
     const colorControlCluster = this.getClusterServer(ColorControlCluster.with(MColorControl.Feature.HueSaturation));
     colorControlCluster?.setCurrentHueAttribute(hue);
     colorControlCluster?.setCurrentSaturationAttribute(saturation);
-    this.log.debug(`moveToHueAndSaturation: hue ${hue}, saturation ${saturation},`
-      + `current: hue ${currentHue?.getLocal()}, saturation ${currentSaturation?.getLocal()}`);
-    await this.callService('light', 'turn_on', {
-      hs_color: [hue, saturation],
-    }, { entity_id: this.entityId });
+    this.log.debug(
+      `moveToHueAndSaturation: hue ${hue}, saturation ${saturation},` +
+        `current: hue ${currentHue?.getLocal()}, saturation ${currentSaturation?.getLocal()}`,
+    );
+    await this.callService(
+      'light',
+      'turn_on',
+      {
+        hs_color: [hue, saturation],
+      },
+      { entity_id: this.entityId },
+    );
   };
-
 }

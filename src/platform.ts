@@ -13,19 +13,22 @@ export interface HomeAssistantPlatformConfig extends PlatformConfig {
 }
 
 export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
-
   private client!: HomeAssistantClient;
   private unsupportedEntities = new Set<string>();
   private devices = new Map<string, HomeAssistantDevice>();
 
   private deviceFactories: Record<string, (entity: HassEntity) => HomeAssistantDevice> = {
-    light: entity => new LightDevice(this.client, entity),
-    switch: entity => new SwitchDevice(this.client, entity),
-    media_player: entity => new SwitchDevice(this.client, entity),
-    scene: entity => new SwitchDevice(this.client, entity),
+    light: (entity) => new LightDevice(this.client, entity),
+    switch: (entity) => new SwitchDevice(this.client, entity),
+    media_player: (entity) => new SwitchDevice(this.client, entity),
+    scene: (entity) => new SwitchDevice(this.client, entity),
   };
 
-  constructor(matterbridge: Matterbridge, log: AnsiLogger, private readonly platformConfig: HomeAssistantPlatformConfig) {
+  constructor(
+    matterbridge: Matterbridge,
+    log: AnsiLogger,
+    private readonly platformConfig: HomeAssistantPlatformConfig,
+  ) {
     super(matterbridge, log, platformConfig);
     this.validateConfig();
   }
@@ -33,7 +36,9 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
   private validateConfig(): void {
     const errors: string[] = [];
     if (!(this.platformConfig.homeAssistantUrl?.startsWith('http') ?? false)) {
-      errors.push(`Home Assistant URL is not set. It must start with 'http', but was: '${this.platformConfig.homeAssistantUrl}'`);
+      errors.push(
+        `Home Assistant URL is not set. It must start with 'http', but was: '${this.platformConfig.homeAssistantUrl}'`,
+      );
     }
     if (!this.platformConfig.homeAssistantAccessToken) {
       errors.push('Home Assistant Access Token is not set.');

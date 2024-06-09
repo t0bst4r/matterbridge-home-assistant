@@ -5,13 +5,12 @@ import { HomeAssistantClient } from '../home-assistant/home-assistant-client.js'
 import { MatterbridgeDeviceCommands } from '../util/matterbrigde-device-commands.js';
 
 export class SwitchDevice extends HomeAssistantDevice {
-
   private readonly isOn: (state: HassEntity) => boolean;
 
   constructor(homeAssistantClient: HomeAssistantClient, entity: HassEntity, isOn?: (state: HassEntity) => boolean) {
     super(homeAssistantClient, entity, DeviceTypes.ON_OFF_PLUGIN_UNIT);
 
-    this.isOn = isOn ?? (state => state.state !== 'off');
+    this.isOn = isOn ?? ((state) => state.state !== 'off');
 
     this.createDefaultIdentifyClusterServer();
     this.addCommandHandler('identify', this.identify.bind(this));

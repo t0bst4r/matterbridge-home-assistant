@@ -1,4 +1,13 @@
-import type { ClusterServerHandlers, Identify, OnOff, LevelControl, ColorControl, WindowCovering, DoorLock, Thermostat } from '@project-chip/matter.js/cluster';
+import type {
+  ClusterServerHandlers,
+  Identify,
+  OnOff,
+  LevelControl,
+  ColorControl,
+  WindowCovering,
+  DoorLock,
+  Thermostat,
+} from '@project-chip/matter.js/cluster';
 
 // COPIED FROM matterbridge/matterbridgeDevice.d.ts
 
