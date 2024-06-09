@@ -635,7 +635,7 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
-"@project-chip/matter-node.js@0.9.1", "@project-chip/matter-node.js@^0.9.0", "@project-chip/matter-node.js@^0.9.1":
+"@project-chip/matter-node.js@0.9.1", "@project-chip/matter-node.js@^0.9.1":
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/@project-chip/matter-node.js/-/matter-node.js-0.9.1.tgz#9518a076fddaa8e1dc1d5a5381f913be00ec2765"
   integrity sha512-sxMdJFGIYNS6yH12MQCSitSNN5tS+C7uErd1jX6p9G3mgRFDx5rvp+5TfkL8Pa9kc0hYujSdyM9mUSZSB4T3yg==
@@ -2512,7 +2512,7 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-matter-history@^1.1.0:
+matter-history@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/matter-history/-/matter-history-1.1.1.tgz#02cf8ee11a469e96e3f7de3ed3cbf375806b147e"
   integrity sha512-qFnt4T+GVK2Epa+3MeQ5FXmt+kVwX6+ukc+M0WUfVvuFPrfCsDD/RurP/JZwUahI1J1wOQE+/yvFEwUp8TJO7Q==
@@ -2521,15 +2521,15 @@ matter-history@^1.1.0:
     moment "^2.30.1"
     node-ansi-logger "^1.9.5"
 
-matterbridge@1.2.19:
-  version "1.2.19"
-  resolved "https://registry.yarnpkg.com/matterbridge/-/matterbridge-1.2.19.tgz#23f63fd374aeb0716e9d73c7ea593aa17aea9968"
-  integrity sha512-eIOMNgSSflm2PB+58zTh9qq63ykPzVNH3OX9OeLPa27edxJTnqiG5wMgIdCCY6ELfADQQcj0x7snxi6JbS68yA==
+matterbridge@1.2.22:
+  version "1.2.22"
+  resolved "https://registry.yarnpkg.com/matterbridge/-/matterbridge-1.2.22.tgz#87481500721ca2621cecea9d7631d828a14d8702"
+  integrity sha512-Xrp/twjLQxHtBRJvKT5kqRUxXzOHs5beMjJG44T13iSK+ANrEXVkvq1E8nW7XEKNmWJ8suTO/oweT8G1LFBFAw==
   dependencies:
-    "@project-chip/matter-node.js" "^0.9.0"
+    "@project-chip/matter-node.js" "^0.9.1"
     body-parser "^1.20.2"
     express "^4.19.2"
-    matter-history "^1.1.0"
+    matter-history "^1.1.1"
     node-ansi-logger "^1.9.5"
     node-persist-manager "^1.0.7"
     ws "^8.17.0"
