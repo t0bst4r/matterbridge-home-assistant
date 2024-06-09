@@ -3,5 +3,11 @@
   "extends": [
     "config:recommended",
     ":semanticCommitTypeAll(fix)"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "groupName": "{{manager}}"
+    }
   ]
 }
