@@ -45,8 +45,7 @@ export class HomeAssistantClient {
 
   public subscribe(subscriber: (entities: HassEntities) => void): () => void {
     return subscribeEntities(this.connection, (entities) => {
-      const filteredEntities = Object.entries(entities)
-        .filter(([key]) => this.isIncluded(key));
+      const filteredEntities = Object.entries(entities).filter(([key]) => this.isIncluded(key));
       subscriber(Object.fromEntries(filteredEntities));
     });
   }
@@ -64,8 +63,8 @@ export class HomeAssistantClient {
   private isIncluded(entityId: string): boolean {
     const domainIncluded = this.includeDomains.some((domain) => entityId.startsWith(domain));
     const patternIncluded = this.includePatterns.some((pattern) => pattern.test(entityId));
-    const included = this.includeDomains.length + this.includePatterns.length === 0
-      || domainIncluded || patternIncluded;
+    const included =
+      this.includeDomains.length + this.includePatterns.length === 0 || domainIncluded || patternIncluded;
     const domainExcluded = this.excludeDomains.some((domain) => entityId.startsWith(domain));
     const patternExcluded = this.excludePatterns.some((pattern) => pattern.test(entityId));
     const excluded = domainExcluded || patternExcluded;
