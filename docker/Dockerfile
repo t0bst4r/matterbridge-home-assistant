@@ -21,9 +21,10 @@ WORKDIR /app
 RUN npm init -y \
     && npm install matterbridge@$MATTERBRIDGE_VERSION
 
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 COPY matterbridge-home-assistant.tgz /app/matterbridge-home-assistant.tgz
-RUN npm install ./matterbridge-home-assistant.tgz \
-    && rm -f ./matterbridge-home-assistant.tgz \
-    && npx matterbridge -add ./node_modules/matterbridge-home-assistant
 
-CMD [ "npx", "matterbridge", "-bridge" ]
+RUN npm install ./matterbridge-home-assistant.tgz \
+    && rm -f ./matterbridge-home-assistant.tgz
+
+CMD "./docker-entrypoint.sh"
