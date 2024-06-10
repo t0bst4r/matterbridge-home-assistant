@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.5...matterbridge-home-assistant-v0.3.0) (2024-06-10)
+
+
+### Features
+
+* added scripts and automations as generic switches ([#38](https://github.com/t0bst4r/matterbridge-home-assistant/issues/38)) ([db18fef](https://github.com/t0bst4r/matterbridge-home-assistant/commit/db18fef3a52e98c36c686504020510e95c297945))
+
+
+### Bug Fixes
+
+* **deps:** update docker/build-push-action action to v5.4.0 ([#30](https://github.com/t0bst4r/matterbridge-home-assistant/issues/30)) ([4dba47f](https://github.com/t0bst4r/matterbridge-home-assistant/commit/4dba47f12789f83a03b96f9935c24c60efe66626))
+
 ## [0.2.5](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.4...matterbridge-home-assistant-v0.2.5) (2024-06-10)
 
 
