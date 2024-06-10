@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.2...matterbridge-home-assistant-v0.2.3) (2024-06-10)
+
+
+### Bug Fixes
+
+* register devices synchronously and fix docker ([#31](https://github.com/t0bst4r/matterbridge-home-assistant/issues/31)) ([1431621](https://github.com/t0bst4r/matterbridge-home-assistant/commit/1431621af517cea2a766ec2d958bd6eaf814c39a))
+
 ## [0.2.2](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.1...matterbridge-home-assistant-v0.2.2) (2024-06-09)
 
 
