@@ -44,10 +44,13 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
     this.client.subscribe(this.updateEntities.bind(this));
   }
 
-  private updateEntities(entities: HassEntities): void {
-    Object.entries(entities)
+  private async updateEntities(entities: HassEntities): Promise<void> {
+    const supportedEntities = Object.entries(entities)
       .filter(([key]) => !this.unsupportedEntities.has(key))
-      .forEach(([, entity]) => this.updateEntity(entity));
+      .map(([, entity]) => entity);
+    for (const entity of supportedEntities) {
+      await this.updateEntity(entity);
+    }
   }
 
   private async updateEntity(entity: HassEntity): Promise<void> {
@@ -56,8 +59,14 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
       const domain = entity.entity_id.split('.')[0];
       if (this.deviceFactories[domain]) {
         device = this.deviceFactories[domain](entity);
-        await this.registerDevice(device);
-        this.devices.set(entity.entity_id, device);
+        try {
+          await this.registerDevice(device);
+          this.devices.set(entity.entity_id, device);
+        } catch (e: unknown) {
+          this.log.warn(`Failed to register device: ${entity.entity_id}`);
+          this.log.error((e as object).toString());
+          this.unsupportedEntities.add(entity.entity_id);
+        }
       } else {
         this.unsupportedEntities.add(entity.entity_id);
         this.log.debug(`Entity ${entity.entity_id} is not supported`);

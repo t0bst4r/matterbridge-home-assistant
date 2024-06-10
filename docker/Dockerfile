@@ -15,12 +15,15 @@ EXPOSE 5540
 
 VOLUME /root/.matterbridge
 
-RUN npm install -g matterbridge@$MATTERBRIDGE_VERSION
+RUN mkdir /app
+WORKDIR /app
 
-COPY matterbridge-home-assistant.tgz /matterbridge-home-assistant.tgz
-RUN npm install -g /matterbridge-home-assistant.tgz
-RUN rm -f /matterbridge-home-assistant.tgz
+RUN npm init -y \
+    && npm install matterbridge@$MATTERBRIDGE_VERSION
 
-RUN matterbridge -add matterbridge-home-assistant
+COPY matterbridge-home-assistant.tgz /app/matterbridge-home-assistant.tgz
+RUN npm install ./matterbridge-home-assistant.tgz \
+    && rm -f ./matterbridge-home-assistant.tgz \
+    && npx matterbridge -add ./node_modules/matterbridge-home-assistant
 
-CMD [ "matterbridge", "-bridge" ]
+CMD [ "npx", "matterbridge", "-bridge" ]
