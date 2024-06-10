@@ -120,11 +120,29 @@ HOME_ASSISTANT_ACCESS_TOKEN=ey....yQ
 HOME_ASSISTANT_CLIENT_CONFIG={ "includeDomains": ["light", "media_player"], "excludePatterns": ["media_player.*echo*"] }
 ```
 
+## Commissioning / Pairing the device with your Matter controller
+
+Start matterbridge and find the commissioning QR code in the logs.
+This code can be used to connect your Matter controller (like Alexa, Apple Home or Google Home) to the bridge.
+
+![Matterbridge commissioning code](docs/matterbridge-commissioning.png)
+
 ## Supported Entities
 
 - Light entities (`light.`) including on-off, brightness and hue & saturation control
 - Switch entities (`switch.`) including on-off control
 - Media Players (`media_player.`) are mapped to Switches and currently only support on-off control
+- Scenes (`scene.`) are mapped to Switches and currently only support on-off control
+- Scripts (`script.`) are mapped to Switches and currently only support on-off control
+- Automations (`automation.`) are mapped to Switches and currently only support on-off control
+
+# Contributors
+
+[//]: # (x-release-please-start-version)
+
+[![Contributors](https://contrib.rocks/image?repo=t0bst4r/matterbridge-home-assistant&v=0.2.4)](https://github.com/t0bst4r/matterbridge-home-assistant/graphs/contributors)
+
+[//]: # (x-release-please-end)
 
 ---
 
