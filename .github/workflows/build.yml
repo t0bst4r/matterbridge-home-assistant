@@ -91,7 +91,7 @@ jobs:
           name: npm-package
           path: docker
       - name: 🚀 Build
-        uses: docker/build-push-action@v5.3.0
+        uses: docker/build-push-action@v5.4.0
         with:
           push: false
           context: ./docker
