@@ -22,6 +22,8 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
     switch: (entity) => new SwitchDevice(this.client, entity),
     media_player: (entity) => new SwitchDevice(this.client, entity),
     scene: (entity) => new SwitchDevice(this.client, entity),
+    script: (entity) => new SwitchDevice(this.client, entity),
+    automation: (entity) => new SwitchDevice(this.client, entity),
   };
 
   constructor(
