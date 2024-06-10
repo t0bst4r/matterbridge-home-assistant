@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.3...matterbridge-home-assistant-v0.2.4) (2024-06-10)
+
+
+### Bug Fixes
+
+* **docker:** added docker entrypoint ([#33](https://github.com/t0bst4r/matterbridge-home-assistant/issues/33)) ([90d10da](https://github.com/t0bst4r/matterbridge-home-assistant/commit/90d10da4681585652fcf80635edf7e4f71db9061))
+
 ## [0.2.3](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.2...matterbridge-home-assistant-v0.2.3) (2024-06-10)
 
 
