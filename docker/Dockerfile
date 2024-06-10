@@ -22,6 +22,8 @@ RUN npm init -y \
     && npm install matterbridge@$MATTERBRIDGE_VERSION
 
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod a+x docker-entrypoint.sh
+
 COPY matterbridge-home-assistant.tgz /app/matterbridge-home-assistant.tgz
 
 RUN npm install ./matterbridge-home-assistant.tgz \
