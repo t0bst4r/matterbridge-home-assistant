@@ -8,9 +8,7 @@
       "bump-patch-for-minor-pre-major": false,
       "draft": false,
       "prerelease": false,
-      "extra-files": [
-        "README.md"
-      ]
+      "extra-files": ["README.md"]
     }
   }
 }

@@ -28,7 +28,7 @@ jobs:
   node:
     name: 🚀 Release Node
     if: ${{ needs.release-please.outputs.release_created }}
-    needs: [ release-please ]
+    needs: [release-please]
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Checkout
@@ -61,7 +61,7 @@ jobs:
   docker:
     name: 🚀 Release Docker
     if: ${{ needs.release-please.outputs.release_created }}
-    needs: [ release-please, node ]
+    needs: [release-please, node]
     runs-on: ubuntu-latest
     permissions:
       packages: write

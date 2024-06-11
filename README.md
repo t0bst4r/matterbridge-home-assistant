@@ -56,8 +56,8 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      HOME_ASSISTANT_URL: "http://192.168.178.23:8123"
-      HOME_ASSISTANT_ACCESS_TOKEN: "ey....yQ"
+      HOME_ASSISTANT_URL: 'http://192.168.178.23:8123'
+      HOME_ASSISTANT_ACCESS_TOKEN: 'ey....yQ'
       HOME_ASSISTANT_CLIENT_CONFIG: |
         {
           "includeDomains": ["light", "media_player"],
@@ -138,11 +138,11 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 
 # Contributors
 
-[//]: # (x-release-please-start-version)
+<!-- x-release-please-start-version -->
 
 [![Contributors](https://contrib.rocks/image?repo=t0bst4r/matterbridge-home-assistant&v=0.3.0)](https://github.com/t0bst4r/matterbridge-home-assistant/graphs/contributors)
 
-[//]: # (x-release-please-end)
+<!-- x-release-please-end -->
 
 ---
 

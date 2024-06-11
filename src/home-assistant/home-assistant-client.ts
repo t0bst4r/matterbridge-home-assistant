@@ -45,19 +45,7 @@ export class HomeAssistantClient {
 
   public subscribe(subscriber: (entities: HassEntities) => void): () => void {
     return subscribeEntities(this.connection, (entities) => {
-      const filteredEntities = Object.entries(entities)
-        .filter(
-          ([key]) => this.includeDomains.length === 0 || this.includeDomains.some((domain) => key.startsWith(domain)),
-        )
-        .filter(
-          ([key]) => this.includePatterns.length === 0 || this.includePatterns.some((pattern) => pattern.test(key)),
-        )
-        .filter(
-          ([key]) => this.excludeDomains.length === 0 || !this.excludeDomains.some((domain) => key.startsWith(domain)),
-        )
-        .filter(
-          ([key]) => this.excludePatterns.length === 0 || !this.excludePatterns.some((pattern) => pattern.test(key)),
-        );
+      const filteredEntities = Object.entries(entities).filter(([key]) => this.isIncluded(key));
       subscriber(Object.fromEntries(filteredEntities));
     });
   }
@@ -70,5 +58,16 @@ export class HomeAssistantClient {
     returnResponse?: boolean,
   ): Promise<unknown> {
     return callService(this.connection, domain, service, serviceData, target, returnResponse);
+  }
+
+  private isIncluded(entityId: string): boolean {
+    const domainIncluded = this.includeDomains.some((domain) => entityId.startsWith(domain));
+    const patternIncluded = this.includePatterns.some((pattern) => pattern.test(entityId));
+    const included =
+      this.includeDomains.length + this.includePatterns.length === 0 || domainIncluded || patternIncluded;
+    const domainExcluded = this.excludeDomains.some((domain) => entityId.startsWith(domain));
+    const patternExcluded = this.excludePatterns.some((pattern) => pattern.test(entityId));
+    const excluded = domainExcluded || patternExcluded;
+    return included && !excluded;
   }
 }
