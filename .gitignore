@@ -13,3 +13,6 @@ coverage/
 
 # Build Output
 lib/
+
+# Developer Settings
+.env.local

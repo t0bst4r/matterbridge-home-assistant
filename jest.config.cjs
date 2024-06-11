@@ -10,6 +10,9 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/'],
   testPathIgnorePatterns: ['/node_modules/'],
   watchPathIgnorePatterns: ['/node_modules/'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   reporters: [
     'default',
     [
@@ -24,6 +27,7 @@ module.exports = {
       'ts-jest',
       {
         tsconfig: 'tsconfig.dev.json',
+        useESM: true,
       },
     ],
   },
