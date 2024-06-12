@@ -5,6 +5,7 @@ import {
   createConnection,
   createLongLivedTokenAuth,
   HassEntities,
+  HassEntity,
   HassServiceTarget,
   subscribeEntities,
 } from 'home-assistant-js-websocket';
@@ -45,7 +46,9 @@ export class HomeAssistantClient {
 
   public subscribe(subscriber: (entities: HassEntities) => void): () => void {
     return subscribeEntities(this.connection, (entities) => {
-      const filteredEntities = Object.entries(entities).filter(([key]) => this.isIncluded(key));
+      const filteredEntities = Object.entries(entities).filter(
+        ([key, entity]) => this.isIncluded(key) && this.isEnabled(entity),
+      );
       subscriber(Object.fromEntries(filteredEntities));
     });
   }
@@ -69,5 +72,9 @@ export class HomeAssistantClient {
     const patternExcluded = this.excludePatterns.some((pattern) => pattern.test(entityId));
     const excluded = domainExcluded || patternExcluded;
     return included && !excluded;
+  }
+
+  private isEnabled(entity: HassEntity): boolean {
+    return !entity.attributes?.hidden;
   }
 }
