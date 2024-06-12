@@ -47,7 +47,7 @@ export class HomeAssistantClient {
   public subscribe(subscriber: (entities: HassEntities) => void): () => void {
     return subscribeEntities(this.connection, (entities) => {
       const filteredEntities = Object.entries(entities).filter(
-        ([key, entity]) => this.isIncluded(key) && this.isEnabled(entity)
+        ([key, entity]) => this.isIncluded(key) && this.isEnabled(entity),
       );
       subscriber(Object.fromEntries(filteredEntities));
     });
