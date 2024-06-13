@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.4.0...matterbridge-home-assistant-v0.5.0) (2024-06-13)
+
+
+### Features
+
+* **docker:** [#44](https://github.com/t0bst4r/matterbridge-home-assistant/issues/44) add config-file support for docker deployments ([#63](https://github.com/t0bst4r/matterbridge-home-assistant/issues/63)) ([f3c38ee](https://github.com/t0bst4r/matterbridge-home-assistant/commit/f3c38ee300f3210422662f264c45f7239ec0bfe7))
+
+
+### Bug Fixes
+
+* update dependencies and add missing docker build-args ([#65](https://github.com/t0bst4r/matterbridge-home-assistant/issues/65)) ([cfb69f5](https://github.com/t0bst4r/matterbridge-home-assistant/commit/cfb69f5855079e9f36fd790728a32b86c63d98f2))
+
 ## [0.4.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.3.0...matterbridge-home-assistant-v0.4.0) (2024-06-13)
 
 
