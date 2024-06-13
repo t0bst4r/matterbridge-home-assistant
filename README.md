@@ -140,7 +140,7 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 
 <!-- x-release-please-start-version -->
 
-[![Contributors](https://contrib.rocks/image?repo=t0bst4r/matterbridge-home-assistant&v=0.3.0)](https://github.com/t0bst4r/matterbridge-home-assistant/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=t0bst4r/matterbridge-home-assistant&v=0.4.0)](https://github.com/t0bst4r/matterbridge-home-assistant/graphs/contributors)
 
 <!-- x-release-please-end -->
 
