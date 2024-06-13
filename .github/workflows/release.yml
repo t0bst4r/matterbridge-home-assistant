@@ -88,7 +88,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: ℹ️ Compose build flags
         id: flags
-        run: echo "version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
+          echo "matterbridge-version=$(yq -r '.peerDependencies.matterbridge' package.json)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Download Artifact
         uses: actions/download-artifact@v4
         with:
@@ -108,6 +110,8 @@ jobs:
             ghcr.io/${{github.repository}}:latest
           cache-to: type=local,mode=max,dest=/tmp/.docker-cache-new
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
+          build-args: |
+            MATTERBRIDGE_VERSION=${{ steps.flags.outputs.matterbridge-version }}
       - name: 🚚 Swap build cache
         run: |
           rm -rf /tmp/.docker-cache
