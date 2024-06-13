@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.4.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.3.0...matterbridge-home-assistant-v0.4.0) (2024-06-13)
+
+
+### Features
+
+* [#49](https://github.com/t0bst4r/matterbridge-home-assistant/issues/49) added support for HS, RGB color modes and color temperature ([#51](https://github.com/t0bst4r/matterbridge-home-assistant/issues/51)) ([ad74c4d](https://github.com/t0bst4r/matterbridge-home-assistant/commit/ad74c4d85a0ca608e3c749d487ec49fd0d3c13eb))
+* [#52](https://github.com/t0bst4r/matterbridge-home-assistant/issues/52) Hide entities based on their hidden attribute ([#58](https://github.com/t0bst4r/matterbridge-home-assistant/issues/58)) ([b4c6346](https://github.com/t0bst4r/matterbridge-home-assistant/commit/b4c634641b38e6b3748489fef342ef5a764a6006))
+* **config:** [#45](https://github.com/t0bst4r/matterbridge-home-assistant/issues/45) changed include to match one of domain or pattern ([#48](https://github.com/t0bst4r/matterbridge-home-assistant/issues/48)) ([ea20387](https://github.com/t0bst4r/matterbridge-home-assistant/commit/ea20387108fe7ceb34b3744f7b1f0859ba6ab8fa))
+
+
+### Bug Fixes
+
+* **deps:** update actions/stale action to v9 ([#57](https://github.com/t0bst4r/matterbridge-home-assistant/issues/57)) ([41143a3](https://github.com/t0bst4r/matterbridge-home-assistant/commit/41143a3efcb5d763e126e89d382d28202c133d08))
+* **deps:** update dependency prettier to v3.3.2 ([#50](https://github.com/t0bst4r/matterbridge-home-assistant/issues/50)) ([dfe1af2](https://github.com/t0bst4r/matterbridge-home-assistant/commit/dfe1af2a1f0210e25e9fb40843cf96f471b09a02))
+* **deps:** update dependency typescript-eslint to v7.13.0 ([#41](https://github.com/t0bst4r/matterbridge-home-assistant/issues/41)) ([4be75b7](https://github.com/t0bst4r/matterbridge-home-assistant/commit/4be75b7c413c4f32a9e2a783d6688631a3dadb66))
+
 ## [0.3.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.2.5...matterbridge-home-assistant-v0.3.0) (2024-06-10)
 
 
