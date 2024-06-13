@@ -5,11 +5,13 @@ import { HomeAssistantDevice } from './devices/home-assistant-device.js';
 import { LightDevice } from './devices/light-device.js';
 import { SwitchDevice } from './devices/switch-device.js';
 import { HomeAssistantClient, HomeAssistantClientConfig } from './home-assistant/home-assistant-client.js';
+import { lightMocks } from './mocks/light-mocks.js';
 
 export interface HomeAssistantPlatformConfig extends PlatformConfig {
   homeAssistantUrl: string;
   homeAssistantAccessToken: string;
   homeAssistantClientConfig?: HomeAssistantClientConfig;
+  enableMockDevices?: boolean;
 }
 
 export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
@@ -44,6 +46,17 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
       this.platformConfig.homeAssistantClientConfig,
     );
     this.client.subscribe(this.updateEntities.bind(this));
+
+    if (this.platformConfig.enableMockDevices) {
+      const mocks: HassEntity[] = [
+        lightMocks.withBrightness(1),
+        lightMocks.withHsl(2),
+        lightMocks.withRgb(3),
+        lightMocks.withXY(4),
+        lightMocks.withTemperature(5),
+      ];
+      await this.updateEntities(Object.fromEntries(mocks.map((e) => [e.entity_id, e])));
+    }
   }
 
   private async updateEntities(entities: HassEntities): Promise<void> {

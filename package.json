@@ -11,12 +11,17 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier:fix": "prettier . --write",
-    "prettier": "prettier . --check"
+    "prettier": "prettier . --check",
+    "reset-matterbridge": "matterbridge -factoryreset",
+    "preserve": "npm run build && matterbridge -add .",
+    "serve": "dotenvx run -f .env.local -- matterbridge -bridge"
   },
   "devDependencies": {
+    "@dotenvx/dotenvx": "^0.44.1",
     "@eslint/js": "^9.4.0",
     "@project-chip/matter-node.js": "0.9.1",
     "@project-chip/matter.js": "0.9.1",
+    "@types/color": "^3.0.6",
     "@types/glob-to-regexp": "^0.4.4",
     "@types/jest": "^29.5.12",
     "@types/node": "^18",
@@ -39,6 +44,8 @@
     "matterbridge": "^1.2.19"
   },
   "dependencies": {
+    "color": "^4.2.3",
+    "color-temperature": "^0.2.7",
     "glob-to-regexp": "^0.4.1",
     "home-assistant-js-websocket": "^9.3.0",
     "node-ansi-logger": "^1.9.5",
