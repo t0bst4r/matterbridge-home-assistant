@@ -41,6 +41,7 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
     this.validateConfig();
     this.log.info('onStart called with reason:', reason ?? 'none');
     this.client = await HomeAssistantClient.create(
+      this.log,
       this.platformConfig.homeAssistantUrl,
       this.platformConfig.homeAssistantAccessToken,
       this.platformConfig.homeAssistantClientConfig,

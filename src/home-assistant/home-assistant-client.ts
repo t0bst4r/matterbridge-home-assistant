@@ -9,6 +9,7 @@ import {
   HassServiceTarget,
   subscribeEntities,
 } from 'home-assistant-js-websocket';
+import { AnsiLogger } from 'node-ansi-logger';
 
 export interface HomeAssistantClientConfig {
   readonly includeDomains?: Array<string>;
@@ -19,6 +20,7 @@ export interface HomeAssistantClientConfig {
 
 export class HomeAssistantClient {
   public static async create(
+    log: AnsiLogger,
     url: string,
     accessToken: string,
     config?: HomeAssistantClientConfig,
@@ -26,7 +28,7 @@ export class HomeAssistantClient {
     url = url.replace(/\/$/, '');
     const auth = createLongLivedTokenAuth(url, accessToken);
     const connection = await createConnection({ auth });
-    return new HomeAssistantClient(connection, config ?? {});
+    return new HomeAssistantClient(log, connection, config ?? {});
   }
 
   private readonly includeDomains: Array<string>;
@@ -35,6 +37,7 @@ export class HomeAssistantClient {
   private readonly excludePatterns: RegExp[];
 
   constructor(
+    private readonly log: AnsiLogger,
     private readonly connection: Connection,
     config: HomeAssistantClientConfig,
   ) {
@@ -46,10 +49,13 @@ export class HomeAssistantClient {
 
   public subscribe(subscriber: (entities: HassEntities) => void): () => void {
     return subscribeEntities(this.connection, (entities) => {
-      const filteredEntities = Object.entries(entities).filter(
-        ([key, entity]) => this.isIncluded(key) && this.isEnabled(entity),
+      const allEntities = Object.entries(entities);
+      const entitiesEnabled = allEntities.filter(([, entity]) => this.isEnabled(entity));
+      const entitiesIncluded = entitiesEnabled.filter(([key]) => this.isIncluded(key));
+      this.log.debug(
+        `Got updates from ${allEntities.length} entities. ${entitiesEnabled.length} are enabled. ${entitiesIncluded.length} are included.`,
       );
-      subscriber(Object.fromEntries(filteredEntities));
+      subscriber(Object.fromEntries(entitiesIncluded));
     });
   }
 
