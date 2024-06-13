@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.5.0...matterbridge-home-assistant-v0.5.1) (2024-06-13)
+
+
+### Bug Fixes
+
+* **docker:** fixed config file condition ([3c25b86](https://github.com/t0bst4r/matterbridge-home-assistant/commit/3c25b86ce03962edaeb18c599b4f1c4f127ea63d))
+
 ## [0.5.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.4.0...matterbridge-home-assistant-v0.5.0) (2024-06-13)
 
 
