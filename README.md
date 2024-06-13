@@ -73,9 +73,60 @@ volumes:
 
 This package can be configured using environment variables.
 
+### Using Environment Variables
 - `HOME_ASSISTANT_URL` - the home assistant url (e.g. `http://192.168.178.23:8123`)
 - `HOME_ASSISTANT_ACCESS_TOKEN` - a long living access token created in Home Assistant
 - `HOME_ASSISTANT_CLIENT_CONFIG` - a json string containing the client config (see below)
+
+### Using a config file
+*This works for the Custom Docker Deployment only!*
+
+You can mount the following JSON file to your Docker container (wherever you like).
+
+```json
+{
+  "homeAssistantUrl": "http://192.168.178.23:8123",
+  "homeAssistantAccessToken": "ey....yQ",
+  "homeAssistantClientConfig": {
+    "includeDomains": ["light", "media_player"],
+    "excludePatterns": ["media_player.*echo*"]
+  }
+}
+```
+
+To tell the application to load your JSON file, just point the `CONFIG_FILE` environment variable to the path of this file:
+```bash
+docker run -d \
+  --network host \
+  --volume matterbridge-data:/root/.matterbridge \
+  --volume $PWD/matterbridge-config:/config:ro \
+  --env CONFIG_FILE="/config/matterbridge-config.json" \
+  --name matterbridge
+  ghcr.io/t0bst4r/matterbridge-home-assistant:latest
+```
+
+Whenever a property is missing in the provided JSON config, it will use the environment variables as fallback.
+So your config could look like this:
+
+```json
+{
+  "homeAssistantUrl": "http://192.168.178.23:8123",
+  "homeAssistantClientConfig": {
+    "includeDomains": ["light", "media_player"],
+    "excludePatterns": ["media_player.*echo*"]
+  }
+}
+```
+```bash
+docker run -d \
+  --network host \
+  --volume matterbridge-data:/root/.matterbridge \
+  --volume $PWD/matterbridge-config:/config:ro \
+  --env CONFIG_FILE="/config/matterbridge-config.json" \
+  --env HOME_ASSISTANT_ACCESS_TOKEN="ey....yQ" \
+  --name matterbridge
+  ghcr.io/t0bst4r/matterbridge-home-assistant:latest
+```
 
 ### Client Config
 
