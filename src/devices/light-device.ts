@@ -25,6 +25,8 @@ export enum ColorMode {
   WHITE = 'white',
 }
 
+type Maybe<T> = T | null | undefined;
+
 export class LightDevice extends HomeAssistantDevice {
   private readonly supportsLevelControl: boolean;
   private readonly supportsColorControl: boolean;
@@ -99,16 +101,16 @@ export class LightDevice extends HomeAssistantDevice {
     }
 
     if (this.supportsLevelControl) {
-      const brightness = state.attributes.brightness;
+      const brightness: Maybe<number> = state.attributes.brightness;
       const levelControlClusterServer = this.levelControlCluster!;
-      if (levelControlClusterServer.getCurrentLevelAttribute() !== brightness) {
+      if (brightness != null && levelControlClusterServer.getCurrentLevelAttribute() !== brightness) {
         this.log.debug(`FROM HA: ${this.entityId} changed brightness to ${brightness}`);
         levelControlClusterServer.setCurrentLevelAttribute(brightness ?? 0);
       }
     }
 
-    if (this.supportsColorControl) {
-      const color = this.getHomeAssistantColor(state);
+    const color = this.getHomeAssistantColor(state);
+    if (this.supportsColorControl && color != null) {
       const [hue, saturation] = ColorConverter.toMatterHS(color);
       const colorControlCluster = this.hsColorControlCluster!;
       if (colorControlCluster.getCurrentHueAttribute() !== hue) {
@@ -119,14 +121,15 @@ export class LightDevice extends HomeAssistantDevice {
         this.log.debug(`FROM HA: ${this.entityId} changed (matter) saturation to ${saturation}`);
         colorControlCluster.setCurrentSaturationAttribute(saturation);
       }
+    }
 
-      if (this.supportsColorTemperature && state.attributes.color_temp_kelvin != null) {
-        const temperatureMireds = ColorConverter.temperatureKelvinToMireds(state.attributes.color_temp_kelvin);
-        const temperatureControlCluster = this.tempColorControlCluster!;
-        if (temperatureControlCluster.getColorTemperatureMiredsAttribute() !== temperatureMireds) {
-          this.log.debug(`FROM HA: ${this.entityId} changed (matter) color temperature to ${temperatureMireds} mireds`);
-          temperatureControlCluster.setColorTemperatureMiredsAttribute(temperatureMireds);
-        }
+    const colorTempKelvin: Maybe<number> = state.attributes.color_temp_kelvin;
+    if (this.supportsColorControl && this.supportsColorTemperature && colorTempKelvin != null) {
+      const temperatureMireds = ColorConverter.temperatureKelvinToMireds(colorTempKelvin);
+      const temperatureControlCluster = this.tempColorControlCluster!;
+      if (temperatureControlCluster.getColorTemperatureMiredsAttribute() !== temperatureMireds) {
+        this.log.debug(`FROM HA: ${this.entityId} changed (matter) color temperature to ${temperatureMireds} mireds`);
+        temperatureControlCluster.setColorTemperatureMiredsAttribute(temperatureMireds);
       }
     }
   }
@@ -196,15 +199,17 @@ export class LightDevice extends HomeAssistantDevice {
     await this.setHomeAssistantColor(color);
   };
 
-  private getHomeAssistantColor(entity: HassEntity): Color {
-    if (this.supportedColorModes.includes(ColorMode.HS)) {
-      const [hue, saturation] = entity.attributes.hs_color;
+  private getHomeAssistantColor(entity: HassEntity): Maybe<Color> {
+    const hsColor: Maybe<[number, number]> = entity.attributes.hs_color;
+    const rgbColor: Maybe<[number, number, number]> = entity.attributes.rgb_color;
+    if (this.supportedColorModes.includes(ColorMode.HS) && hsColor != null) {
+      const [hue, saturation] = hsColor;
       return ColorConverter.fromHomeAssistantHS(hue, saturation);
-    } else if (this.supportedColorModes.includes(ColorMode.RGB)) {
-      const [r, g, b] = entity.attributes.rgb_color;
+    } else if (this.supportedColorModes.includes(ColorMode.RGB) && rgbColor != null) {
+      const [r, g, b] = rgbColor;
       return ColorConverter.fromRGB(r, g, b);
     }
-    throw new Error(`Could not find the correct color mode for ${entity.entity_id}`);
+    return undefined;
   }
 
   private async setHomeAssistantTemperature(temperatureKelvin: number): Promise<void> {
