@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.5.1...matterbridge-home-assistant-v0.5.2) (2024-06-14)
+
+
+### Bug Fixes
+
+* [#69](https://github.com/t0bst4r/matterbridge-home-assistant/issues/69) added null checks to prevent sending null to matter ([#71](https://github.com/t0bst4r/matterbridge-home-assistant/issues/71)) ([7162542](https://github.com/t0bst4r/matterbridge-home-assistant/commit/7162542a78e673b98fd11e049c47334fe582fe69))
+
 ## [0.5.1](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.5.0...matterbridge-home-assistant-v0.5.1) (2024-06-13)
 
 
