@@ -316,9 +316,9 @@
     kuler "^2.0.0"
 
 "@dotenvx/dotenvx@^0.44.1":
-  version "0.44.3"
-  resolved "https://registry.yarnpkg.com/@dotenvx/dotenvx/-/dotenvx-0.44.3.tgz#00214b92ec302f1d479da7c73d151f051f285140"
-  integrity sha512-72Uf5yuL1L0X3mWlyc2QCSPuPlcu4ex4cA+QNYFgA9YQZaWkT90p/xGcsf+aNL8ElY7DwnE4yRb6p0RaKSMLHA==
+  version "0.44.4"
+  resolved "https://registry.yarnpkg.com/@dotenvx/dotenvx/-/dotenvx-0.44.4.tgz#d2a5e3d29085c246611d5d84a3985326bdc002c4"
+  integrity sha512-M4Q+wgfeSsc4XGnrcVEGeIJYrtABTQo1YrgBom2JB87zSlzY3xW+l1dI0kXf61mKWtCr4mkEA7IkiqyfhXsaQQ==
   dependencies:
     "@inquirer/confirm" "^2.0.17"
     arch "^2.1.1"
