@@ -86,7 +86,7 @@ jobs:
         id: flags
         run: |
           echo "version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
-          echo "image-tag=$(yq -r '.version' package.json)-pr-${{ github.event.number }}" >> "$GITHUB_OUTPUT"
+          echo "image-tag=$(yq -r '.version' package.json)-beta${{ github.event.number }}" >> "$GITHUB_OUTPUT"
           echo "matterbridge-version=$(yq -r '.peerDependencies.matterbridge' package.json)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Download Artifact
         uses: actions/download-artifact@v4
@@ -96,25 +96,18 @@ jobs:
       - name: 🚀 Build
         uses: docker/build-push-action@v5.4.0
         with:
-          push: false
+          push: ${{ github.head_ref == 'release-please--branches--main--components--matterbridge-home-assistant' }}
           context: ./docker
           cache-from: |
             type=local,src=/tmp/.docker-cache
-            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.image-tag }}
-          tags: ghcr.io/${{github.repository}}:${{ steps.flags.outputs.image-tag }}
+            ghcr.io/${{github.repository}}/beta:${{ steps.flags.outputs.image-tag }}
+          tags: |
+            ghcr.io/${{github.repository}}/beta:${{ steps.flags.outputs.image-tag }}
+            ghcr.io/${{github.repository}}/beta:latest
           cache-to: type=local,mode=max,dest=/tmp/.docker-cache-new
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           build-args: |
             MATTERBRIDGE_VERSION=${{ steps.flags.outputs.matterbridge-version }}
-      - name: 🚀 Publish Beta Release
-        if: github.ref == 'refs/heads/release-please--branches--main--components--matterbridge-home-assistant'
-        run: |
-          BETA_TAG=ghcr.io/${{github.repository}}/beta:${{ steps.flags.outputs.version }}-beta${{ github.event.number }}
-          BETA_LATEST_TAG=ghcr.io/${{github.repository}}/beta:latest
-          docker tag ghcr.io/${{github.repository}}:${{ steps.flags.outputs.image-tag }} $BETA_TAG
-          docker tag ghcr.io/${{github.repository}}:${{ steps.flags.outputs.image-tag }} $BETA_LATEST_TAG
-          docker push $BETA_TAG
-          docker push $BETA_LATEST_TAG
       - name: 🚚 Swap build cache
         run: |
           rm -rf /tmp/.docker-cache
