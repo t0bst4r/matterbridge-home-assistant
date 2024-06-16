@@ -1,4 +1,4 @@
-import { DeviceTypes, MatterbridgeDevice } from 'matterbridge';
+import { DeviceTypes } from 'matterbridge';
 import { HomeAssistantDevice } from './home-assistant-device.js';
 import { HomeAssistantClient } from '../home-assistant/home-assistant-client.js';
 import { OnOffAspect } from './aspects/on-off-aspect.js';
@@ -8,11 +8,9 @@ import { ColorControlAspect } from './aspects/color-control-aspect.js';
 
 export class LightDevice extends HomeAssistantDevice {
   constructor(homeAssistantClient: HomeAssistantClient, entity: Entity) {
-    const device = new MatterbridgeDevice(DeviceTypes.ON_OFF_LIGHT);
-    super(entity, device);
-
-    this.addAspect(new OnOffAspect(homeAssistantClient, device, entity));
-    this.addAspect(new LevelControlAspect(homeAssistantClient, device, entity));
-    this.addAspect(new ColorControlAspect(homeAssistantClient, device, entity));
+    super(entity, DeviceTypes.ON_OFF_LIGHT);
+    this.addAspect(new OnOffAspect(homeAssistantClient, this.matter, entity));
+    this.addAspect(new LevelControlAspect(homeAssistantClient, this.matter, entity));
+    this.addAspect(new ColorControlAspect(homeAssistantClient, this.matter, entity));
   }
 }
