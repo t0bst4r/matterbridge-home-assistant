@@ -3,7 +3,7 @@ import { Entity } from '../../home-assistant/entity/entity.js';
 import { HomeAssistantClient } from '../../home-assistant/home-assistant-client.js';
 import { LevelControlCluster, MatterbridgeDevice } from 'matterbridge';
 import { MatterbridgeDeviceCommands } from '../../util/matterbrigde-device-commands.js';
-import { LightEntityColorMode } from '../../home-assistant/entity/light-entity-color-mode.js';
+import { LightEntityColorMode } from '../light-entity-color-mode.js';
 
 const brightnessModes = Object.values(LightEntityColorMode)
   .filter((mode) => mode !== LightEntityColorMode.UNKNOWN)

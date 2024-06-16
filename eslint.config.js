@@ -8,4 +8,7 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   prettier,
+  {
+    ignores: ['lib/*', 'node_modules/*', 'coverage/*', 'test-reports/*'],
+  },
 ];

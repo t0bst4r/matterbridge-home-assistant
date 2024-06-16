@@ -1,5 +1,5 @@
 import { Entity } from '../home-assistant/entity/entity.js';
-import { LightEntityColorMode } from '../home-assistant/entity/light-entity-color-mode.js';
+import { LightEntityColorMode } from '../devices/light-entity-color-mode.js';
 
 export const lightMocks = {
   withBrightness: (id: number): Entity => ({
@@ -13,6 +13,7 @@ export const lightMocks = {
     context: { id: 'mock', user_id: null, parent_id: null },
     last_updated: new Date().toISOString(),
     last_changed: new Date().toISOString(),
+    hidden: false,
   }),
   withHsl: (id: number): Entity => ({
     entity_id: `light.matterbridge_mock_light_hsl_${id}`,
@@ -26,6 +27,7 @@ export const lightMocks = {
     context: { id: 'mock', user_id: null, parent_id: null },
     last_updated: new Date().toISOString(),
     last_changed: new Date().toISOString(),
+    hidden: false,
   }),
   withRgb: (id: number): Entity => ({
     entity_id: `light.matterbridge_mock_light_rgb_${id}`,
@@ -39,6 +41,7 @@ export const lightMocks = {
     context: { id: 'mock', user_id: null, parent_id: null },
     last_updated: new Date().toISOString(),
     last_changed: new Date().toISOString(),
+    hidden: false,
   }),
   withXY: (id: number): Entity => ({
     entity_id: `light.matterbridge_mock_light_xy_${id}`,
@@ -52,6 +55,7 @@ export const lightMocks = {
     context: { id: 'mock', user_id: null, parent_id: null },
     last_updated: new Date().toISOString(),
     last_changed: new Date().toISOString(),
+    hidden: false,
   }),
   withTemperature: (id: number): Entity => ({
     entity_id: `light.matterbridge_mock_light_temp_${id}`,
@@ -65,5 +69,6 @@ export const lightMocks = {
     context: { id: 'mock', user_id: null, parent_id: null },
     last_updated: new Date().toISOString(),
     last_changed: new Date().toISOString(),
+    hidden: false,
   }),
 };

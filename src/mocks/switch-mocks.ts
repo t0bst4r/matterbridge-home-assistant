@@ -10,5 +10,6 @@ export const switchMocks = {
     context: { id: 'mock', user_id: null, parent_id: null },
     last_updated: new Date().toISOString(),
     last_changed: new Date().toISOString(),
+    hidden: false,
   }),
 };

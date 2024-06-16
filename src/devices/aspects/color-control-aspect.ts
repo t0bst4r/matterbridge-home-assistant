@@ -6,7 +6,7 @@ import { MatterbridgeDeviceCommands } from '../../util/matterbrigde-device-comma
 import { ColorConverter } from '../../util/color-converter.js';
 import { HassEntity } from 'home-assistant-js-websocket';
 import type Color from 'color';
-import { LightEntityColorMode } from '../../home-assistant/entity/light-entity-color-mode.js';
+import { LightEntityColorMode } from '../light-entity-color-mode.js';
 
 export const colorModes = [
   LightEntityColorMode.HS,

@@ -1,4 +1,3 @@
-import { UnsubscribeFunc } from 'home-assistant-js-websocket';
 import { Matterbridge, MatterbridgeDynamicPlatform, PlatformConfig } from 'matterbridge';
 import { AnsiLogger } from 'node-ansi-logger';
 import { HomeAssistantClient } from './home-assistant/home-assistant-client.js';
@@ -15,7 +14,7 @@ export interface HomeAssistantPlatformConfig extends PlatformConfig {
 }
 
 export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
-  private unsubscribe!: UnsubscribeFunc;
+  private adapter!: HomeAssistantMatterAdapter;
 
   constructor(
     matterbridge: Matterbridge,
@@ -31,26 +30,25 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
     this.log.info('onStart called with reason:', reason ?? 'none');
 
     const client = await HomeAssistantClient.create(config.homeAssistantUrl, config.homeAssistantAccessToken);
-    const adapter = new HomeAssistantMatterAdapter(
+    this.adapter = new HomeAssistantMatterAdapter(
       client,
       this,
       new PatternMatcher(config.homeAssistantClientConfig ?? {}),
     );
-    this.unsubscribe = client.subscribe(adapter);
 
     if (config.enableMockDevices) {
-      await adapter.onCreate(lightMocks.withBrightness(1));
-      await adapter.onCreate(lightMocks.withHsl(2));
-      await adapter.onCreate(lightMocks.withRgb(3));
-      await adapter.onCreate(lightMocks.withXY(4));
-      await adapter.onCreate(lightMocks.withTemperature(5));
-      await adapter.onCreate(switchMocks.onOff(6));
+      await this.adapter.create(lightMocks.withBrightness(1));
+      await this.adapter.create(lightMocks.withHsl(2));
+      await this.adapter.create(lightMocks.withRgb(3));
+      await this.adapter.create(lightMocks.withXY(4));
+      await this.adapter.create(lightMocks.withTemperature(5));
+      await this.adapter.create(switchMocks.onOff(6));
     }
   }
 
   override async onShutdown(reason?: string) {
     this.log.info('onShutdown called with reason:', reason ?? 'none');
-    this.unsubscribe();
+    this.adapter.close();
     if (this.config.unregisterOnShutdown === true) await this.unregisterAllDevices();
   }
 
