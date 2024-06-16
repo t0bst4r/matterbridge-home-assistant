@@ -107,7 +107,7 @@ jobs:
           build-args: |
             MATTERBRIDGE_VERSION=${{ steps.flags.outputs.matterbridge-version }}
       - name: 🚀 Publish Beta Release
-        if: github.ref == 'refs/heads/release-please--branches--main--components--matterbridge-home-assistant'
+        if: github.head_ref == 'release-please--branches--main--components--matterbridge-home-assistant'
         run: |
           BETA_TAG=ghcr.io/${{github.repository}}/beta:${{ steps.flags.outputs.version }}-beta${{ github.event.number }}
           BETA_LATEST_TAG=ghcr.io/${{github.repository}}/beta:latest
