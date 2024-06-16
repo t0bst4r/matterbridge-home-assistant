@@ -5,6 +5,7 @@ import { HomeAssistantClient } from './home-assistant/home-assistant-client.js';
 import { lightMocks } from './mocks/light-mocks.js';
 import { PatternMatcher, PatternMatcherConfig } from './util/pattern-matcher.js';
 import { HomeAssistantMatterAdapter } from './home-assistant/home-assistant-matter-adapter.js';
+import { switchMocks } from './mocks/switch-mocks.js';
 
 export interface HomeAssistantPlatformConfig extends PlatformConfig {
   homeAssistantUrl: string;
@@ -43,6 +44,7 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
       await adapter.onCreate(lightMocks.withRgb(3));
       await adapter.onCreate(lightMocks.withXY(4));
       await adapter.onCreate(lightMocks.withTemperature(5));
+      await adapter.onCreate(switchMocks.onOff(6));
     }
   }
 
