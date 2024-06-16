@@ -1,4 +1,4 @@
-import { ColorConverter } from './color-converter.js';
+import { ColorConverter } from '../../src/util/color-converter.js';
 
 const precision = (num: number) => Math.round(num * 100) / 100;
 

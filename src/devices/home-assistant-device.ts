@@ -1,42 +1,38 @@
 import * as crypto from 'crypto';
-import { HassEntity, HassServiceTarget } from 'home-assistant-js-websocket';
-import { MatterbridgeDevice, DeviceTypeDefinition, EndpointOptions } from 'matterbridge';
-import { HomeAssistantClient } from '../home-assistant/home-assistant-client.js';
+import { HassEntity } from 'home-assistant-js-websocket';
+import { MatterbridgeDevice } from 'matterbridge';
+import { MatterAspect } from './aspects/matter-aspect.js';
+import { Entity } from '../home-assistant/entity/entity.js';
 
-export abstract class HomeAssistantDevice extends MatterbridgeDevice {
+export abstract class HomeAssistantDevice {
   public readonly entityId: string;
+  private readonly aspects: MatterAspect<Entity>[] = [];
 
   protected constructor(
-    private readonly homeAssistantClient: HomeAssistantClient,
     entity: HassEntity,
-    definition: DeviceTypeDefinition,
-    options?: EndpointOptions,
+    public readonly matter: MatterbridgeDevice,
   ) {
-    super(definition, options);
-
     this.entityId = entity.entity_id;
 
-    this.createDefaultGroupsClusterServer();
-    this.createDefaultScenesClusterServer();
-    this.createDefaultBridgedDeviceBasicInformationClusterServer(
+    matter.createDefaultGroupsClusterServer();
+    matter.createDefaultScenesClusterServer();
+    matter.createDefaultBridgedDeviceBasicInformationClusterServer(
       entity.attributes.friendly_name ?? entity.entity_id,
       this.createSerial(entity.entity_id),
       0x0000,
       't0bst4r',
-      definition.name,
+      matter.getDeviceTypes().at(0)!.name,
     );
   }
 
-  public abstract updateState(state: HassEntity): void | Promise<void>;
+  public addAspect(aspect: MatterAspect<Entity>): void {
+    this.aspects.push(aspect);
+  }
 
-  protected callService(
-    domain: string,
-    service: string,
-    serviceData?: object,
-    target?: HassServiceTarget,
-    returnResponse?: boolean,
-  ): Promise<unknown> {
-    return this.homeAssistantClient.callService(domain, service, serviceData, target, returnResponse);
+  public async updateState(state: HassEntity): Promise<void> {
+    for (const aspect of this.aspects) {
+      await aspect.update(state);
+    }
   }
 
   private createSerial(entityId: string) {
