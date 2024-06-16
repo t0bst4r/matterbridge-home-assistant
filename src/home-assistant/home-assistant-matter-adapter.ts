@@ -7,12 +7,14 @@ import { SwitchDevice } from '../devices/switch-device.js';
 import { HomeAssistantClient } from './home-assistant-client.js';
 import { AnsiLogger, TimestampFormat } from 'node-ansi-logger';
 import { MatterbridgeDynamicPlatform } from 'matterbridge';
+import { PatternMatcher } from '../util/pattern-matcher.js';
 
 export class HomeAssistantMatterAdapter implements EntityConsumer {
   private readonly unsupportedEntities = new Set<string>();
+  private readonly excludedEntities = new Set<string>();
   private readonly devices = new Map<string, HomeAssistantDevice>();
   private readonly log: AnsiLogger = new AnsiLogger({
-    logName: 'ColorControlAspect',
+    logName: 'HomeAssistantMatterAdapter',
     logTimestampFormat: TimestampFormat.TIME_MILLIS,
     logDebug: process.env.LOG_DEBUG === 'true',
   });
@@ -29,11 +31,18 @@ export class HomeAssistantMatterAdapter implements EntityConsumer {
   constructor(
     private readonly client: HomeAssistantClient,
     private readonly platform: MatterbridgeDynamicPlatform,
+    private readonly patternMatcher: PatternMatcher,
   ) {}
 
   async onCreate(entity: Entity) {
     if (entity.hidden) {
       this.log.debug(`Entity '${entity.entity_id}' is hidden`);
+      return;
+    }
+
+    if (!this.patternMatcher.isIncluded(entity.entity_id)) {
+      this.excludedEntities.add(entity.entity_id);
+      this.log.debug(`Entity '${entity.entity_id}' is not included, but excluded by patterns`);
       return;
     }
 
@@ -57,7 +66,7 @@ export class HomeAssistantMatterAdapter implements EntityConsumer {
   }
 
   async onUpdate(entity: Entity) {
-    if (this.unsupportedEntities.has(entity.entity_id)) {
+    if (this.unsupportedEntities.has(entity.entity_id) || this.excludedEntities.has(entity.entity_id)) {
       return;
     }
     const device = this.devices.get(entity.entity_id);

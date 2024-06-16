@@ -3,7 +3,7 @@ import { Matterbridge, MatterbridgeDynamicPlatform, PlatformConfig } from 'matte
 import { AnsiLogger } from 'node-ansi-logger';
 import { HomeAssistantClient } from './home-assistant/home-assistant-client.js';
 import { lightMocks } from './mocks/light-mocks.js';
-import { PatternMatcherConfig } from './util/pattern-matcher.js';
+import { PatternMatcher, PatternMatcherConfig } from './util/pattern-matcher.js';
 import { HomeAssistantMatterAdapter } from './home-assistant/home-assistant-matter-adapter.js';
 
 export interface HomeAssistantPlatformConfig extends PlatformConfig {
@@ -30,7 +30,11 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
     this.log.info('onStart called with reason:', reason ?? 'none');
 
     const client = await HomeAssistantClient.create(config.homeAssistantUrl, config.homeAssistantAccessToken);
-    const adapter = new HomeAssistantMatterAdapter(client, this);
+    const adapter = new HomeAssistantMatterAdapter(
+      client,
+      this,
+      new PatternMatcher(config.homeAssistantClientConfig ?? {}),
+    );
     this.unsubscribe = client.subscribe(adapter);
 
     if (config.enableMockDevices) {
