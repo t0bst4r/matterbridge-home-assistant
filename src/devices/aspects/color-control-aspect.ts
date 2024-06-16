@@ -1,7 +1,7 @@
 import { MatterAspect } from './matter-aspect.js';
 import { Entity } from '../../home-assistant/entity/entity.js';
 import { HomeAssistantClient } from '../../home-assistant/home-assistant-client.js';
-import { ColorControl as MColorControl, ColorControlCluster, MatterbridgeDevice } from 'matterbridge/dist';
+import { ColorControl as MColorControl, ColorControlCluster, MatterbridgeDevice } from 'matterbridge';
 import { MatterbridgeDeviceCommands } from '../../util/matterbrigde-device-commands.js';
 import { ColorConverter } from '../../util/color-converter.js';
 import { HassEntity } from 'home-assistant-js-websocket';
