@@ -1,27 +1,28 @@
 import * as crypto from 'crypto';
 import { HassEntity } from 'home-assistant-js-websocket';
-import { MatterbridgeDevice } from 'matterbridge';
+import { MatterbridgeDevice, DeviceTypeDefinition } from 'matterbridge';
 import { MatterAspect } from './aspects/matter-aspect.js';
 import { Entity } from '../home-assistant/entity/entity.js';
 
 export abstract class HomeAssistantDevice {
   public readonly entityId: string;
+  public readonly matter: MatterbridgeDevice;
   private readonly aspects: MatterAspect<Entity>[] = [];
 
-  protected constructor(
-    entity: HassEntity,
-    public readonly matter: MatterbridgeDevice,
-  ) {
+  protected constructor(entity: HassEntity, definition: DeviceTypeDefinition) {
     this.entityId = entity.entity_id;
+    this.matter = new MatterbridgeDevice(definition);
+    this.matter.log.setLogDebug(process.env.LOG_DEBUG === 'true');
+    this.matter.log.setLogName(this.entityId);
 
-    matter.createDefaultGroupsClusterServer();
-    matter.createDefaultScenesClusterServer();
-    matter.createDefaultBridgedDeviceBasicInformationClusterServer(
+    this.matter.createDefaultGroupsClusterServer();
+    this.matter.createDefaultScenesClusterServer();
+    this.matter.createDefaultBridgedDeviceBasicInformationClusterServer(
       entity.attributes.friendly_name ?? entity.entity_id,
       this.createSerial(entity.entity_id),
       0x0000,
       't0bst4r',
-      matter.getDeviceTypes().at(0)!.name,
+      this.matter.getDeviceTypes().at(0)!.name,
     );
   }
 
@@ -29,7 +30,7 @@ export abstract class HomeAssistantDevice {
     this.aspects.push(aspect);
   }
 
-  public async updateState(state: HassEntity): Promise<void> {
+  public async updateState(state: Entity): Promise<void> {
     for (const aspect of this.aspects) {
       await aspect.update(state);
     }
