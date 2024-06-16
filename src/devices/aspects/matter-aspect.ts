@@ -1,4 +1,4 @@
-import { AnsiLogger, TimestampFormat } from 'node-ansi-logger/dist';
+import { AnsiLogger, TimestampFormat } from 'node-ansi-logger';
 
 export abstract class MatterAspect<TState> {
   protected readonly log: AnsiLogger = new AnsiLogger({

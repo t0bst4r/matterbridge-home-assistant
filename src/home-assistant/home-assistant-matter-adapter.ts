@@ -5,7 +5,7 @@ import { HomeAssistantDevice } from '../devices/home-assistant-device.js';
 import { LightDevice } from '../devices/light-device.js';
 import { SwitchDevice } from '../devices/switch-device.js';
 import { HomeAssistantClient } from './home-assistant-client.js';
-import { AnsiLogger } from 'node-ansi-logger/dist';
+import { AnsiLogger } from 'node-ansi-logger';
 import { MatterbridgeDynamicPlatform } from 'matterbridge';
 
 export class HomeAssistantMatterAdapter implements EntityConsumer {
