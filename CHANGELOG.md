@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/v0.5.2...v1.0.0) (2024-06-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* Entity marked as hidden in Home Assistant are automatically hidden in Matter.
+
+### Features
+
+* refactor device types to aspects, add ([#52](https://github.com/t0bst4r/matterbridge-home-assistant/issues/52)) added hidden attribute ([9bc4126](https://github.com/t0bst4r/matterbridge-home-assistant/commit/9bc4126b4216c0fdf7830c5ec58cdd3b7ba1d7f9))
+
+
+### Bug Fixes
+
+* **deps:** update dependency @dotenvx/dotenvx to v0.44.4 ([#75](https://github.com/t0bst4r/matterbridge-home-assistant/issues/75)) ([63fd48b](https://github.com/t0bst4r/matterbridge-home-assistant/commit/63fd48bd41839f219fcbf6a30fad14dccc85c1a3))
+* **deps:** update npm ([#73](https://github.com/t0bst4r/matterbridge-home-assistant/issues/73)) ([af80419](https://github.com/t0bst4r/matterbridge-home-assistant/commit/af8041907703d506ca265c5fc802672813ee2e89))
+
 ## [0.5.2](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.5.1...matterbridge-home-assistant-v0.5.2) (2024-06-14)
 
 
