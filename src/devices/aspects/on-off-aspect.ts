@@ -15,6 +15,7 @@ export class OnOffAspect extends MatterAspect<Entity> {
     isOn?: (state: HassEntity) => boolean,
   ) {
     super(entity.entity_id);
+    this.log.setLogName('OnOffAspect');
     this.isOn = isOn ?? ((state) => state.state !== 'off');
 
     device.createDefaultOnOffClusterServer();

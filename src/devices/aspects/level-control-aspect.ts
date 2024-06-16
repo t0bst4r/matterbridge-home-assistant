@@ -22,6 +22,7 @@ export class LevelControlAspect extends MatterAspect<Entity> {
     entity: Entity,
   ) {
     super(entity.entity_id);
+    this.log.setLogName('LevelControlAspect');
     const supportedColorModes: LightEntityColorMode[] = entity.attributes.supported_color_modes ?? [];
 
     this.supportsLevelControl = supportedColorModes.some((mode) => brightnessModes.includes(mode));

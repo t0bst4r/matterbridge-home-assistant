@@ -30,7 +30,7 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
     this.log.info('onStart called with reason:', reason ?? 'none');
 
     const client = await HomeAssistantClient.create(config.homeAssistantUrl, config.homeAssistantAccessToken);
-    const adapter = new HomeAssistantMatterAdapter(this.log, client, this);
+    const adapter = new HomeAssistantMatterAdapter(client, this);
     this.unsubscribe = client.subscribe(adapter);
 
     if (config.enableMockDevices) {

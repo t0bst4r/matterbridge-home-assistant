@@ -5,12 +5,17 @@ import { HomeAssistantDevice } from '../devices/home-assistant-device.js';
 import { LightDevice } from '../devices/light-device.js';
 import { SwitchDevice } from '../devices/switch-device.js';
 import { HomeAssistantClient } from './home-assistant-client.js';
-import { AnsiLogger } from 'node-ansi-logger';
+import { AnsiLogger, TimestampFormat } from 'node-ansi-logger';
 import { MatterbridgeDynamicPlatform } from 'matterbridge';
 
 export class HomeAssistantMatterAdapter implements EntityConsumer {
   private readonly unsupportedEntities = new Set<string>();
   private readonly devices = new Map<string, HomeAssistantDevice>();
+  private readonly log: AnsiLogger = new AnsiLogger({
+    logName: 'ColorControlAspect',
+    logTimestampFormat: TimestampFormat.TIME_MILLIS,
+    logDebug: process.env.LOG_DEBUG === 'true',
+  });
 
   private readonly deviceFactories: Record<string, (entity: HassEntity) => HomeAssistantDevice> = {
     light: (entity) => new LightDevice(this.client, entity),
@@ -22,7 +27,6 @@ export class HomeAssistantMatterAdapter implements EntityConsumer {
   };
 
   constructor(
-    private readonly log: AnsiLogger,
     private readonly client: HomeAssistantClient,
     private readonly platform: MatterbridgeDynamicPlatform,
   ) {}

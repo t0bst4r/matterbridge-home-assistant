@@ -35,6 +35,7 @@ export class ColorControlAspect extends MatterAspect<Entity> {
     entity: Entity,
   ) {
     super(entity.entity_id);
+    this.log.setLogName('ColorControlAspect');
     this.supportedColorModes = entity.attributes.supported_color_modes ?? [];
     this.supportsColorControl = this.supportedColorModes.some((mode) => colorModes.includes(mode));
     this.supportsColorTemperature = this.supportedColorModes.includes(LightEntityColorMode.COLOR_TEMP);
