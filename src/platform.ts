@@ -1,10 +1,8 @@
 import { Matterbridge, MatterbridgeDynamicPlatform, PlatformConfig } from 'matterbridge';
 import { AnsiLogger } from 'node-ansi-logger';
 import { HomeAssistantClient } from './home-assistant/home-assistant-client.js';
-import { lightMocks } from './mocks/light-mocks.js';
 import { PatternMatcher, PatternMatcherConfig } from './util/pattern-matcher.js';
 import { HomeAssistantMatterAdapter } from './home-assistant/home-assistant-matter-adapter.js';
-import { switchMocks } from './mocks/switch-mocks.js';
 
 export interface HomeAssistantPlatformConfig extends PlatformConfig {
   homeAssistantUrl: string;
@@ -35,15 +33,6 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
       this,
       new PatternMatcher(config.homeAssistantClientConfig ?? {}),
     );
-
-    if (config.enableMockDevices) {
-      await this.adapter.create(lightMocks.withBrightness(1));
-      await this.adapter.create(lightMocks.withHsl(2));
-      await this.adapter.create(lightMocks.withRgb(3));
-      await this.adapter.create(lightMocks.withXY(4));
-      await this.adapter.create(lightMocks.withTemperature(5));
-      await this.adapter.create(switchMocks.onOff(6));
-    }
   }
 
   override async onShutdown(reason?: string) {

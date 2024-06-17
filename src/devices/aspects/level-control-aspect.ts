@@ -41,7 +41,7 @@ export class LevelControlAspect extends MatterAspect<Entity> {
   };
 
   async update(state: Entity): Promise<void> {
-    const level: number | undefined = this.config.getValue(state.attributes.brightness);
+    const level: number | undefined = this.config.getValue(state);
     const levelControlClusterServer = this.levelControlCluster!;
     if (level != null && levelControlClusterServer.getCurrentLevelAttribute() !== level) {
       this.log.debug(`FROM HA: ${this.entityId} changed value to ${level}`);
