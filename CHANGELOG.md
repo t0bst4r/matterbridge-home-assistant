@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.0.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/v0.5.2...v1.0.0) (2024-06-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Entity marked as hidden in Home Assistant are automatically hidden in Matter.
+
+### Features
+
+* **lights:** added identify cluster server ([c527a07](https://github.com/t0bst4r/matterbridge-home-assistant/commit/c527a07cf5061fe13aa5c7779d1d968f69853d0c))
+* refactor device types to aspects, add ([#52](https://github.com/t0bst4r/matterbridge-home-assistant/issues/52)) added hidden attribute ([9bc4126](https://github.com/t0bst4r/matterbridge-home-assistant/commit/9bc4126b4216c0fdf7830c5ec58cdd3b7ba1d7f9))
+* refactor home-assistant-client ([20477cb](https://github.com/t0bst4r/matterbridge-home-assistant/commit/20477cb44f6f52cb6ee78876734e61964a2efbe1))
+
+
+### Bug Fixes
+
+* add pattern matcher after refactoring ([38f2303](https://github.com/t0bst4r/matterbridge-home-assistant/commit/38f2303ecb76c474bb0fa9a7b0671f1e6235f8a2))
+* **deps:** update dependency @dotenvx/dotenvx to v0.44.4 ([#75](https://github.com/t0bst4r/matterbridge-home-assistant/issues/75)) ([63fd48b](https://github.com/t0bst4r/matterbridge-home-assistant/commit/63fd48bd41839f219fcbf6a30fad14dccc85c1a3))
+* **deps:** update docker/build-push-action action to v6 ([#87](https://github.com/t0bst4r/matterbridge-home-assistant/issues/87)) ([77b22b1](https://github.com/t0bst4r/matterbridge-home-assistant/commit/77b22b130a4f959a781fc2f61b84119a49a57b59))
+* **deps:** update npm ([#73](https://github.com/t0bst4r/matterbridge-home-assistant/issues/73)) ([af80419](https://github.com/t0bst4r/matterbridge-home-assistant/commit/af8041907703d506ca265c5fc802672813ee2e89))
+* fix level control brightness selector ([48fb8ac](https://github.com/t0bst4r/matterbridge-home-assistant/commit/48fb8ac4328dd988069a208937ba42fe4de12a3b))
+* **lights:** removed dist import ([0b7cfb7](https://github.com/t0bst4r/matterbridge-home-assistant/commit/0b7cfb7e420406dc47d49ce3fc298d8dec58fecf))
+* made level control and onoff aspect configurable ([81f64ff](https://github.com/t0bst4r/matterbridge-home-assistant/commit/81f64ff8a3e7b488c97a127eb27823b1002bfe54))
+* removed dist imports ([f3f150f](https://github.com/t0bst4r/matterbridge-home-assistant/commit/f3f150fdb217bea9a313c2d75387dc156e2db8aa))
+* **switch:** add identify aspect to switches ([d8579f8](https://github.com/t0bst4r/matterbridge-home-assistant/commit/d8579f8e690a9ce7eec5f77047db7897ff7d8a05))
+
 ## [0.5.2](https://github.com/t0bst4r/matterbridge-home-assistant/compare/matterbridge-home-assistant-v0.5.1...matterbridge-home-assistant-v0.5.2) (2024-06-14)
 
 
