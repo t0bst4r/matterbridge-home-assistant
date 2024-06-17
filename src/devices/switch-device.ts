@@ -10,6 +10,6 @@ export class SwitchDevice extends HomeAssistantDevice {
   constructor(homeAssistantClient: HomeAssistantClient, entity: Entity, isOn?: (state: HassEntity) => boolean) {
     super(entity, DeviceTypes.ON_OFF_PLUGIN_UNIT);
     this.addAspect(new IdentifyAspect(this.matter, entity));
-    this.addAspect(new OnOffAspect(homeAssistantClient, this.matter, entity, isOn));
+    this.addAspect(new OnOffAspect(homeAssistantClient, this.matter, entity, { isOn }));
   }
 }

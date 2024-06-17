@@ -27,8 +27,8 @@ export class HomeAssistantClient {
 
   private readonly entityCollection: Collection<HassEntities>;
   private readonly registryCollection: Collection<HassRegistryEntities>;
-  private states!: HassEntities;
-  private registry!: HassRegistryEntities;
+  private states: HassEntities = {};
+  private registry: HassRegistryEntities = {};
   private entities: Record<string, Entity> = {};
   private readonly subscribers = new Set<SubscribeFn>();
   private readonly update: () => Promise<void>;
@@ -40,16 +40,11 @@ export class HomeAssistantClient {
   }
 
   private async init() {
-    await this.entityCollection.refresh();
-    await this.registryCollection.refresh();
-    this.states = this.entityCollection.state;
-    this.registry = this.registryCollection.state;
-
     this.entityCollection.subscribe((states) => {
       this.states = states;
       this.update();
     });
-    this.entityCollection.subscribe((registry) => {
+    this.registryCollection.subscribe((registry) => {
       this.registry = registry;
       this.update();
     });
