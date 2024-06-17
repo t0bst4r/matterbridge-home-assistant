@@ -6,6 +6,8 @@ import { MatterbridgeDeviceCommands } from '../../util/matterbrigde-device-comma
 
 export interface LevenControlAspectConfig {
   getValue: (entity: Entity) => number | undefined;
+  getMinValue?: (entity: Entity) => number | undefined;
+  getMaxValue?: (entity: Entity) => number | undefined;
   moveToLevel: {
     service: string;
     data: (value: number) => object;
@@ -41,8 +43,20 @@ export class LevelControlAspect extends MatterAspect<Entity> {
   };
 
   async update(state: Entity): Promise<void> {
-    const level: number | undefined = this.config.getValue(state);
     const levelControlClusterServer = this.levelControlCluster!;
+
+    const minLevel = this.config.getMinValue?.(state);
+    if (minLevel != null && levelControlClusterServer.getMinLevelAttribute?.() !== minLevel) {
+      this.log.debug(`FROM HA: ${this.entityId} changed min-value to ${minLevel}`);
+      levelControlClusterServer.setMinLevelAttribute(minLevel);
+    }
+    const maxLevel = this.config.getMaxValue?.(state);
+    if (maxLevel != null && levelControlClusterServer.getMaxLevelAttribute?.() !== maxLevel) {
+      this.log.debug(`FROM HA: ${this.entityId} changed max-value to ${maxLevel}`);
+      levelControlClusterServer.setMaxLevelAttribute(maxLevel);
+    }
+
+    const level = this.config.getValue(state);
     if (level != null && levelControlClusterServer.getCurrentLevelAttribute() !== level) {
       this.log.debug(`FROM HA: ${this.entityId} changed value to ${level}`);
       levelControlClusterServer.setCurrentLevelAttribute(level);
