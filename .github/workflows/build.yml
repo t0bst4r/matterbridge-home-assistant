@@ -109,7 +109,7 @@ jobs:
           name: npm-package
           path: docker
       - name: 🚀 Build
-        uses: docker/build-push-action@v5.4.0
+        uses: docker/build-push-action@v6.0.0
         with:
           push: ${{ github.head_ref == 'release-please--branches--main--components--matterbridge-home-assistant' }}
           context: ./docker
