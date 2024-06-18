@@ -136,32 +136,30 @@ The client config has to be a json string and can have the following properties:
 interface HomeAssistantClientConfig {
   /**
    * The domains to include.
-   * If set, ALL entities must match one of those domains - even those configured in `includePatterns`
    * @example [ "light", "media_player" ]
    */
   includeDomains?: Array<string>;
   /**
    * Glob-Patterns to include entities.
-   * If set, ALL entities must match at least one pattern - even those configured in `includeDomains`
    * @example [ "light.*", "media_player.*_tv_*" ]
    */
   includePatterns?: Array<string>;
   /**
    * The domains to exclude.
-   * If set, entities must not match any of those domains.
    * Exclusions are always winning against inclusions.
    * @example [ "media_player" ]
    */
   excludeDomains?: Array<string>;
   /**
    * Glob-Patterns to exclude entities.
-   * If set, entities must not match at any of those patterns.
    * Exclusions are always winning against inclusions.
    * @example [ "media_player.*echo*" ]
    */
   excludePatterns?: Array<string>;
 }
 ```
+
+**Entities must match any of `includePatterns` or `includeDomains` and most not match any of `excludeDomains` and `excludePatterns`.**
 
 ### Example Configuration
 
