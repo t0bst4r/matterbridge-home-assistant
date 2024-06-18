@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/v1.0.0...v1.1.0) (2024-06-18)
+
+
+### Features
+
+* add basic climate device support ([#47](https://github.com/t0bst4r/matterbridge-home-assistant/issues/47)) ([56f0e89](https://github.com/t0bst4r/matterbridge-home-assistant/commit/56f0e89b8ad059c5a6ece4f2ff8e23e34fee45cc))
+
+
+### Bug Fixes
+
+* **deps:** update docker/build-push-action action to v6.0.1 ([#90](https://github.com/t0bst4r/matterbridge-home-assistant/issues/90)) ([7415f7e](https://github.com/t0bst4r/matterbridge-home-assistant/commit/7415f7ec549f06228e52c470d49547f6a14940a9))
+
 ## [1.0.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/v0.5.2...v1.0.0) (2024-06-17)
 
 
