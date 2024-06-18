@@ -5,13 +5,18 @@
   "version": "1.0.0",
   "type": "module",
   "types": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "test": "jest",
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prettier:fix": "prettier . --write",
     "prettier": "prettier . --check",
+    "prettier:fix": "prettier . --write",
+    "release": "release-it",
     "reset-matterbridge": "matterbridge -factoryreset",
     "preserve": "npm run build && matterbridge -add .",
     "serve": "dotenvx run -f .env.local -- matterbridge -bridge"
@@ -21,6 +26,7 @@
     "@eslint/js": "^9.4.0",
     "@project-chip/matter-node.js": "0.9.1",
     "@project-chip/matter.js": "0.9.1",
+    "@release-it/conventional-changelog": "^8.0.1",
     "@types/color": "^3.0.6",
     "@types/debounce-promise": "^3.1.9",
     "@types/glob-to-regexp": "^0.4.4",
@@ -35,6 +41,7 @@
     "jest-junit": "^16.0.0",
     "matterbridge": "1.2.22",
     "prettier": "^3.3.1",
+    "release-it": "^17.3.0",
     "ts-jest": "^29.1.4",
     "typescript": "^5.4.5",
     "typescript-eslint": "^8.0.0-alpha.30"

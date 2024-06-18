@@ -3,6 +3,7 @@ name: Release
 on:
   push:
     branches:
+      - dev
       - main
 
 env:
@@ -10,26 +11,8 @@ env:
   NODE_VERSION: '18.x'
 
 jobs:
-  release-please:
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: write
-      packages: read
-    outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-    steps:
-      - uses: googleapis/release-please-action@v4
-        id: release
-        with:
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          config-file: .github/release-please-config.json
-          manifest-file: .github/release-please-manifest.json
-
-  node:
-    name: 🚀 Release Node
-    if: ${{ needs.release-please.outputs.release_created }}
-    needs: [release-please]
+  validate:
+    name: Validate
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Checkout
@@ -38,7 +21,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '${{ env.NODE_VERSION }}'
-          registry-url: 'https://registry.npmjs.org'
       - name: 🚛 Install dependencies
         run: yarn install --check-files
       - name: ✏️ Lint
@@ -47,13 +29,48 @@ jobs:
         run: yarn build
       - name: 🔎 Test
         run: yarn test
-      - name: 🚚 Package
-        run: yarn pack --filename matterbridge-home-assistant.tgz
-      - name: 🚀 Publish
-        run: yarn publish matterbridge-home-assistant.tgz
+
+  node:
+    name: 🚀 Release Node
+    needs: [validate]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: ⤵️ Checkout
+        uses: actions/checkout@v4
+      - name: 🤖 Configure Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions [Bot]"
+      - name: 🏗 Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '${{ env.NODE_VERSION }}'
+          registry-url: 'https://registry.npmjs.org'
+      - name: 🚛 Install dependencies
+        run: yarn install --check-files
+      - name: 🛠️ Build
+        run: yarn build
+      - name: 🚀 Publish (Beta)
+        if: github.ref == 'refs/heads/dev'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          export NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN
+          yarn release --preRelease=beta
+      - name: 🚀 Publish
+        if: github.ref == 'refs/heads/main'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          export NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN
+          yarn release
+      - run: ls -la
       - name: ⤴️ Upload Artifact
+        if: false
         uses: actions/upload-artifact@v4
         with:
           name: npm-package
@@ -61,8 +78,8 @@ jobs:
 
   docker:
     name: 🚀 Release Docker
-    if: ${{ needs.release-please.outputs.release_created }}
-    needs: [release-please, node]
+    if: false
+    needs: [node]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -100,7 +117,7 @@ jobs:
       - name: 🚀 Build
         uses: docker/build-push-action@v6.0.1
         with:
-          push: true
+          push: false
           context: ./docker
           cache-from: |
             type=local,src=/tmp/.docker-cache
