@@ -1,5 +1,12 @@
 
 
+## 1.1.1 (2024-06-18)
+
+
+### Bug Fixes
+
+* **ci:** update readme during release ([#92](https://github.com/t0bst4r/matterbridge-home-assistant/issues/92)) ([1869b39](https://github.com/t0bst4r/matterbridge-home-assistant/commit/1869b3906d2554f383856c04b20d8dde2edecc12))
+
 # 1.1.0 (2024-06-18)
 
 
