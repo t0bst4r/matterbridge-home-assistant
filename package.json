@@ -24,6 +24,7 @@
   "devDependencies": {
     "@dotenvx/dotenvx": "^0.44.1",
     "@eslint/js": "^9.4.0",
+    "@j-ulrich/release-it-regex-bumper": "^5.1.0",
     "@project-chip/matter-node.js": "0.9.1",
     "@project-chip/matter.js": "0.9.1",
     "@release-it/conventional-changelog": "^8.0.1",
