@@ -1,3 +1,12 @@
+
+
+# 1.1.0 (2024-06-18)
+
+
+### Features
+
+* **ci:** use release-it for release-management ([#91](https://github.com/t0bst4r/matterbridge-home-assistant/issues/91)) ([589cd0b](https://github.com/t0bst4r/matterbridge-home-assistant/commit/589cd0b8114761d46d30516eeb925ee644347782))
+
 ## [1.0.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/v0.5.2...v1.0.0) (2024-06-17)
 
 
