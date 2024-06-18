@@ -1,5 +1,3 @@
-# Changelog
-
 ## [1.0.0](https://github.com/t0bst4r/matterbridge-home-assistant/compare/v0.5.2...v1.0.0) (2024-06-17)
 
 
