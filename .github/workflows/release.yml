@@ -2,9 +2,7 @@ name: Release
 
 on:
   push:
-    branches:
-      - dev
-      - main
+    branches: [main]
 
 env:
   CI: 'true'
@@ -12,7 +10,7 @@ env:
 
 jobs:
   validate:
-    name: Validate
+    name: 🛠️ Build
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Checkout
@@ -21,6 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '${{ env.NODE_VERSION }}'
+          cache: 'yarn'
       - name: 🚛 Install dependencies
         run: yarn install --check-files
       - name: ✏️ Lint
@@ -36,6 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      release-ref: ${{ steps.release-info.outputs.release-ref }}
     steps:
       - name: ⤵️ Checkout
         uses: actions/checkout@v4
@@ -48,29 +49,21 @@ jobs:
         with:
           node-version: '${{ env.NODE_VERSION }}'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'yarn'
       - name: 🚛 Install dependencies
         run: yarn install --check-files
       - name: 🛠️ Build
         run: yarn build
-      - name: 🚀 Publish (Beta)
-        if: github.ref == 'refs/heads/dev'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          export NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN
-          yarn release --preRelease=beta
       - name: 🚀 Publish
-        if: github.ref == 'refs/heads/main'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn release
+      - name: ℹ️ Detect Git Ref
+        id: release-info
         run: |
-          export NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN
-          yarn release
-      - run: ls -la
+          echo "release-ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Upload Artifact
-        if: false
         uses: actions/upload-artifact@v4
         with:
           name: npm-package
@@ -78,7 +71,6 @@ jobs:
 
   docker:
     name: 🚀 Release Docker
-    if: false
     needs: [node]
     runs-on: ubuntu-latest
     permissions:
@@ -86,6 +78,8 @@ jobs:
     steps:
       - name: ⤵️ Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.node.outputs.release-ref }}
       - name: 🏗 Set up build cache
         id: cache
         uses: actions/cache@v4.0.2
@@ -108,6 +102,7 @@ jobs:
         id: flags
         run: |
           echo "version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
+          echo "latest-tag=latest" >> "$GITHUB_OUTPUT"
           echo "matterbridge-version=$(yq -r '.peerDependencies.matterbridge' package.json)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Download Artifact
         uses: actions/download-artifact@v4
@@ -117,16 +112,16 @@ jobs:
       - name: 🚀 Build
         uses: docker/build-push-action@v6.0.1
         with:
-          push: false
+          push: true
           context: ./docker
           cache-from: |
             type=local,src=/tmp/.docker-cache
             ghcr.io/${{github.repository}}:${{ steps.flags.outputs.version }}
-            ghcr.io/${{github.repository}}:latest
+            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.latest-tag }}
+          cache-to: type=local,mode=max,dest=/tmp/.docker-cache-new
           tags: |
             ghcr.io/${{github.repository}}:${{ steps.flags.outputs.version }}
-            ghcr.io/${{github.repository}}:latest
-          cache-to: type=local,mode=max,dest=/tmp/.docker-cache-new
+            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.latest-tag }}
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           build-args: |
             MATTERBRIDGE_VERSION=${{ steps.flags.outputs.matterbridge-version }}
