@@ -33,8 +33,13 @@ jobs:
     name: 🚀 Release Node
     needs: [validate]
     runs-on: ubuntu-latest
+    outputs:
+      released-version: ${{ steps.publish.outputs.released-version }}
     permissions:
       contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
     steps:
       - name: ⤵️ Checkout
         uses: actions/checkout@v4
@@ -52,13 +57,14 @@ jobs:
       - name: 🛠️ Build
         run: yarn build
       - name: 🚀 Publish
+        id: publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn release
           yarn pack --filename matterbridge-home-assistant.tgz
-          ls -la
+          echo "released-version=$(cat .VERSION)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -95,7 +101,7 @@ jobs:
       - name: ℹ️ Compose build flags
         id: flags
         run: |
-          echo "version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
+          echo "version=${{ needs.node.outputs.released-version }}" >> "$GITHUB_OUTPUT"
           echo "latest-tag=latest" >> "$GITHUB_OUTPUT"
           echo "matterbridge-version=$(yq -r '.dependencies.matterbridge' package.json)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Download Artifact
