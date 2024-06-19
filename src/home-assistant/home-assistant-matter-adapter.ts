@@ -19,6 +19,7 @@ export class HomeAssistantMatterAdapter {
   private readonly deviceFactories: Record<string, (entity: Entity) => HomeAssistantDevice> = {
     light: (entity) => new LightDevice(this.client, entity),
     switch: (entity) => new SwitchDevice(this.client, entity),
+    input_boolean: (entity) => new SwitchDevice(this.client, entity),
     media_player: (entity) => new SwitchDevice(this.client, entity),
     scene: (entity) => new SwitchDevice(this.client, entity),
     script: (entity) => new SwitchDevice(this.client, entity),
