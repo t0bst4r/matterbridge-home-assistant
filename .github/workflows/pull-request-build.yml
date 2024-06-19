@@ -4,7 +4,7 @@ on:
 
 env:
   CI: 'true'
-  NODE_VERSION: '18.x'
+  NODE_VERSION: '20.x'
 
 jobs:
   lint:

@@ -6,7 +6,7 @@ on:
 
 env:
   CI: 'true'
-  NODE_VERSION: '18.x'
+  NODE_VERSION: '20.x'
 
 jobs:
   validate:
@@ -35,8 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    outputs:
-      release-ref: ${{ steps.release-info.outputs.release-ref }}
     steps:
       - name: ⤵️ Checkout
         uses: actions/checkout@v4
@@ -48,7 +46,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '${{ env.NODE_VERSION }}'
-          registry-url: 'https://registry.npmjs.org'
           cache: 'yarn'
       - name: 🚛 Install dependencies
         run: yarn install --check-files
@@ -56,13 +53,12 @@ jobs:
         run: yarn build
       - name: 🚀 Publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn release
-      - name: ℹ️ Detect Git Ref
-        id: release-info
         run: |
-          echo "release-ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          yarn release
+          yarn pack --filename matterbridge-home-assistant.tgz
+          ls -la
       - name: ⤴️ Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -78,8 +74,6 @@ jobs:
     steps:
       - name: ⤵️ Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.node.outputs.release-ref }}
       - name: 🏗 Set up build cache
         id: cache
         uses: actions/cache@v4.0.2
