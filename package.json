@@ -2,7 +2,7 @@
   "name": "matterbridge-home-assistant",
   "main": "lib/index.js",
   "license": "Apache-2.0",
-  "version": "1.1.2",
+  "version": "0.0.0",
   "type": "module",
   "types": "lib/index.d.ts",
   "publishConfig": {
@@ -57,6 +57,18 @@
   "release": {
     "ci": true,
     "branches": ["main"],
-    "tagFormat": "v${version}"
+    "tagFormat": "v${version}",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      [
+        "@semantic-release/exec",
+        {
+          "prepare": "echo ${nextRelease.version} > .VERSION"
+        }
+      ]
+    ]
   }
 }
