@@ -1,5 +1,12 @@
 
 
+## 1.1.2 (2024-06-19)
+
+
+### Bug Fixes
+
+* **deps:** update npm ([#76](https://github.com/t0bst4r/matterbridge-home-assistant/issues/76)) ([daf50e1](https://github.com/t0bst4r/matterbridge-home-assistant/commit/daf50e12af2bf7771616339fa344cfc0a7e5c902))
+
 ## 1.1.1 (2024-06-18)
 
 
