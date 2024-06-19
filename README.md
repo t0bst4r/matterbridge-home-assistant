@@ -184,7 +184,9 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 
 - Light entities (`light.`) including on-off, brightness and hue & saturation control
 - Switch entities (`switch.`) including on-off control
+- Input-Boolean entities (`input_boolean.`) including on-off control
 - Media Players (`media_player.`) are mapped to Switches and currently only support on-off control
+- Climate Devices (`climate.`) only support temperature, yet. **Not tested. Please provide feedback!**
 - Scenes (`scene.`) are mapped to Switches and currently only support on-off control
 - Scripts (`script.`) are mapped to Switches and currently only support on-off control
 - Automations (`automation.`) are mapped to Switches and currently only support on-off control
