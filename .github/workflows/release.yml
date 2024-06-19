@@ -64,7 +64,7 @@ jobs:
         run: |
           yarn release
           yarn pack --filename matterbridge-home-assistant.tgz
-          echo "released-version=$(cat .VERSION)" >> "$GITHUB_OUTPUT"
+          echo "released-version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Upload Artifact
         uses: actions/upload-artifact@v4
         with:

@@ -26,7 +26,6 @@
     "@eslint/js": "^9.4.0",
     "@project-chip/matter-node.js": "0.9.1",
     "@project-chip/matter.js": "0.9.1",
-    "@semantic-release/exec": "^6.0.3",
     "@types/color": "^3.0.6",
     "@types/debounce-promise": "^3.1.9",
     "@types/glob-to-regexp": "^0.4.4",
@@ -63,13 +62,7 @@
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/npm",
-      "@semantic-release/github",
-      [
-        "@semantic-release/exec",
-        {
-          "prepare": "echo ${nextRelease.version} > .VERSION"
-        }
-      ]
+      "@semantic-release/github"
     ]
   }
 }
