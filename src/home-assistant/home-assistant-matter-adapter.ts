@@ -7,7 +7,6 @@ import { AnsiLogger, TimestampFormat } from 'node-ansi-logger';
 import { MatterbridgeDynamicPlatform } from 'matterbridge';
 import { PatternMatcher } from '../util/pattern-matcher.js';
 import debounce from 'debounce-promise';
-import { ClimateDevice } from '../devices/climate-device.js';
 
 export class HomeAssistantMatterAdapter {
   private readonly log: AnsiLogger = new AnsiLogger({
@@ -24,7 +23,7 @@ export class HomeAssistantMatterAdapter {
     scene: (entity) => new SwitchDevice(this.client, entity),
     script: (entity) => new SwitchDevice(this.client, entity),
     automation: (entity) => new SwitchDevice(this.client, entity),
-    climate: (entity) => new ClimateDevice(this.client, entity),
+    // climate: (entity) => new ClimateDevice(this.client, entity),
   };
 
   private readonly ignoreEntities = new Set<string>();
