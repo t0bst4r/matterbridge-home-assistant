@@ -74,6 +74,7 @@ jobs:
   docker:
     name: 🚀 Release Docker
     needs: [node]
+    if: needs.node.outputs.released-version != '0.0.0'
     runs-on: ubuntu-latest
     permissions:
       packages: write
