@@ -10,5 +10,5 @@ if [ -n "$CONFIG_FILE" ]; then
   export HOME_ASSISTANT_URL HOME_ASSISTANT_ACCESS_TOKEN HOME_ASSISTANT_CLIENT_CONFIG
 fi
 
-npx matterbridge -add ./node_modules/matterbridge-home-assistant
-npx matterbridge -bridge
+npx matterbridge -add matterbridge-home-assistant
+npx matterbridge -bridge -docker
