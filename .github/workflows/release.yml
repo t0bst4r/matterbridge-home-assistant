@@ -103,7 +103,7 @@ jobs:
         run: |
           echo "version=${{ needs.node.outputs.released-version }}" >> "$GITHUB_OUTPUT"
           echo "latest-tag=latest" >> "$GITHUB_OUTPUT"
-          echo "matterbridge-version=$(yq -r '.dependencies.matterbridge' package.json)" >> "$GITHUB_OUTPUT"
+          echo "matterbridge-version=$(yq -r '.devDependencies.matterbridge' package.json)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Download Artifact
         uses: actions/download-artifact@v4
         with:
@@ -129,3 +129,15 @@ jobs:
         run: |
           rm -rf /tmp/.docker-cache
           mv /tmp/.docker-cache-new /tmp/.docker-cache
+
+  dispatch:
+    name: 🚀 Repository Dispatch
+    needs: [ node, docker ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.ADDON_DISPATCH_TOKEN }}
+          repository: t0bst4r/matterbridge-home-assistant-addon
+          event-type: release-main
