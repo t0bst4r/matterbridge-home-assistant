@@ -84,7 +84,7 @@ jobs:
       - name: ℹ️ Compose build flags
         id: flags
         run: |
-          MATTERBRIDGE_VERSION="$(yq -r '.dependencies.matterbridge' package.json)"
+          MATTERBRIDGE_VERSION="$(yq -r '.devDependencies.matterbridge' package.json)"
           echo "matterbridge-version=$MATTERBRIDGE_VERSION" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Download Artifact
         uses: actions/download-artifact@v4
