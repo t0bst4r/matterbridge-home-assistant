@@ -27,8 +27,13 @@ export class OnOffAspect extends MatterAspect<Entity> {
     this.log.setLogName('OnOffAspect');
 
     device.createDefaultOnOffClusterServer();
-    device.addCommandHandler('on', this.turnOn.bind(this));
-    device.addCommandHandler('off', this.turnOff.bind(this));
+    if (config?.turnOn) {
+      device.addCommandHandler('on', this.turnOn.bind(this));
+    }
+
+    if (config?.turnOff) {
+      device.addCommandHandler('off', this.turnOff.bind(this));
+    }    
   }
 
   private get onOffCluster() {
