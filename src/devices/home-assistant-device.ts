@@ -1,6 +1,5 @@
 import * as crypto from 'crypto';
-import { HassEntity } from 'home-assistant-js-websocket';
-import { MatterbridgeDevice, DeviceTypeDefinition } from 'matterbridge';
+import { DeviceTypeDefinition, MatterbridgeDevice } from 'matterbridge';
 import { MatterAspect } from './aspects/matter-aspect.js';
 import { Entity } from '../home-assistant/entity/entity.js';
 
@@ -9,7 +8,7 @@ export abstract class HomeAssistantDevice {
   public readonly matter: MatterbridgeDevice;
   private readonly aspects: MatterAspect<Entity>[] = [];
 
-  protected constructor(entity: HassEntity, definition: DeviceTypeDefinition) {
+  protected constructor(entity: Entity, definition: DeviceTypeDefinition) {
     this.entityId = entity.entity_id;
     this.matter = new MatterbridgeDevice(definition);
     this.matter.log.setLogDebug(process.env.LOG_DEBUG === 'true');
