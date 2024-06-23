@@ -1026,18 +1026,18 @@
     "@pnpm/network.ca-file" "^1.0.1"
     config-chain "^1.1.11"
 
-"@project-chip/matter-node.js@0.9.1", "@project-chip/matter-node.js@^0.9.1":
-  version "0.9.1"
-  resolved "https://registry.npmjs.org/@project-chip/matter-node.js/-/matter-node.js-0.9.1.tgz"
-  integrity sha512-sxMdJFGIYNS6yH12MQCSitSNN5tS+C7uErd1jX6p9G3mgRFDx5rvp+5TfkL8Pa9kc0hYujSdyM9mUSZSB4T3yg==
+"@project-chip/matter-node.js@0.9.2", "@project-chip/matter-node.js@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@project-chip/matter-node.js/-/matter-node.js-0.9.2.tgz#7f94302589a19e180cd8459e075b2f8b3d03f1c1"
+  integrity sha512-Gh3wmvdeAZwrPgHRm8ZXgZWqqUbLj//4sqADpPJyNe53XHWugLYVuQv6xob0A+OlICPTvcTvdLhWy6IutFJzOA==
   dependencies:
-    "@project-chip/matter.js" "0.9.1"
+    "@project-chip/matter.js" "0.9.2"
     node-localstorage "^3.0.5"
 
-"@project-chip/matter.js@0.9.1":
-  version "0.9.1"
-  resolved "https://registry.npmjs.org/@project-chip/matter.js/-/matter.js-0.9.1.tgz"
-  integrity sha512-Czu8ASidxZLBMpFjD+uNpSr6HAaA3ALd3n56cFX91I4Siz5PUAaFPi3EepStGHo8wm+HgxE8BQ4Ss1jB3QzCWA==
+"@project-chip/matter.js@0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@project-chip/matter.js/-/matter.js-0.9.2.tgz#67723f9053fbff89430cbc8f70687ddff6b8e57f"
+  integrity sha512-x4oaJkvHTvMv79fn6AR8p0JBaqbOM7tUHwkeQSrq0pLOZRSg6FArLEIdyF/siUw8JsEyECdgpVgS70ujk6HyNQ==
   dependencies:
     "@noble/curves" "^1.4.0"
 
@@ -4714,24 +4714,24 @@ marked@^12.0.0:
   resolved "https://registry.yarnpkg.com/marked/-/marked-12.0.2.tgz#b31578fe608b599944c69807b00f18edab84647e"
   integrity sha512-qXUm7e/YKFoqFPYPa3Ukg9xlI5cyAtGmyEIzMfW//m6kXwCy2Ps9DYf5ioijFKQ8qyuscrHoY04iJGctu2Kg0Q==
 
-matter-history@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/matter-history/-/matter-history-1.1.1.tgz"
-  integrity sha512-qFnt4T+GVK2Epa+3MeQ5FXmt+kVwX6+ukc+M0WUfVvuFPrfCsDD/RurP/JZwUahI1J1wOQE+/yvFEwUp8TJO7Q==
+matter-history@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/matter-history/-/matter-history-1.1.2.tgz#fd2ab2e9e6e61416c41305ebfc4bd54affc53e86"
+  integrity sha512-6oJIjK8KIt24sS+T+ywaVwBJhaz8Sid17q1RkSyP1PSqDzMRPvos2F5jBzgqTA++Ijq/AXoVfu8WlG/s/YhBlw==
   dependencies:
-    "@project-chip/matter-node.js" "^0.9.1"
+    "@project-chip/matter-node.js" "^0.9.2"
     moment "^2.30.1"
     node-ansi-logger "^1.9.5"
 
-matterbridge@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/matterbridge/-/matterbridge-1.3.0.tgz#a7af21f63fdbcb6894597cbc89a4502c1965dcdd"
-  integrity sha512-IKaCSP36xRA6G6VQHiEPnUAsswY5tvoXsQGkP5OS5azD2c2/SmUsZVNEf8vMeKlbo3x3OQqd8JRYqkje4WxHqg==
+matterbridge@1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/matterbridge/-/matterbridge-1.3.4.tgz#9c5f24fa812648b71ec4bf2e8f760f4c78deb50a"
+  integrity sha512-EfgyCyLZWDd+a+eEAWEAvZ/QVWz8ic2MieYSad4lyjobXTbLU5nGQqRc9pWt1zrX+K22GckeRY2JfcBuwr6GYg==
   dependencies:
-    "@project-chip/matter-node.js" "^0.9.1"
+    "@project-chip/matter-node.js" "^0.9.2"
     body-parser "^1.20.2"
     express "^4.19.2"
-    matter-history "^1.1.1"
+    matter-history "^1.1.2"
     node-ansi-logger "^1.9.5"
     node-persist-manager "^1.0.7"
     ws "^8.17.1"

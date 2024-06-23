@@ -10,5 +10,10 @@ if [ -n "$CONFIG_FILE" ]; then
   export HOME_ASSISTANT_URL HOME_ASSISTANT_ACCESS_TOKEN HOME_ASSISTANT_CLIENT_CONFIG
 fi
 
-npx matterbridge -add matterbridge-home-assistant
-npx matterbridge -bridge -docker
+# Workaround to fix https://github.com/t0bst4r/matterbridge-home-assistant/issues/115
+if grep -q /app/node_modules/matterbridge-home-assistant ~/.matterbridge/storage/.matterbridge/*; then
+  sed -i 's/\/app\/node_modules\/matterbridge-home-assistant/\/usr\/local\/lib\/node_modules\/matterbridge-home-assistant/g' ~/.matterbridge/storage/.matterbridge/*
+fi
+
+matterbridge -add matterbridge-home-assistant
+matterbridge -bridge -docker
