@@ -8,7 +8,7 @@ import { ColorControlAspect } from './aspects/color-control-aspect.js';
 import { IdentifyAspect } from './aspects/identify-aspect.js';
 import { LightEntityColorMode } from './light-entity-color-mode.js';
 
-const brightnessModes = Object.values(LightEntityColorMode)
+const brightnessModes: LightEntityColorMode[] = Object.values(LightEntityColorMode)
   .filter((mode) => mode !== LightEntityColorMode.UNKNOWN)
   .filter((mode) => mode !== LightEntityColorMode.ONOFF);
 
