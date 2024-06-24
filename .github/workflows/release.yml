@@ -147,6 +147,7 @@ jobs:
     name: 🚀 Repository Dispatch
     needs: [ node, docker ]
     runs-on: ubuntu-latest
+    if: needs.node.outputs.released-version != '0.0.0'
     steps:
       - name: 🚀 Repository Dispatch
         uses: peter-evans/repository-dispatch@v3
