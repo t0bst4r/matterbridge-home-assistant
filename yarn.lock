@@ -320,10 +320,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@dotenvx/dotenvx@^0.45.0":
-  version "0.45.0"
-  resolved "https://registry.yarnpkg.com/@dotenvx/dotenvx/-/dotenvx-0.45.0.tgz#2361494c1fa390a0ed7c269b84c886a8da0b8395"
-  integrity sha512-qjW6PDX3mONGQHSrI6LPzOCHn/RZPZuHThPrRZOvyo90pTMGQaCqRbcastl1Y3ZQlw0igdcKnk9pJSh5uYNLbg==
+"@dotenvx/dotenvx@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@dotenvx/dotenvx/-/dotenvx-1.0.0.tgz#d53e58b1e4a71678efb80d4209d089a59900ac9a"
+  integrity sha512-z6xELzLG70tV4Mt+x9NL/HZDZ4WakBX4tN+36tMVl8bqDRAJLj+FXLILkS1OWvFREJSb8k53YGhK1w35m9834A==
   dependencies:
     "@inquirer/confirm" "^2.0.17"
     arch "^2.1.1"
