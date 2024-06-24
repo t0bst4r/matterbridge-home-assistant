@@ -59,7 +59,15 @@
     "branches": ["main"],
     "tagFormat": "v${version}",
     "plugins": [
-      "@semantic-release/commit-analyzer",
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "angular",
+          "releaseRules": [
+            { "type": "bump", "release": "patch" }
+          ]
+        }
+      ],
       "@semantic-release/release-notes-generator",
       "@semantic-release/npm",
       "@semantic-release/github"
