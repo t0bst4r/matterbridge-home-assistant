@@ -2,25 +2,60 @@
 
 ---
 
-This **Matterbridge Home Assistant** package provides bindings to
-connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket)
-to [Matterbridge](https://github.com/Luligu/matterbridge/).
+This **Matterbridge Home Assistant** package provides bindings to connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket) to [Matterbridge](https://github.com/Luligu/matterbridge/).
+
+## Breaking Changes
+
+### Switching from Version 1.x to 2.0.0
+
+In version 1.x `matterbridge` was not listed as a `dependencies` or `peerDependency`.
+This has been changed in version 2.0.0. It is now listed as a peer dependency.
+
+When installed in a local `package.json` file, this is not a problem.
+But since `matterbridge` installs all its plugins globally, this will lead to an error running `matterbridge` with 
+`matterbridge-home-assistant`, bacause of npm's `new` (>= 7) strategy for peer-dependencies.
+
+To solve this, you need to enable [legacy-peer-deps](https://docs.npmjs.com/cli/v10/using-npm/config#legacy-peer-deps)
+in your npm config (`npm config set legacy-peer-deps true`). In the pre-built docker image and the native Home Assistant
+Addon, this is already configured. 
+
+**This change is only "breaking" if you installed this project by hand using npm.**
+
 
 ## Installation
 
-### Manual Setup
+### Manual Setup (global installation)
 
-- Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to
-  setup `matterbridge`.
-- Install the plugin `npm install -g matterbridge-home-assistant`
-- Make sure the plugin is configured properly using environment variables (see [Configuration](#configuration)).
-- Activate the plugin `matterbridge -add matterbridge-home-assistant`
-- Start matterbridge using `matterbridge -bridge`
+When installed globally, npm has to be configured to use "legacy-peer-deps".
+This is [not recommended by npm](https://docs.npmjs.com/cli/v10/using-npm/config#legacy-peer-deps).
+
+Anyway this allows updating `matterbridge` and `matterbridge-home-assistant` using the Web UI.
+
+1. Configure npm to use "legacy-peer-deps" (`npm config set legacy-peer-deps true`)
+2. Install matterbridge `npm install -g matterbridge`
+3. Install the plugin `npm install -g matterbridge-home-assistant`
+4. Make sure the plugin is configured properly using environment variables (see [Configuration](#configuration)).
+5. Activate the plugin `matterbridge -add matterbridge-home-assistant`
+6. Start matterbridge using `matterbridge -bridge`
+
+### Manual Setup (local installation)
+
+When installed locally, you need to create a `package.json` file and install `matterbridge` and 
+`matterbridge-home-assistant` into that folder. This does not require "legacy-peer-deps" to be activated. On the other
+hand, it will not be possible to update `matterbridge` or `matterbridge-home-assistant` using the Web UI. It will also
+not be possible to **install** additional matterbridge-plugins using the UI. Those can be added to the package.json 
+afterward to be installed.
+
+1. Create a new directory, where you want matterbridge to be installed.
+2. Create a new `package.json` file in the directory (e.g. by running `npm init -y`)
+3. Open a terminal (cmd, bash, powershell), navigate to the directory and install `matterbridge` and 
+`matterbridge-home-assistant` using `npm install matterbridge matterbridge-home-assistant`
+4. In the same terminal run `npx matterbridge -add ./node_modules/matterbridge-home-assistant`
+5. Start matterbridge using `npx matterbridge -bridge`.
 
 ### Home Assistant Add-On
 
-Follow the [Home Assistant Add-On Repository](https://github.com/t0bst4r/matterbridge-home-assistant-addon) to install
-Matterbridge with Home Assistant.
+Follow the instructions from [Home Assistant Add-On Repository](https://github.com/t0bst4r/matterbridge-home-assistant-addon) to install Matterbridge with Home Assistant OS.
 
 ### Custom Docker Deployment
 
@@ -43,7 +78,7 @@ docker run -d \
   --env HOME_ASSISTANT_URL="http://192.168.178.23:8123" \
   --env HOME_ASSISTANT_ACCESS_TOKEN="ey....yQ" \
   --env HOME_ASSISTANT_CLIENT_CONFIG='{ "includeDomains": ["light", "media_player"], "excludePatterns": ["media_player.*echo*"] }' \
-  --name matterbridge
+  --name matterbridge \
   ghcr.io/t0bst4r/matterbridge-home-assistant:latest
 ```
 
@@ -104,7 +139,7 @@ docker run -d \
   --volume matterbridge-data:/root/.matterbridge \
   --volume $PWD/matterbridge-config:/config:ro \
   --env CONFIG_FILE="/config/matterbridge-config.json" \
-  --name matterbridge
+  --name matterbridge \
   ghcr.io/t0bst4r/matterbridge-home-assistant:latest
 ```
 
@@ -128,7 +163,7 @@ docker run -d \
   --volume $PWD/matterbridge-config:/config:ro \
   --env CONFIG_FILE="/config/matterbridge-config.json" \
   --env HOME_ASSISTANT_ACCESS_TOKEN="ey....yQ" \
-  --name matterbridge
+  --name matterbridge \
   ghcr.io/t0bst4r/matterbridge-home-assistant:latest
 ```
 
