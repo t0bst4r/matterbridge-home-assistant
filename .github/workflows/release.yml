@@ -147,7 +147,7 @@ jobs:
     name: 🚀 Repository Dispatch
     needs: [ node, docker ]
     runs-on: ubuntu-latest
-    if: needs.node.outputs.released-version != '0.0.0'
+    if: needs.node.outputs.released-version != '0.0.0' && needs.node.outputs.dist-tag == 'latest'
     steps:
       - name: 🚀 Repository Dispatch
         uses: peter-evans/repository-dispatch@v3
@@ -155,4 +155,4 @@ jobs:
           token: ${{ secrets.ADDON_DISPATCH_TOKEN }}
           repository: t0bst4r/matterbridge-home-assistant-addon
           event-type: release
-          client-payload: '{"dist-tag": "${{ needs.node.outputs.dist-tag }}"}'
+          client-payload: '{"latest-version": "${{ needs.node.outputs.released-version }}"}'
