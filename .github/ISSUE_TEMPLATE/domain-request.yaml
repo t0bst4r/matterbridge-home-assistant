@@ -1,6 +1,5 @@
-name: Entity Domain
-description: Request a new domain of entities.
-title: "[Feature]: "
+name: Request support for a new domain
+title: "[Domain]: "
 labels: [ "enhancement" ]
 body:
   - type: markdown
