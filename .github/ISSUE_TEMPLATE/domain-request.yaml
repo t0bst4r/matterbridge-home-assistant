@@ -1,7 +1,7 @@
 name: Domain Request
 description: Request support for a new domain
-title: "[Domain]: "
-labels: [ "enhancement" ]
+title: '[Domain]: '
+labels: ['enhancement']
 body:
   - type: markdown
     attributes:

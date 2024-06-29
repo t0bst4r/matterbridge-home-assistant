@@ -66,7 +66,7 @@ jobs:
           yarn release
           yarn pack --filename matterbridge-home-assistant.tgz
           echo "released-version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
-          
+
           if [[ "${{github.ref}}" = 'refs/heads/main' ]]; then
             echo "dist-tag=latest" >> "$GITHUB_OUTPUT"
           elif [[ "${{github.ref}}" = 'refs/heads/beta' ]]; then
@@ -145,7 +145,7 @@ jobs:
 
   dispatch:
     name: 🚀 Repository Dispatch
-    needs: [ node, docker ]
+    needs: [node, docker]
     runs-on: ubuntu-latest
     if: needs.node.outputs.released-version != '0.0.0' && needs.node.outputs.dist-tag == 'latest'
     steps:
