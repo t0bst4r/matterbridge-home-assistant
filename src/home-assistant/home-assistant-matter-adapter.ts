@@ -8,6 +8,7 @@ import { MatterbridgeDynamicPlatform } from 'matterbridge';
 import { PatternMatcher } from '../util/pattern-matcher.js';
 import debounce from 'debounce-promise';
 import { LockDevice } from '../devices/lock-device.js';
+import { BinarySensorDevice } from '../devices/binary_sensor-device.js';
 
 export class HomeAssistantMatterAdapter {
   private readonly log: AnsiLogger = new AnsiLogger({
@@ -25,6 +26,7 @@ export class HomeAssistantMatterAdapter {
     scene: (entity) => new SwitchDevice(this.client, entity),
     script: (entity) => new SwitchDevice(this.client, entity),
     automation: (entity) => new SwitchDevice(this.client, entity),
+    binary_sensor: (entity) => new BinarySensorDevice(entity),
     // climate: (entity) => new ClimateDevice(this.client, entity),
   };
 
