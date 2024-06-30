@@ -1,6 +1,6 @@
 import { Entity } from '../home-assistant/entity/entity.js';
 
-export const binarySesnorsMocks = {
+export const binarySensorMocks = {
   withDoorClass: (id: number): Entity => ({
     entity_id: `binary_sensor.matterbridge_mock_door_${id}`,
     state: 'off',
