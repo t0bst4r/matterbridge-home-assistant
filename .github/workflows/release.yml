@@ -35,6 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       released-version: ${{ steps.publish.outputs.released-version }}
+      dist-tag: ${{ steps.publish.outputs.dist-tag }}
     permissions:
       contents: write
       issues: write
@@ -65,6 +66,17 @@ jobs:
           yarn release
           yarn pack --filename matterbridge-home-assistant.tgz
           echo "released-version=$(yq -r '.version' package.json)" >> "$GITHUB_OUTPUT"
+
+          if [[ "${{github.ref}}" = 'refs/heads/main' ]]; then
+            echo "dist-tag=latest" >> "$GITHUB_OUTPUT"
+          elif [[ "${{github.ref}}" = 'refs/heads/beta' ]]; then
+            echo "dist-tag=beta" >> "$GITHUB_OUTPUT"
+          elif [[ "${{github.ref}}" = 'refs/heads/alpha' ]]; then
+            echo "dist-tag=alpha" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error ::Could not determine dist-tag for branch ${{ github.ref }}"
+            exit 1
+          fi
       - name: ⤴️ Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -103,7 +115,7 @@ jobs:
         id: flags
         run: |
           echo "version=${{ needs.node.outputs.released-version }}" >> "$GITHUB_OUTPUT"
-          echo "latest-tag=latest" >> "$GITHUB_OUTPUT"
+          echo "dist-tag=${{ needs.node.outputs.dist-tag }}" >> "$GITHUB_OUTPUT"
           echo "matterbridge-version=$(yq -r '.devDependencies.matterbridge' package.json)" >> "$GITHUB_OUTPUT"
       - name: ⤴️ Download Artifact
         uses: actions/download-artifact@v4
@@ -111,18 +123,18 @@ jobs:
           name: npm-package
           path: docker
       - name: 🚀 Build
-        uses: docker/build-push-action@v6.0.2
+        uses: docker/build-push-action@v6.2.0
         with:
           push: true
           context: ./docker
           cache-from: |
             type=local,src=/tmp/.docker-cache
             ghcr.io/${{github.repository}}:${{ steps.flags.outputs.version }}
-            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.latest-tag }}
+            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.dist-tag }}
           cache-to: type=local,mode=max,dest=/tmp/.docker-cache-new
           tags: |
             ghcr.io/${{github.repository}}:${{ steps.flags.outputs.version }}
-            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.latest-tag }}
+            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.dist-tag }}
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           build-args: |
             MATTERBRIDGE_VERSION=${{ steps.flags.outputs.matterbridge-version }}
@@ -133,12 +145,14 @@ jobs:
 
   dispatch:
     name: 🚀 Repository Dispatch
-    needs: [ node, docker ]
+    needs: [node, docker]
     runs-on: ubuntu-latest
+    if: needs.node.outputs.released-version != '0.0.0' && needs.node.outputs.dist-tag == 'latest'
     steps:
       - name: 🚀 Repository Dispatch
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.ADDON_DISPATCH_TOKEN }}
           repository: t0bst4r/matterbridge-home-assistant-addon
-          event-type: release-main
+          event-type: release
+          client-payload: '{"latest-version": "${{ needs.node.outputs.released-version }}"}'

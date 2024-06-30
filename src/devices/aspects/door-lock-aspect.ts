@@ -22,6 +22,7 @@ export class DoorLockAspect extends MatterAspect<Entity> {
   }
 
   private readonly lock: MatterbridgeDeviceCommands['lockDoor'] = async () => {
+    this.log.debug(`FROM MATTER: ${this.entityId} changed lock state to "locked"`);
     this.lockCluster.setLockStateAttribute(DoorLock.LockState.Locked);
     const [domain, service] = ['lock', 'lock'];
     await this.homeAssistantClient.callService(domain, service, undefined, {
@@ -29,6 +30,7 @@ export class DoorLockAspect extends MatterAspect<Entity> {
     });
   };
   private readonly unlock: MatterbridgeDeviceCommands['unlockDoor'] = async () => {
+    this.log.debug(`FROM MATTER: ${this.entityId} changed lock state to "unlocked"`);
     this.lockCluster.setLockStateAttribute(DoorLock.LockState.Unlocked);
     const [domain, service] = ['lock', 'unlock'];
     await this.homeAssistantClient.callService(domain, service, undefined, {
