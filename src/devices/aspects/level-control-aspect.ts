@@ -20,6 +20,8 @@ export class LevelControlAspect extends MatterAspect<Entity> {
     return this.device.getClusterServer(LevelControlCluster);
   }
 
+  private readonly isSupported: boolean;
+
   constructor(
     private readonly homeAssistantClient: HomeAssistantClient,
     private readonly device: MatterbridgeDevice,
@@ -28,7 +30,8 @@ export class LevelControlAspect extends MatterAspect<Entity> {
   ) {
     super(entity.entity_id);
     this.log.setLogName('LevelControlAspect');
-    if (!config.isSupported || config.isSupported(entity)) {
+    this.isSupported = !config.isSupported || config.isSupported(entity);
+    if (this.isSupported) {
       this.log.debug(`Entity ${entity.entity_id} supports level control`);
       device.createDefaultLevelControlClusterServer();
       device.addCommandHandler('moveToLevel', this.moveToLevel.bind(this));
@@ -46,6 +49,9 @@ export class LevelControlAspect extends MatterAspect<Entity> {
   };
 
   async update(state: Entity): Promise<void> {
+    if (!this.isSupported) {
+      return;
+    }
     const levelControlClusterServer = this.levelControlCluster!;
 
     const minLevel = this.config.getMinValue?.(state);
