@@ -11,9 +11,9 @@ import { LightEntityColorMode } from '../light-entity-color-mode.js';
 export const colorModes = [
   LightEntityColorMode.HS,
   LightEntityColorMode.RGB,
+  LightEntityColorMode.XY,
   // TODO: ColorMode.RGBW, not yet supported
   // TODO: ColorMode.RGBWW, not yet supported
-  // TODO: ColorMode.XY, not yet supported
 ];
 
 export class ColorControlAspect extends MatterAspect<Entity> {
@@ -112,10 +112,14 @@ export class ColorControlAspect extends MatterAspect<Entity> {
 
   private getHomeAssistantColor(entity: HassEntity): Color | undefined {
     const hsColor: [number, number] | undefined = entity.attributes.hs_color;
+    const xyColor: [number, number] | undefined = entity.attributes.xy_color;
     const rgbColor: [number, number, number] | undefined = entity.attributes.rgb_color;
     if (this.supportedColorModes.includes(LightEntityColorMode.HS) && hsColor != null) {
       const [hue, saturation] = hsColor;
       return ColorConverter.fromHomeAssistantHS(hue, saturation);
+    } else if (this.supportedColorModes.includes(LightEntityColorMode.XY) && xyColor != null) {
+      const [x, y] = xyColor;
+      return ColorConverter.fromXY(x, y);
     } else if (this.supportedColorModes.includes(LightEntityColorMode.RGB) && rgbColor != null) {
       const [r, g, b] = rgbColor;
       return ColorConverter.fromRGB(r, g, b);
@@ -136,16 +140,6 @@ export class ColorControlAspect extends MatterAspect<Entity> {
   }
 
   private async setHomeAssistantColor(color: Color): Promise<void> {
-    if (this.supportedColorModes.includes(LightEntityColorMode.HS)) {
-      await this.setHomeAssistantHS(color);
-    } else if (this.supportedColorModes.includes(LightEntityColorMode.RGB)) {
-      await this.setHomeAssistantRGB(color);
-    } else {
-      throw new Error(`Could not find the correct color mode for ${this.entityId}`);
-    }
-  }
-
-  private async setHomeAssistantHS(color: Color): Promise<void> {
     const [hue, saturation] = ColorConverter.toHomeAssistantHS(color);
     this.log.debug(`SET HS: ${this.entityId}, (HA) hue: ${hue}, (HA) saturation: ${saturation}`);
     await this.homeAssistantClient.callService(
@@ -153,19 +147,6 @@ export class ColorControlAspect extends MatterAspect<Entity> {
       'turn_on',
       {
         hs_color: [hue, saturation],
-      },
-      { entity_id: this.entityId },
-    );
-  }
-
-  private async setHomeAssistantRGB(color: Color): Promise<void> {
-    const rgbColor = ColorConverter.toRGB(color);
-    this.log.debug(`SET RGB: ${this.entityId}, rgb: ${rgbColor.join(', ')}`);
-    await this.homeAssistantClient.callService(
-      'light',
-      'turn_on',
-      {
-        rgb_color: rgbColor,
       },
       { entity_id: this.entityId },
     );

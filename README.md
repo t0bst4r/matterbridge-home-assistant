@@ -2,16 +2,19 @@
 
 ---
 
-This **Matterbridge Home Assistant** package provides bindings to
-connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket)
-to [Matterbridge](https://github.com/Luligu/matterbridge/).
+This **Matterbridge Home Assistant** package provides bindings to connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket) to [Matterbridge](https://github.com/Luligu/matterbridge/).
+
+---
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/t0bst4r)
+
+---
 
 ## Installation
 
 ### Manual Setup
 
-- Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to
-  setup `matterbridge`.
+- Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to set up `matterbridge`.
 - Install the plugin `npm install -g matterbridge-home-assistant`
 - Make sure the plugin is configured properly using environment variables (see [Configuration](#configuration)).
 - Activate the plugin `matterbridge -add matterbridge-home-assistant`
@@ -193,8 +196,5 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 
 # Contributors
 
-[![Contributors](https://contrib.rocks/image?repo=t0bst4r/matterbridge-home-assistant)](https://github.com/t0bst4r/matterbridge-home-assistant/graphs/contributors)
-
----
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/t0bst4r)
+[<img src="https://github.com/t0bst4r.png" width="50px" alt="t0bst4r" title="t0bst4r" />](https://github.com/t0bst4r)
+[<img src="https://github.com/bassrock.png" width="50px" alt="bassrock" title="bassrock" />](https://github.com/bassrock)

@@ -6,6 +6,7 @@ import { MatterbridgeDeviceCommands } from '../../util/matterbrigde-device-comma
 
 export interface LevenControlAspectConfig {
   getValue: (entity: Entity) => number | undefined;
+  isSupported?: (entity: Entity) => boolean;
   getMinValue?: (entity: Entity) => number | undefined;
   getMaxValue?: (entity: Entity) => number | undefined;
   moveToLevel: {
@@ -27,10 +28,12 @@ export class LevelControlAspect extends MatterAspect<Entity> {
   ) {
     super(entity.entity_id);
     this.log.setLogName('LevelControlAspect');
-    this.log.debug(`Entity ${entity.entity_id} supports level control`);
-    device.createDefaultLevelControlClusterServer();
-    device.addCommandHandler('moveToLevel', this.moveToLevel.bind(this));
-    device.addCommandHandler('moveToLevelWithOnOff', this.moveToLevel.bind(this));
+    if (!config.isSupported || config.isSupported(entity)) {
+      this.log.debug(`Entity ${entity.entity_id} supports level control`);
+      device.createDefaultLevelControlClusterServer();
+      device.addCommandHandler('moveToLevel', this.moveToLevel.bind(this));
+      device.addCommandHandler('moveToLevelWithOnOff', this.moveToLevel.bind(this));
+    }
   }
 
   private moveToLevel: MatterbridgeDeviceCommands['moveToLevel'] = async ({ request: { level } }) => {

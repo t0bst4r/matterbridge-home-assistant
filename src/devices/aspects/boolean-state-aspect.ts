@@ -9,8 +9,7 @@ export class BooleanStateAspect extends MatterAspect<Entity> {
   ) {
     super(entity.entity_id);
     this.log.setLogName('BooleanStateAspect');
-
-    device.createDefaultBooleanStateClusterServer(entity.state !== 'off');
+    device.createDefaultBooleanStateClusterServer(this.isOn(entity));
   }
 
   private get booleanStateCluster() {
@@ -19,11 +18,14 @@ export class BooleanStateAspect extends MatterAspect<Entity> {
 
   async update(state: Entity): Promise<void> {
     const booleanStateClusterServer = this.booleanStateCluster!;
-    const isOnFn = (entity: Entity) => entity.state !== 'off';
-    const isOn = isOnFn(state);
+    const isOn = this.isOn(state);
     if (booleanStateClusterServer.getStateValueAttribute() !== isOn) {
       this.log.debug(`FROM HA: ${state.entity_id} changed boolean state to ${state.state}`);
       booleanStateClusterServer.setStateValueAttribute(isOn);
     }
+  }
+
+  private isOn(entity: Entity): boolean {
+    return entity.state !== 'off';
   }
 }
