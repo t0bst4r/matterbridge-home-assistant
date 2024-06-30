@@ -1,6 +1,7 @@
 import Color from 'color';
 // @ts-expect-error color-temperature does not have any typings
 import { colorTemperature2rgb } from 'color-temperature';
+import { xyColorToRgbColor } from './xy-to-rgb.js';
 
 /*
  * Matter:
@@ -40,6 +41,17 @@ export abstract class ColorConverter {
    */
   public static fromMatterHS(hue: number, saturation: number): Color {
     return Color.hsv((hue / 255) * 360, (saturation / 254) * 100, 100);
+  }
+
+  /**
+   * Create a color object from `x` and `y` values set via Matter
+   * @param x X, Values between 0 and 1
+   * @param y Y, Values between 0 and 1
+   * @return Color
+   */
+  static fromXY(x: number, y: number): Color {
+    const rgb = xyColorToRgbColor(x, y);
+    return Color.rgb(...rgb);
   }
 
   /**

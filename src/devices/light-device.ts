@@ -19,23 +19,18 @@ export class LightDevice extends HomeAssistantDevice {
     this.addAspect(new IdentifyAspect(this.matter, entity));
     this.addAspect(new OnOffAspect(homeAssistantClient, this.matter, entity));
     this.addAspect(new ColorControlAspect(homeAssistantClient, this.matter, entity));
-
-    this.configureLevelControl(homeAssistantClient, entity);
-  }
-
-  private configureLevelControl(homeAssistantClient: HomeAssistantClient, entity: Entity) {
-    const supportedColorModes: LightEntityColorMode[] = entity.attributes.supported_color_modes ?? [];
-    const supportsLevelControl = supportedColorModes.some((mode) => brightnessModes.includes(mode));
-    if (supportsLevelControl) {
-      this.addAspect(
-        new LevelControlAspect(homeAssistantClient, this.matter, entity, {
-          getValue: (entity) => entity.attributes.brightness,
-          moveToLevel: {
-            service: 'light.turn_on',
-            data: (brightness) => ({ brightness }),
-          },
-        }),
-      );
-    }
+    this.addAspect(
+      new LevelControlAspect(homeAssistantClient, this.matter, entity, {
+        isSupported: (entity) => {
+          const supportedColorModes: LightEntityColorMode[] = entity.attributes.supported_color_modes ?? [];
+          return supportedColorModes.some((mode) => brightnessModes.includes(mode));
+        },
+        getValue: (entity) => entity.attributes.brightness,
+        moveToLevel: {
+          service: 'light.turn_on',
+          data: (brightness) => ({ brightness }),
+        },
+      }),
+    );
   }
 }
