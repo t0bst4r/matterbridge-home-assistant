@@ -1,6 +1,6 @@
 import { HomeAssistantDevice } from './home-assistant-device.js';
 import { Entity } from '../home-assistant/entity/entity.js';
-import { DeviceTypes } from 'matterbridge';
+import { DeviceTypes } from '@project-chip/matter.js/device';
 import { IdentifyAspect } from './aspects/identify-aspect.js';
 import { DoorLockAspect } from './aspects/door-lock-aspect.js';
 import { HomeAssistantClient } from '../home-assistant/home-assistant-client.js';

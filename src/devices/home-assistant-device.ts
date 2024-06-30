@@ -1,28 +1,31 @@
-import * as crypto from 'crypto';
-import { DeviceTypeDefinition, MatterbridgeDevice } from 'matterbridge';
+import { extendPublicHandlerMethods } from '@project-chip/matter.js/util';
+import { Device, DeviceTypeDefinition, EndpointOptions } from '@project-chip/matter.js/device';
+import { createDefaultGroupsClusterServer, createDefaultScenesClusterServer } from '@project-chip/matter.js/cluster';
+import { Logger } from 'winston';
 import { MatterAspect } from './aspects/matter-aspect.js';
 import { Entity } from '../home-assistant/entity/entity.js';
+import { MatterbridgeDeviceCommands } from '../util/matterbrigde-device-commands.js';
+import { logger } from '../logger.js';
+import { BasicInformationAspect } from './aspects/basic-information-aspect.js';
 
-export abstract class HomeAssistantDevice {
+const BaseDevice = extendPublicHandlerMethods<typeof Device, MatterbridgeDeviceCommands>(Device);
+
+export abstract class HomeAssistantDevice extends BaseDevice {
+  public readonly logger: Logger;
   public readonly entityId: string;
-  public readonly matter: MatterbridgeDevice;
   private readonly aspects: MatterAspect<Entity>[] = [];
 
-  protected constructor(entity: Entity, definition: DeviceTypeDefinition) {
-    this.entityId = entity.entity_id;
-    this.matter = new MatterbridgeDevice(definition);
-    this.matter.log.setLogDebug(process.env.LOG_DEBUG === 'true');
-    this.matter.log.setLogName(this.entityId);
+  protected constructor(entity: Entity, definition: DeviceTypeDefinition, options: EndpointOptions = {}) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const args: any[] = [definition, options];
+    super(...args);
 
-    this.matter.createDefaultGroupsClusterServer();
-    this.matter.createDefaultScenesClusterServer();
-    this.matter.createDefaultBridgedDeviceBasicInformationClusterServer(
-      entity.attributes.friendly_name ?? entity.entity_id,
-      this.createSerial(entity.entity_id),
-      0x0000,
-      't0bst4r',
-      this.matter.getDeviceTypes().at(0)!.name,
-    );
+    this.logger = logger.child({ service: entity.entity_id });
+    this.entityId = entity.entity_id;
+
+    this.addClusterServer(createDefaultGroupsClusterServer());
+    this.addClusterServer(createDefaultScenesClusterServer());
+    this.addAspect(new BasicInformationAspect(this, entity));
   }
 
   public addAspect(aspect: MatterAspect<Entity>): void {
@@ -33,9 +36,5 @@ export abstract class HomeAssistantDevice {
     for (const aspect of this.aspects) {
       await aspect.update(state);
     }
-  }
-
-  private createSerial(entityId: string) {
-    return crypto.createHash('md5').update(entityId).digest('hex').substring(0, 30);
   }
 }

@@ -1,12 +1,12 @@
-import { AnsiLogger, TimestampFormat } from 'node-ansi-logger';
+import { Logger } from 'winston';
+import { logger } from '../../logger.js';
 
 export abstract class MatterAspect<TState> {
-  protected readonly log: AnsiLogger = new AnsiLogger({
-    logName: 'MatterAspect',
-    logTimestampFormat: TimestampFormat.TIME_MILLIS,
-    logDebug: process.env.LOG_DEBUG === 'true',
-  });
+  protected readonly log: Logger;
+
   abstract update(state: TState): Promise<void>;
 
-  protected constructor(protected readonly entityId: string) {}
+  protected constructor(logName: string) {
+    this.log = logger.child({ service: logName });
+  }
 }
