@@ -114,15 +114,15 @@ export class ColorControlAspect extends MatterAspect<Entity> {
     const hsColor: [number, number] | undefined = entity.attributes.hs_color;
     const xyColor: [number, number] | undefined = entity.attributes.xy_color;
     const rgbColor: [number, number, number] | undefined = entity.attributes.rgb_color;
-    if (this.supportedColorModes.includes(LightEntityColorMode.HS) && hsColor != null) {
+    if (hsColor != null) {
       const [hue, saturation] = hsColor;
       return ColorConverter.fromHomeAssistantHS(hue, saturation);
-    } else if (this.supportedColorModes.includes(LightEntityColorMode.XY) && xyColor != null) {
-      const [x, y] = xyColor;
-      return ColorConverter.fromXY(x, y);
-    } else if (this.supportedColorModes.includes(LightEntityColorMode.RGB) && rgbColor != null) {
+    } else if (rgbColor != null) {
       const [r, g, b] = rgbColor;
       return ColorConverter.fromRGB(r, g, b);
+    } else if (xyColor != null) {
+      const [x, y] = xyColor;
+      return ColorConverter.fromXY(x, y);
     }
     return undefined;
   }
