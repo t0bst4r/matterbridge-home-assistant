@@ -40,7 +40,7 @@ export abstract class ColorConverter {
    * @return Color
    */
   public static fromMatterHS(hue: number, saturation: number): Color {
-    return Color.hsv((hue / 255) * 360, (saturation / 254) * 100, 100);
+    return Color.hsv((hue / 254) * 360, (saturation / 254) * 100, 100);
   }
 
   /**
@@ -97,7 +97,7 @@ export abstract class ColorConverter {
    */
   public static toMatterHS(color: Color): [hue: number, saturation: number] {
     const [h, s] = color.hsv().array();
-    return [(h / 360) * 255, (s / 100) * 254];
+    return [(h / 360) * 254, (s / 100) * 254];
   }
 
   /**
