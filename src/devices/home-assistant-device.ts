@@ -1,7 +1,7 @@
-import * as crypto from 'crypto';
 import { DeviceTypeDefinition, MatterbridgeDevice } from 'matterbridge';
 import { MatterAspect } from './aspects/matter-aspect.js';
 import { Entity } from '../home-assistant/entity/entity.js';
+import { BasicInformationAspect } from './aspects/basic-information-aspect.js';
 
 export abstract class HomeAssistantDevice {
   public readonly entityId: string;
@@ -16,13 +16,7 @@ export abstract class HomeAssistantDevice {
 
     this.matter.createDefaultGroupsClusterServer();
     this.matter.createDefaultScenesClusterServer();
-    this.matter.createDefaultBridgedDeviceBasicInformationClusterServer(
-      entity.attributes.friendly_name ?? entity.entity_id,
-      this.createSerial(entity.entity_id),
-      0x0000,
-      't0bst4r',
-      this.matter.getDeviceTypes().at(0)!.name,
-    );
+    this.addAspect(new BasicInformationAspect(this.matter, entity));
   }
 
   public addAspect(aspect: MatterAspect<Entity>): void {
@@ -33,9 +27,5 @@ export abstract class HomeAssistantDevice {
     for (const aspect of this.aspects) {
       await aspect.update(state);
     }
-  }
-
-  private createSerial(entityId: string) {
-    return crypto.createHash('md5').update(entityId).digest('hex').substring(0, 30);
   }
 }
