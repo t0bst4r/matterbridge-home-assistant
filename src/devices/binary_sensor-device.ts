@@ -1,35 +1,43 @@
-import { DeviceTypeDefinition, DeviceTypes } from 'matterbridge';
+import { DeviceTypeDefinition, DeviceTypes, MatterbridgeDevice } from 'matterbridge';
 import { HomeAssistantDevice } from './home-assistant-device.js';
 import { IdentifyAspect } from './aspects/identify-aspect.js';
 import { Entity } from '../home-assistant/entity/entity.js';
 import { BooleanStateAspect } from './aspects/boolean-state-aspect.js';
-import { OccupancySensingAspect } from './aspects/occupancy-sensing-aspect.js';
+import { MatterAspect } from './aspects/matter-aspect.js';
+import { BinarySensorDeviceClass } from './binary_sensor/binary_sensor-device-class.js';
+import { occupancyDeviceClasses } from './binary_sensor/occupancy-sensors.js';
+import { contactDeviceClasses } from './binary_sensor/contact-sensors.js';
 
-// https://www.home-assistant.io/integrations/binary_sensor/
-const SENSOR_TYPES: Record<string, DeviceTypeDefinition> = {
-  default: DeviceTypes.CONTACT_SENSOR,
-  door: DeviceTypes.CONTACT_SENSOR,
-  garage_door: DeviceTypes.CONTACT_SENSOR,
-  window: DeviceTypes.CONTACT_SENSOR,
-  opening: DeviceTypes.CONTACT_SENSOR,
-  occupancy: DeviceTypes.OCCUPANCY_SENSOR,
-  motion: DeviceTypes.OCCUPANCY_SENSOR,
+export interface InternalBinarySensorDeviceConfig {
+  deviceType: DeviceTypeDefinition;
+  createAspects: (device: MatterbridgeDevice, entity: Entity) => MatterAspect<Entity>[];
+}
+
+// TODO: There is also an on-off-sensor in matter,
+//  but OnOff CLIENT cluster seems to be harder to implement than ContactSensor with BooleanState SERVER cluster
+const defaultSensor: InternalBinarySensorDeviceConfig = {
+  deviceType: DeviceTypes.CONTACT_SENSOR,
+  createAspects: (device, entity) => [new BooleanStateAspect(device, entity)],
 };
 
-const deviceClassToDeviceTypeDefinition = (deviceClass: string | undefined): DeviceTypeDefinition => {
-  return SENSOR_TYPES[deviceClass ?? 'default'] ?? SENSOR_TYPES['default'];
+const deviceClassConfigs: Partial<Record<BinarySensorDeviceClass, InternalBinarySensorDeviceConfig>> = {
+  ...occupancyDeviceClasses,
+  ...contactDeviceClasses,
 };
 
 export class BinarySensorDevice extends HomeAssistantDevice {
-  constructor(entity: Entity) {
-    const deviceType = deviceClassToDeviceTypeDefinition(entity.attributes.device_class);
-    super(entity, deviceType);
-    this.addAspect(new IdentifyAspect(this.matter, entity));
-    if (deviceType === DeviceTypes.OCCUPANCY_SENSOR) {
-      this.addAspect(new OccupancySensingAspect(this.matter, entity));
-    } else {
-      // Default all other binary sensors to boolean state
-      this.addAspect(new BooleanStateAspect(this.matter, entity));
+  private static getConfig(entity: Entity): InternalBinarySensorDeviceConfig {
+    let config: InternalBinarySensorDeviceConfig | undefined = undefined;
+    if (entity.attributes.device_class) {
+      config = deviceClassConfigs[entity.attributes.device_class as BinarySensorDeviceClass];
     }
+    return config ?? defaultSensor;
+  }
+
+  constructor(entity: Entity) {
+    const config = BinarySensorDevice.getConfig(entity);
+    super(entity, config.deviceType);
+    this.addAspect(new IdentifyAspect(this.matter, entity));
+    config.createAspects(this.matter, entity).forEach(this.addAspect.bind(this));
   }
 }

@@ -1,11 +1,16 @@
-import { MatterbridgeDevice, BooleanStateCluster } from 'matterbridge';
+import { BooleanStateCluster, MatterbridgeDevice } from 'matterbridge';
 import { Entity } from '../../home-assistant/entity/entity.js';
 import { MatterAspect } from './matter-aspect.js';
+
+export interface BooleanStateAspectConfig {
+  invert?: boolean;
+}
 
 export class BooleanStateAspect extends MatterAspect<Entity> {
   constructor(
     private readonly device: MatterbridgeDevice,
     entity: Entity,
+    private readonly config?: BooleanStateAspectConfig,
   ) {
     super(entity.entity_id);
     this.log.setLogName('BooleanStateAspect');
@@ -26,6 +31,11 @@ export class BooleanStateAspect extends MatterAspect<Entity> {
   }
 
   private isOn(entity: Entity): boolean {
-    return entity.state !== 'off';
+    const isNotOff = entity.state !== 'off';
+    if (this.config?.invert == true) {
+      return !isNotOff;
+    } else {
+      return isNotOff;
+    }
   }
 }
