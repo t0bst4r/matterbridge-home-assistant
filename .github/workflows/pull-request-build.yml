@@ -92,7 +92,7 @@ jobs:
           name: npm-package
           path: docker
       - name: 🚀 Build
-        uses: docker/build-push-action@v6.2.0
+        uses: docker/build-push-action@v6.3.0
         with:
           push: false
           context: ./docker
