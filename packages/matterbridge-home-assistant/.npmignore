@@ -1,20 +1,10 @@
-# Workflows & IDEs
-/.github/
-/.vscode/
-/.idea/
-
-# Test results
-/test-reports/
-/coverage/
-
 # Source Code
 /test/
 /src/
 
 # Configs
 /docker/
-.prettierrc.json
-eslint.config.js
+.env.*
 tsconfig.base.json
 tsconfig.dev.json
 tsconfig.json
@@ -24,4 +14,3 @@ tsconfig.tsbuildinfo
 !/lib/
 !/lib/**/*.js
 !/lib/**/*.d.ts
-

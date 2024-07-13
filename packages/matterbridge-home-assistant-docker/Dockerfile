@@ -1,6 +1,7 @@
 FROM node:18-alpine
 
 ARG MATTERBRIDGE_VERSION
+ARG MATTERBRIDGE_HOME_ASSISTANT_VERSION
 
 ENV HOME_ASSISTANT_URL="http://homeassistant:8123"
 ENV HOME_ASSISTANT_ACCESS_TOKEN=""
@@ -21,14 +22,11 @@ RUN apk add jq
 RUN mkdir /app
 WORKDIR /app
 
-RUN npm install -g matterbridge@$MATTERBRIDGE_VERSION
-
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod a+x docker-entrypoint.sh
 
-COPY matterbridge-home-assistant.tgz /app/matterbridge-home-assistant.tgz
-
-RUN npm install -g ./matterbridge-home-assistant.tgz \
-    && rm -f ./matterbridge-home-assistant.tgz
+RUN npm install -g \
+    matterbridge@$MATTERBRIDGE_VERSION \
+    matterbridge-home-assistant@$MATTERBRIDGE_HOME_ASSISTANT_VERSION
 
 CMD ["./docker-entrypoint.sh"]

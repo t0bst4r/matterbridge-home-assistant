@@ -8,11 +8,11 @@
 node_modules/
 
 # Test Output
-test-reports/
-coverage/
 
 # Build Output
 lib/
 
 # Developer Settings
-.env.local
+.env.*
+
+.nx/cache

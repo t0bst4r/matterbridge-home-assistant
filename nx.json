@@ -1,0 +1,17 @@
+{
+  "targetDefaults": {
+    "test": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "build": {
+      "cache": true,
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "{projectRoot}/lib"
+      ]
+    }
+  }
+}
