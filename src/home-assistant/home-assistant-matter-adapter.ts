@@ -33,7 +33,12 @@ export class HomeAssistantMatterAdapter {
   private readonly ignoreEntities = new Set<string>();
   private readonly hiddenEntities = new Set<string>();
   private readonly devices = new Map<string, HomeAssistantDevice>();
+  private _isInitialized: boolean = false;
   public readonly close: UnsubscribeFn;
+
+  public get isInitialized(): boolean {
+    return this._isInitialized;
+  }
 
   constructor(
     private readonly client: HomeAssistantClient,
@@ -58,6 +63,7 @@ export class HomeAssistantMatterAdapter {
     for (const removedEntity of removed) {
       await this.remove(removedEntity);
     }
+    this._isInitialized = true;
   }
 
   async create(entity: Entity) {

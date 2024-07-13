@@ -20,33 +20,34 @@ export class HomeAssistantClient {
     url = url.replace(/\/$/, '');
     const auth = createLongLivedTokenAuth(url, accessToken);
     const connection = await createConnection({ auth });
-    const client = new HomeAssistantClient(connection);
-    await client.init();
-    return client;
+    return new HomeAssistantClient(connection);
   }
 
   private readonly entityCollection: Collection<HassEntities>;
   private readonly registryCollection: Collection<HassRegistryEntities>;
-  private states: HassEntities = {};
-  private registry: HassRegistryEntities = {};
+  private states: HassEntities | undefined = undefined;
+  private registry: HassRegistryEntities | undefined = undefined;
   private entities: Record<string, Entity> = {};
   private readonly subscribers = new Set<SubscribeFn>();
   private readonly update: () => Promise<void>;
+
+  private _isInitialized: boolean = false;
+  public get isInitialized(): boolean {
+    return this._isInitialized;
+  }
 
   private constructor(private readonly connection: Connection) {
     this.update = debounce(this.expensiveUpdate.bind(this), 100);
     this.entityCollection = entitiesColl(connection);
     this.registryCollection = entityRegistryColl(connection);
-  }
 
-  private async init() {
-    this.entityCollection.subscribe((states) => {
+    this.entityCollection.subscribe(async (states) => {
       this.states = states;
-      this.update();
+      await this.update();
     });
-    this.registryCollection.subscribe((registry) => {
+    this.registryCollection.subscribe(async (registry) => {
       this.registry = registry;
-      this.update();
+      await this.update();
     });
   }
 
@@ -57,17 +58,21 @@ export class HomeAssistantClient {
   }
 
   private async expensiveUpdate() {
+    if (!this.states || !this.registry) {
+      return;
+    }
     this.entities = Object.fromEntries(
       Object.keys(this.states)
         .map<Entity>((entityId) => ({
-          ...this.states[entityId],
-          hidden: !!this.registry[entityId]?.hidden_by,
+          ...this.states![entityId],
+          hidden: !!this.registry?.[entityId]?.hidden_by,
         }))
         .map((entity) => [entity.entity_id, entity]),
     );
     for (const subscriber of this.subscribers) {
       await subscriber(this.entities);
     }
+    this._isInitialized = true;
   }
 
   callService(
