@@ -17,11 +17,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '${{ env.NODE_VERSION }}'
-          cache: 'yarn'
+          cache: 'npm'
       - name: 🚛 Install dependencies
-        run: yarn install --check-files
+        run: npm ci
       - name: ✏️ Lint
-        run: yarn lint
+        run: npm run lint
 
   test:
     name: 🔎 Test
@@ -33,11 +33,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '${{ env.NODE_VERSION }}'
-          cache: 'yarn'
+          cache: 'npm'
       - name: 🚛 Install dependencies
-        run: yarn install --check-files
+        run: npm ci
       - name: 🔎 Test
-        run: yarn test
+        run: npm test
 
   build:
     name: 🛠️ Build Node
@@ -49,62 +49,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '${{ env.NODE_VERSION }}'
-          cache: 'yarn'
+          cache: 'npm'
       - name: 🚛 Install dependencies
-        run: yarn install --check-files
+        run: npm ci
       - name: 🛠️ Build
-        run: yarn build
-      - name: 🚚 Package
-        run: yarn pack --filename matterbridge-home-assistant.tgz
-      - name: ⤴️ Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: npm-package
-          path: matterbridge-home-assistant.tgz
-
-  docker:
-    name: 🛠️ Build Docker
-    runs-on: ubuntu-latest
-    needs: [test, lint, build]
-    steps:
-      - name: ⤵️ Checkout
-        uses: actions/checkout@v4
-      - name: 🏗 Set up build cache
-        id: cache
-        uses: actions/cache@v4.0.2
-        with:
-          path: /tmp/.docker-cache
-          key: docker-${{ github.sha }}
-          restore-keys: |
-            docker
-      - name: 🏗 Set up QEMU
-        uses: docker/setup-qemu-action@v3.1.0
-      - name: 🏗 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.4.0
-      - name: ℹ️ Compose build flags
-        id: flags
-        run: |
-          MATTERBRIDGE_VERSION="$(yq -r '.devDependencies.matterbridge' package.json)"
-          echo "matterbridge-version=$MATTERBRIDGE_VERSION" >> "$GITHUB_OUTPUT"
-      - name: ⤴️ Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: npm-package
-          path: docker
-      - name: 🚀 Build
-        uses: docker/build-push-action@v6.3.0
-        with:
-          push: false
-          context: ./docker
-          tags: ghcr.io/${{github.repository}}:pr-${{ github.event.number }}
-          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
-          cache-from: |
-            type=local,src=/tmp/.docker-cache
-          cache-to: |
-            type=local,mode=max,dest=/tmp/.docker-cache-new
-          build-args: |
-            MATTERBRIDGE_VERSION=${{ steps.flags.outputs.matterbridge-version }}
-      - name: 🚚 Swap build cache
-        run: |
-          rm -rf /tmp/.docker-cache
-          mv /tmp/.docker-cache-new /tmp/.docker-cache
+        run: npm run build
