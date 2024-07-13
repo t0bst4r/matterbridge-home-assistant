@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { ColorConverter } from '../../src/util/color-converter.js';
 
 const hsPrecision = (num: number) => Math.round(num * 10) / 10;

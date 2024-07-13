@@ -15,7 +15,6 @@
 /docker/
 .prettierrc.json
 eslint.config.js
-jest.config.cjs
 tsconfig.base.json
 tsconfig.dev.json
 tsconfig.json
