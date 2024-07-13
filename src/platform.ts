@@ -25,7 +25,7 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
 
   override async onStart(reason?: string) {
     const config = this.validateConfig();
-    this.log.info('onStart called with reason:', reason ?? 'none');
+    this.log.debug('onStart called with reason:', reason ?? 'none');
 
     const client = await HomeAssistantClient.create(config.homeAssistantUrl, config.homeAssistantAccessToken);
     this.adapter = new HomeAssistantMatterAdapter(
@@ -33,10 +33,21 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform {
       this,
       new PatternMatcher(config.homeAssistantClientConfig ?? {}),
     );
+
+    await new Promise<void>((resolve) => {
+      const handle = setInterval(() => {
+        if (client.isInitialized && this.adapter.isInitialized) {
+          clearInterval(handle);
+          resolve();
+        }
+      }, 10);
+    });
+
+    this.log.debug('onStart finished');
   }
 
   override async onShutdown(reason?: string) {
-    this.log.info('onShutdown called with reason:', reason ?? 'none');
+    this.log.debug('onShutdown called with reason:', reason ?? 'none');
     this.adapter.close();
     if (this.config.unregisterOnShutdown === true) await this.unregisterAllDevices();
   }
