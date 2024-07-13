@@ -57,12 +57,11 @@ jobs:
           cache: 'npm'
       - name: 🚛 Install dependencies
         run: npm ci
-      - name: 🛠️ Build
-        run: npm run release
       - name: 🚀 Publish
         id: publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "previous-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
           npm run release
