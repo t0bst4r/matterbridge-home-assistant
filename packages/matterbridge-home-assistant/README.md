@@ -2,7 +2,7 @@
 
 ---
 
-This **Matterbridge Home Assistant** package provides bindings to connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket) to [Matterbridge](https://github.com/Luligu/matterbridge/).
+This **Matterbridge Home Assistant** package provides bindings to connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https://github.com/Luligu/matterbridge/).
 
 ---
 
@@ -46,7 +46,7 @@ docker run -d \
   --env HOME_ASSISTANT_URL="http://192.168.178.23:8123" \
   --env HOME_ASSISTANT_ACCESS_TOKEN="ey....yQ" \
   --env HOME_ASSISTANT_CLIENT_CONFIG='{ "includeDomains": ["light", "media_player"], "excludePatterns": ["media_player.*echo*"] }' \
-  --name matterbridge
+  --name matterbridge \
   ghcr.io/t0bst4r/matterbridge-home-assistant:latest
 ```
 
@@ -107,7 +107,7 @@ docker run -d \
   --volume matterbridge-data:/root/.matterbridge \
   --volume $PWD/matterbridge-config:/config:ro \
   --env CONFIG_FILE="/config/matterbridge-config.json" \
-  --name matterbridge
+  --name matterbridge \
   ghcr.io/t0bst4r/matterbridge-home-assistant:latest
 ```
 
@@ -131,7 +131,7 @@ docker run -d \
   --volume $PWD/matterbridge-config:/config:ro \
   --env CONFIG_FILE="/config/matterbridge-config.json" \
   --env HOME_ASSISTANT_ACCESS_TOKEN="ey....yQ" \
-  --name matterbridge
+  --name matterbridge \
   ghcr.io/t0bst4r/matterbridge-home-assistant:latest
 ```
 
@@ -181,7 +181,7 @@ HOME_ASSISTANT_CLIENT_CONFIG={ "includeDomains": ["light", "media_player"], "exc
 Start matterbridge and find the commissioning QR code in the logs.
 This code can be used to connect your Matter controller (like Alexa, Apple Home or Google Home) to the bridge.
 
-![Matterbridge commissioning code](docs/matterbridge-commissioning.png)
+![Matterbridge commissioning code](./docs/matterbridge-commissioning.png)
 
 ## Supported Entities
 
@@ -194,7 +194,6 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 - Scripts (`script.`) are mapped to Switches and currently only support on-off control
 - Automations (`automation.`) are mapped to Switches and currently only support on-off control
 
-# Contributors
+## Contribution, Bug Reports and Enhancements
 
-[<img src="https://github.com/t0bst4r.png" width="50px" alt="t0bst4r" title="t0bst4r" />](https://github.com/t0bst4r)
-[<img src="https://github.com/bassrock.png" width="50px" alt="bassrock" title="bassrock" />](https://github.com/bassrock)
+Please head over to the [GitHub Repository](https://github.com/t0bst4r/matterbridge-home-assistant) and review the README, and its contribution section.

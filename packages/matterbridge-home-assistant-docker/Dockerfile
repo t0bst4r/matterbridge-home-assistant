@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-slim
 
 ARG MATTERBRIDGE_VERSION
 ARG MATTERBRIDGE_HOME_ASSISTANT_VERSION
@@ -17,7 +17,7 @@ EXPOSE 5540
 
 VOLUME /root/.matterbridge
 
-RUN apk add jq
+RUN apt-get update && apt-get install -y jq
 
 RUN mkdir /app
 WORKDIR /app
@@ -25,7 +25,8 @@ WORKDIR /app
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod a+x docker-entrypoint.sh
 
-RUN npm install -g \
+RUN npm config set legacy-peer-deps true \
+    && npm install -g \
     matterbridge@$MATTERBRIDGE_VERSION \
     matterbridge-home-assistant@$MATTERBRIDGE_HOME_ASSISTANT_VERSION
 

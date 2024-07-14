@@ -6,12 +6,8 @@
     },
     "build": {
       "cache": true,
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "{projectRoot}/lib"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/lib"]
     }
   }
 }

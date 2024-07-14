@@ -15,4 +15,4 @@ lib/
 # Developer Settings
 .env.*
 
-.nx/cache
+.nx/
