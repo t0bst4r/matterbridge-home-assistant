@@ -1,0 +1,50 @@
+{
+  "author": "https://github.com/t0bst4r",
+  "license": "Apache-2.0",
+  "description": "Expose your Home Assistant instance as a Matter device hub.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git",
+    "directory": "packages/home-assistant-matter-hub"
+  },
+  "keywords": [
+    "matter",
+    "home",
+    "assistant",
+    "home assistant",
+    "home-assistant",
+    "homeassistant"
+  ],
+  "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant/blob/-/packages/home-assistant-matter-hub/README.md",
+  "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
+  "name": "home-assistant-matter-hub",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsc && tsc-alias"
+  },
+  "peerDependencies": {
+    "@project-chip/matter.js": "^0.9.4",
+    "@project-chip/matter-node.js": "^0.9.4",
+    "matterbridge": "^1.4.0"
+  },
+  "dependencies": {
+    "color": "^4.2.3",
+    "color-temperature": "^0.2.7",
+    "debounce-promise": "^3.1.2",
+    "glob-to-regexp": "^0.4.1",
+    "home-assistant-js-websocket": "^9.4.0",
+    "winston": "^3.13.1"
+  },
+  "devDependencies": {
+    "@types/color": "^3.0.6",
+    "@types/debounce-promise": "^3.1.9",
+    "@types/glob-to-regexp": "^0.4.4",
+    "@project-chip/matter.js": "0.9.4",
+    "@project-chip/matter-node.js": "0.9.4",
+    "matterbridge": "1.4.0"
+  }
+}
