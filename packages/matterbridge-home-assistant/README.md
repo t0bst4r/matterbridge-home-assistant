@@ -2,7 +2,8 @@
 
 ---
 
-This **Matterbridge Home Assistant** package provides bindings to connect [HomeAssistant](https://www.npmjs.com/package/home-assistant-js-websocket) to [Matterbridge](https://github.com/Luligu/matterbridge/).
+This **Matterbridge Home Assistant** package provides bindings to
+connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https://github.com/Luligu/matterbridge/).
 
 ---
 
@@ -10,13 +11,33 @@ This **Matterbridge Home Assistant** package provides bindings to connect [HomeA
 
 ---
 
+## Breaking Changes: Migrating from 1.x to 2.x
+
+- In version 1.x `matterbridge` was not listed as a `dependencies` or `peerDependency`. This has been changed in version
+  2.0.0. It is now listed as a peer dependency.
+  When installed in a local `package.json` file, this is not a problem. But since `matterbridge` installs all its
+  plugins globally, this will lead to an error running `matterbridge` with `matterbridge-home-assistant`, because of
+  npm's "new" (>= 7) strategy for peer-dependencies.
+  To solve this, you need to enable [legacy-peer-deps](https://docs.npmjs.com/cli/v10/using-npm/config#legacy-peer-deps)
+  in your npm config (`npm config set legacy-peer-deps true`) or in an environment
+  variable (`npm_config_legacy_peer_deps=true`). In the pre-built docker image and the native Home Assistant Addon, this
+  is already configured.
+
+- In version 1.x this plugin was meant to be configured using multiple environment variables. Due to the growing number 
+  of configuration options, this has been changed. This plugin requires to be configured using a configuration JSON file 
+  or one single environment variable containing the whole JSON configuration.
+  **Please see the [configuration section](#configuration) below.**
+
 ## Installation
 
 ### Manual Setup
 
-- Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to set up `matterbridge`.
+- Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to set
+  up `matterbridge`.
+- Configure npm to use legacy-peer-deps mode for global packages: `npm config set legacy-peer-deps true`
+  or `npm_config_legacy_peer_deps=true`
 - Install the plugin `npm install -g matterbridge-home-assistant`
-- Make sure the plugin is configured properly using environment variables (see [Configuration](#configuration)).
+- Make sure the plugin is configured properly (see [Configuration](#configuration)).
 - Activate the plugin `matterbridge -add matterbridge-home-assistant`
 - Start matterbridge using `matterbridge -bridge`
 
@@ -43,10 +64,9 @@ docker volume create matterbridge-data
 docker run -d \
   --network host \
   --volume matterbridge-data:/root/.matterbridge \
-  --env HOME_ASSISTANT_URL="http://192.168.178.23:8123" \
-  --env HOME_ASSISTANT_ACCESS_TOKEN="ey....yQ" \
-  --env HOME_ASSISTANT_CLIENT_CONFIG='{ "includeDomains": ["light", "media_player"], "excludePatterns": ["media_player.*echo*"] }' \
-  --name matterbridge
+  --volume $PWD/config.json:/app/config.json \
+  --env MHA_CONFIG_FILE="/app/config.json" \
+  --name matterbridge \
   ghcr.io/t0bst4r/matterbridge-home-assistant:latest
 ```
 
@@ -59,12 +79,15 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      HOME_ASSISTANT_URL: 'http://192.168.178.23:8123'
-      HOME_ASSISTANT_ACCESS_TOKEN: 'ey....yQ'
-      HOME_ASSISTANT_CLIENT_CONFIG: |
+      MHA_CONFIG: |
         {
-          "includeDomains": ["light", "media_player"],
-          "excludePatterns": ["media_player.*echo*"]
+          "homeAssistant": {
+            "url": "http://192.168.178.23:8123/",
+            "accessToken": "ey....yQ",
+            "matcher": {
+              "includeDomains": ["light"]
+            }
+          }
         }
     volumes:
       - data:/root/.matterbridge
@@ -74,114 +97,68 @@ volumes:
 
 ## Configuration
 
-This package can be configured using environment variables.
+This package can be configured using a config file or an environment variable. If both are present, the environment
+variable will be used.
 
-### Using Environment Variables
+### Using a file
 
-- `HOME_ASSISTANT_URL` - the home assistant url (e.g. `http://192.168.178.23:8123`)
-- `HOME_ASSISTANT_ACCESS_TOKEN` - a long living access token created in Home Assistant
-- `HOME_ASSISTANT_CLIENT_CONFIG` - a json string containing the client config (see below)
+This package can be configured using a JSON config file. Use the environment variable `MHA_CONFIG_FILE` to point it
+to the config file. See [config structure](#config-structure).
 
-### Using a config file
+### Using an environment variable
 
-_This works for the Custom Docker Deployment only!_
+This package can be configured using an environment variable. Use the environment variable `MHA_CONFIG` and put the JSON
+configuration in it. See [config structure](#config-structure).
 
-You can mount the following JSON file to your Docker container (wherever you like).
+### Config structure
 
-```json
+```json5
 {
-  "homeAssistantUrl": "http://192.168.178.23:8123",
-  "homeAssistantAccessToken": "ey....yQ",
-  "homeAssistantClientConfig": {
-    "includeDomains": ["light", "media_player"],
-    "excludePatterns": ["media_player.*echo*"]
+  // optional:
+  "devices": {
+    // optional: override the vendorId for all devices
+    "vendorId": 0,
+    // optional: override the vendorName for all devices
+    "vendorName": "t0bst4r"
+  },
+  // required:
+  "homeAssistant": {
+    // required:
+    "url": "http://192.168.178.23:8123",
+    // required:
+    "accessToken": "ey....yQ",
+    // optional:
+    "matcher": {
+      // optional: include all entities of these domains:
+      "includeDomains": [
+        "light",
+      ],
+      // optional: include all entities matching these entity_id patterns:
+      "includePatterns": [
+        "media_player.samsung_tv_*"
+      ],
+      // optional: exclude all entities of these domains:
+      "excludeDomains": [
+        "lock",
+      ],
+      // optional: exclude all entities matching these entity_id patterns:
+      "excludePatterns": [
+        "media_player.*echo*"
+      ]
+    }
   }
 }
 ```
 
-To tell the application to load your JSON file, just point the `CONFIG_FILE` environment variable to the path of this file:
-
-```bash
-docker run -d \
-  --network host \
-  --volume matterbridge-data:/root/.matterbridge \
-  --volume $PWD/matterbridge-config:/config:ro \
-  --env CONFIG_FILE="/config/matterbridge-config.json" \
-  --name matterbridge
-  ghcr.io/t0bst4r/matterbridge-home-assistant:latest
-```
-
-Whenever a property is missing in the provided JSON config, it will use the environment variables as fallback.
-So your config could look like this:
-
-```json
-{
-  "homeAssistantUrl": "http://192.168.178.23:8123",
-  "homeAssistantClientConfig": {
-    "includeDomains": ["light", "media_player"],
-    "excludePatterns": ["media_player.*echo*"]
-  }
-}
-```
-
-```bash
-docker run -d \
-  --network host \
-  --volume matterbridge-data:/root/.matterbridge \
-  --volume $PWD/matterbridge-config:/config:ro \
-  --env CONFIG_FILE="/config/matterbridge-config.json" \
-  --env HOME_ASSISTANT_ACCESS_TOKEN="ey....yQ" \
-  --name matterbridge
-  ghcr.io/t0bst4r/matterbridge-home-assistant:latest
-```
-
-### Client Config
-
-The client config has to be a json string and can have the following properties:
-
-```typescript
-interface HomeAssistantClientConfig {
-  /**
-   * The domains to include.
-   * @example [ "light", "media_player" ]
-   */
-  includeDomains?: Array<string>;
-  /**
-   * Glob-Patterns to include entities.
-   * @example [ "light.*", "media_player.*_tv_*" ]
-   */
-  includePatterns?: Array<string>;
-  /**
-   * The domains to exclude.
-   * Exclusions are always winning against inclusions.
-   * @example [ "media_player" ]
-   */
-  excludeDomains?: Array<string>;
-  /**
-   * Glob-Patterns to exclude entities.
-   * Exclusions are always winning against inclusions.
-   * @example [ "media_player.*echo*" ]
-   */
-  excludePatterns?: Array<string>;
-}
-```
-
-**Entities must match any of `includePatterns` or `includeDomains` and most not match any of `excludeDomains` and `excludePatterns`.**
-
-### Example Configuration
-
-```
-HOME_ASSISTANT_URL=http://192.168.178.23:8123
-HOME_ASSISTANT_ACCESS_TOKEN=ey....yQ
-HOME_ASSISTANT_CLIENT_CONFIG={ "includeDomains": ["light", "media_player"], "excludePatterns": ["media_player.*echo*"] }
-```
+**Entities must match any of `includePatterns` or `includeDomains` and must not match any of `excludeDomains`
+and `excludePatterns`.**
 
 ## Commissioning / Pairing the device with your Matter controller
 
 Start matterbridge and find the commissioning QR code in the logs.
 This code can be used to connect your Matter controller (like Alexa, Apple Home or Google Home) to the bridge.
 
-![Matterbridge commissioning code](docs/matterbridge-commissioning.png)
+![Matterbridge commissioning code](./docs/matterbridge-commissioning.png)
 
 ## Supported Entities
 
@@ -194,7 +171,27 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 - Scripts (`script.`) are mapped to Switches and currently only support on-off control
 - Automations (`automation.`) are mapped to Switches and currently only support on-off control
 
-# Contributors
+## Frequently Asked Questions
 
-[<img src="https://github.com/t0bst4r.png" width="50px" alt="t0bst4r" title="t0bst4r" />](https://github.com/t0bst4r)
-[<img src="https://github.com/bassrock.png" width="50px" alt="bassrock" title="bassrock" />](https://github.com/bassrock)
+### Why doesn't Matterbridge find new entities which were just added to home assistant?
+
+`matterbridge-home-assistant` scans all entities once during startup and checks their visibility state.
+After that it only subscribes to state changes (on-off, color, etc.). Restart Matterbridge to find the new entities
+to be added.
+
+### How can I hide entities beside the include/exclude patterns?
+
+`matterbridge-home-assistant` compares entity_ids to the include/exclude patterns and domains, but also considers the
+hidden state of an entity (can be found in the entity details in Home Assistant).
+Both are only checked once during startup, so changes will apply after restarting Matterbridge.
+
+### Why doesn't Matterbridge remove entities, which I just marked as hidden?
+
+`matterbridge-home-assistant` compares entity_ids to the include/exclude patterns and domains, but also considers the
+hidden state of an entity (can be found in the entity details in Home Assistant).
+Both are only checked once during startup, so changes will apply after restarting Matterbridge.
+
+## Contribution, Bug Reports and Enhancements
+
+Please head over to the [GitHub Repository](https://github.com/t0bst4r/matterbridge-home-assistant) and review the
+README, and its contribution section.
