@@ -102,7 +102,7 @@ jobs:
           echo "version=${{ needs.node.outputs.released-version }}" >> "$GITHUB_OUTPUT"
           echo "matterbridge-version=$(yq -r '.devDependencies.matterbridge' packages/matterbridge-home-assistant/package.json)" >> "$GITHUB_OUTPUT"
       - name: 🚀 Build
-        uses: docker/build-push-action@v6.4.0
+        uses: docker/build-push-action@v6.4.1
         with:
           push: true
           context: packages/matterbridge-home-assistant-docker
