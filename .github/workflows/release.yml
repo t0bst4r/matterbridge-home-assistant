@@ -1,8 +1,9 @@
 name: Release
 
 on:
-  push:
-    branches: [main]
+  schedule:
+    - cron: '0 18 * * FRI'
+  workflow_dispatch:
 
 env:
   CI: 'true'
