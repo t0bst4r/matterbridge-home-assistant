@@ -2,7 +2,7 @@
   "name": "matterbridge-home-assistant",
   "main": "lib/index.js",
   "license": "Apache-2.0",
-  "version": "1.6.16",
+  "version": "1.6.17",
   "description": "Matterbridge Home Assistant plugin",
   "author": "https://github.com/t0bst4r",
   "type": "module",

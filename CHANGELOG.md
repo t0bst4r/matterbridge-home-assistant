@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.6.17 (2024-07-18)
+
+**Note:** Version bump only for package root
+
+
+
+
+
 ## 1.6.16 (2024-07-18)
 
 **Note:** Version bump only for package root
