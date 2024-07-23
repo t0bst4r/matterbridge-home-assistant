@@ -30,7 +30,7 @@
     "debounce-promise": "^3.1.2",
     "glob-to-regexp": "^0.4.1",
     "home-assistant-js-websocket": "^9.4.0",
-    "node-ansi-logger": "^1.9.5",
+    "node-ansi-logger": "^2.0.0",
     "ws": "^8.18.0"
   }
 }
