@@ -16,7 +16,7 @@
     "run:matterbridge": "lerna run serve --scope=matterbridge-home-assistant"
   },
   "devDependencies": {
-    "@types/node": "^18.19.39",
+    "@types/node": "^20.0.0",
     "@eslint/js": "^9.7.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@dotenvx/dotenvx": "^1.6.4",
