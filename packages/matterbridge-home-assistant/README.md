@@ -13,16 +13,6 @@ connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https:
 
 ## Breaking Changes: Migrating from 1.x to 2.x
 
-- In version 1.x `matterbridge` was not listed as a `dependencies` or `peerDependency`. This has been changed in version
-  2.0.0. It is now listed as a peer dependency.
-  When installed in a local `package.json` file, this is not a problem. But since `matterbridge` installs all its
-  plugins globally, this will lead to an error running `matterbridge` with `matterbridge-home-assistant`, because of
-  npm's "new" (>= 7) strategy for peer-dependencies.
-  To solve this, you need to enable [legacy-peer-deps](https://docs.npmjs.com/cli/v10/using-npm/config#legacy-peer-deps)
-  in your npm config (`npm config set legacy-peer-deps true`) or in an environment
-  variable (`npm_config_legacy_peer_deps=true`). In the pre-built docker image and the native Home Assistant Addon, this
-  is already configured.
-
 - In version 1.x this plugin was meant to be configured using multiple environment variables. Due to the growing number 
   of configuration options, this has been changed. This plugin requires to be configured using a configuration JSON file 
   or one single environment variable containing the whole JSON configuration.
@@ -34,8 +24,6 @@ connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https:
 
 - Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to set
   up `matterbridge`.
-- Configure npm to use legacy-peer-deps mode for global packages: `npm config set legacy-peer-deps true`
-  or `npm_config_legacy_peer_deps=true`
 - Install the plugin `npm install -g matterbridge-home-assistant`
 - Make sure the plugin is configured properly (see [Configuration](#configuration)).
 - Activate the plugin `matterbridge -add matterbridge-home-assistant`
