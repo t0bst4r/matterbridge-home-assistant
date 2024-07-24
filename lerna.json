@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "1.6.18",
+  "version": "2.0.0",
   "conventionalCommits": true,
   "changelogPreset": {
     "name": "conventionalcommits",
@@ -50,9 +50,7 @@
         "section": "👷 Continuous Integration"
       }
     ],
-    "issuePrefixes": [
-      "#"
-    ],
+    "issuePrefixes": ["#"],
     "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
     "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
     "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",

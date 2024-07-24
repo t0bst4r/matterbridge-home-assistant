@@ -18,7 +18,7 @@
   "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant/blob/-/packages/home-assistant-matter-hub/README.md",
   "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
   "name": "home-assistant-matter-hub",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "type": "module",
@@ -27,8 +27,8 @@
     "build": "tsc && tsc-alias"
   },
   "peerDependencies": {
-    "@project-chip/matter.js": "^0.9.4",
     "@project-chip/matter-node.js": "^0.9.4",
+    "@project-chip/matter.js": "^0.9.4",
     "matterbridge": "^1.4.0"
   },
   "dependencies": {
@@ -40,11 +40,11 @@
     "winston": "^3.13.1"
   },
   "devDependencies": {
+    "@project-chip/matter-node.js": "0.9.4",
+    "@project-chip/matter.js": "0.9.4",
     "@types/color": "^3.0.6",
     "@types/debounce-promise": "^3.1.9",
     "@types/glob-to-regexp": "^0.4.4",
-    "@project-chip/matter.js": "0.9.4",
-    "@project-chip/matter-node.js": "0.9.4",
     "matterbridge": "1.4.0"
   }
 }
