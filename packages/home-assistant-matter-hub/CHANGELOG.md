@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.1 (2024-07-24)
+
+
+### 🚀 Chore
+
+* update node-types to 20 ([45bdaa6](https://github.com/t0bst4r/matterbridge-home-assistant/commit/45bdaa6e7443a9f116cc0390010bb7222c7338bf))
+
+
+
 ## 2.0.0 (2024-07-24)
 
 
