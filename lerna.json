@@ -2,6 +2,62 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "version": "1.6.18",
   "conventionalCommits": true,
+  "changelogPreset": {
+    "name": "conventionalcommits",
+    "types": [
+      {
+        "type": "feat",
+        "section": "✨ Features"
+      },
+      {
+        "type": "fix",
+        "section": "🐛 Bug Fixes"
+      },
+      {
+        "type": "chore",
+        "section": "🚀 Chore"
+      },
+      {
+        "type": "docs",
+        "section": "📝 Documentation"
+      },
+      {
+        "type": "style",
+        "section": "💄 Styles"
+      },
+      {
+        "type": "refactor",
+        "section": "♻️ Code Refactoring"
+      },
+      {
+        "type": "perf",
+        "section": "⚡ Performance Improvements"
+      },
+      {
+        "type": "test",
+        "section": "✅ Tests"
+      },
+      {
+        "type": "revert",
+        "section": "⏪ Revert"
+      },
+      {
+        "type": "build",
+        "section": "📦‍ Build System"
+      },
+      {
+        "type": "ci",
+        "section": "👷 Continuous Integration"
+      }
+    ],
+    "issuePrefixes": [
+      "#"
+    ],
+    "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
+    "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
+    "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
+    "userUrlFormat": "{{host}}/{{user}}"
+  },
   "createRelease": "github",
   "command": {
     "version": {
