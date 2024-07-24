@@ -56,9 +56,7 @@ export class HomeAssistantClient {
 
   private async init(): Promise<void> {
     const entityIds: string[] = [];
-    const entities = (await getStates(this.connection)).filter((entity) =>
-      this.patternMatcher.isIncluded(entity.entity_id),
-    );
+    const entities = await getStates(this.connection);
     entities.forEach((entity) => entityIds.push(entity.entity_id));
     this.entityStates = Object.fromEntries(entities.map((e) => [e.entity_id, e]));
     this.log.debug('%s entities included', entityIds.length);
@@ -66,7 +64,11 @@ export class HomeAssistantClient {
     this.entityRegistry = await getRegistry(this.connection);
     this.log.debug('Registry refreshed');
 
-    await this.update();
+    this.entities = Object.fromEntries(
+      Object.entries(buildState(entityIds, this.entityStates, this.entityRegistry)).filter(([, entity]) =>
+        this.patternMatcher.isIncluded(entity),
+      ),
+    );
     this.log.debug('State updated');
 
     this.close = subscribeEntities(
@@ -80,7 +82,7 @@ export class HomeAssistantClient {
   }
 
   private async expensiveUpdate() {
-    this.entities = buildState(this.entityStates, this.entityRegistry);
+    this.entities = buildState(Object.keys(this.entities), this.entityStates, this.entityRegistry);
     for (const subscriber of this.subscribers) {
       await subscriber(this.entities);
     }

@@ -125,6 +125,16 @@ configuration in it. See [config structure](#config-structure).
       "includePatterns": [
         "media_player.samsung_tv_*"
       ],
+      // optional: include all entities having one of these labels.
+      // It is important to use the slug of the label. When your label is "My Devices", the slug is most probably "my_devices".
+      "includeLabels": [
+        "My Devices"
+      ],
+      // optional: include all entities having one of the following platforms (= integration)
+      // It is important to use the slug of the platform / integration.
+      "includePlatform": [
+        "hue"
+      ],
       // optional: exclude all entities of these domains:
       "excludeDomains": [
         "lock",
@@ -132,7 +142,17 @@ configuration in it. See [config structure](#config-structure).
       // optional: exclude all entities matching these entity_id patterns:
       "excludePatterns": [
         "media_player.*echo*"
-      ]
+      ],
+      // optional: exclude all entities having one of these labels.
+      // It is important to use the slug of the label. When your label is "My Devices", the slug is most probably "my_devices".
+      "excludeLabels": [
+        "My Devices"
+      ],
+      // optional: exclude all entities having one of the following platforms (= integration)
+      // It is important to use the slug of the platform / integration.
+      "excludePlatform": [
+        "hue"
+      ],
     }
   }
 }
