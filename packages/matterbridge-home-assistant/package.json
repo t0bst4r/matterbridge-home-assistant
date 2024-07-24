@@ -16,7 +16,7 @@
     "serve": "dotenvx run -f .env.local -- matterbridge -bridge"
   },
   "devDependencies": {
-    "@project-chip/matter-node.js": "0.9.3",
+    "@project-chip/matter-node.js": "0.9.4",
     "@project-chip/matter.js": "0.9.3",
     "@types/color": "^3.0.6",
     "@types/debounce-promise": "^3.1.9",
