@@ -1,36 +1,55 @@
 {
-  "name": "matterbridge-home-assistant",
-  "main": "lib/index.js",
-  "license": "Apache-2.0",
-  "version": "1.6.18",
-  "description": "Matterbridge Home Assistant plugin",
   "author": "https://github.com/t0bst4r",
-  "type": "module",
+  "license": "Apache-2.0",
+  "description": "Matterbridge Home Assistant plugin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git",
+    "directory": "packages/matterbridge-home-assistant"
+  },
+  "keywords": [
+    "matter",
+    "home",
+    "assistant",
+    "home assistant",
+    "home-assistant",
+    "homeassistant"
+  ],
+  "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant/blob/-/packages/matterbridge-home-assistant/README.md",
+  "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
+  "name": "matterbridge-home-assistant",
+  "version": "1.6.18",
+  "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "type": "module",
   "scripts": {
     "test": "vitest run",
     "build": "tsc",
-    "build-push:docker": "docker buildx build",
     "reset-matterbridge": "matterbridge -factoryreset",
-    "preserve": "npm run build && matterbridge -add .",
-    "serve": "dotenvx run -f .env.local -- matterbridge -bridge"
-  },
-  "devDependencies": {
-    "@project-chip/matter-node.js": "0.9.3",
-    "@project-chip/matter.js": "0.9.3",
-    "@types/color": "^3.0.6",
-    "@types/debounce-promise": "^3.1.9",
-    "@types/glob-to-regexp": "^0.4.4",
-    "@types/ws": "^8.5.11",
-    "matterbridge": "1.3.13"
+    "preserve": "matterbridge -add .",
+    "serve": "dotenvx run -f .env.local -- matterbridge -bridge -debug",
+    "reset": "matterbridge -factoryreset"
   },
   "dependencies": {
-    "color": "^4.2.3",
-    "color-temperature": "^0.2.7",
-    "debounce-promise": "^3.1.2",
-    "glob-to-regexp": "^0.4.1",
-    "home-assistant-js-websocket": "^9.4.0",
-    "node-ansi-logger": "^1.9.5",
+    "home-assistant-matter-hub": "^0.0.1",
     "ws": "^8.18.0"
+  },
+  "peerDependencies": {
+    "@project-chip/matter.js": "^0.9.4",
+    "@project-chip/matter-node.js": "^0.9.4",
+    "matterbridge": "^1.4.0"
+  },
+  "devDependencies": {
+    "@project-chip/matter.js": "0.9.4",
+    "@project-chip/matter-node.js": "0.9.4",
+    "@types/ws": "^8.5.11",
+    "matterbridge": "1.4.0"
+  },
+  "nx": {
+    "targets": {
+      "serve": {
+        "dependsOn": ["build"]
+      }
+    }
   }
 }

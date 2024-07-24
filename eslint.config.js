@@ -9,6 +9,11 @@ module.exports = [
   ...tseslint.configs.recommended,
   prettier,
   {
-    ignores: ['eslint.config.js', '**/lib/'],
+    ignores: ['*.config.js', '**/lib/'],
+  },
+  {
+    rules: {
+      '@typescript-eslint/no-empty-object-type': 'off',
+    },
   },
 ];
