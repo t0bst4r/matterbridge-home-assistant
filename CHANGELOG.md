@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.2 (2024-07-24)
+
+
+### 🐛 Bug Fixes
+
+* remove failure state from docker-entrypoint ([3175127](https://github.com/t0bst4r/matterbridge-home-assistant/commit/3175127da204ec4fd04830becbf6ac0c7c9cd28a))
+
+
+
 ## 2.0.1 (2024-07-24)
 
 
