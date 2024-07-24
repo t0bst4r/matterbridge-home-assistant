@@ -1,4 +1,4 @@
-import { DeviceTypes } from 'matterbridge';
+import { DeviceTypeDefinition, DeviceTypes } from 'matterbridge';
 
 import { ColorControlAspect, IdentifyAspect, LevelControlAspect, OnOffAspect } from '@/aspects/index.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
@@ -23,21 +23,37 @@ export { LightEntityColorMode } from './light/light-entity-color-mode.js';
 
 export class LightDevice extends DeviceBase {
   constructor(homeAssistantClient: HomeAssistantClient, entity: HomeAssistantMatterEntity, config: DeviceBaseConfig) {
-    super(entity, DeviceTypes.ON_OFF_LIGHT, config);
-
     const supportedColorModes: LightEntityColorMode[] = entity.attributes.supported_color_modes ?? [];
+    const supportsBrightness = supportedColorModes.some((mode) => brightnessModes.includes(mode));
+    const supportsColorControl = supportedColorModes.some((mode) => colorModes.includes(mode));
+    const supportsColorTemperature = supportedColorModes.includes(LightEntityColorMode.COLOR_TEMP);
+
+    let deviceType: DeviceTypeDefinition;
+    if (supportsColorControl) {
+      deviceType = DeviceTypes.EXTENDED_COLOR_LIGHT;
+    } else if (supportsColorTemperature) {
+      deviceType = DeviceTypes.COLOR_TEMPERATURE_LIGHT;
+    } else if (supportsBrightness) {
+      deviceType = DeviceTypes.DIMMABLE_LIGHT;
+    } else {
+      deviceType = DeviceTypes.ON_OFF_LIGHT;
+    }
+
+    super(entity, deviceType, config);
 
     this.addAspect(new IdentifyAspect(this.matter, entity));
     this.addAspect(new OnOffAspect(homeAssistantClient, this.matter, entity));
 
-    this.addAspect(
-      new ColorControlAspect(homeAssistantClient, this.matter, entity, {
-        supportsColorControl: supportedColorModes.some((mode) => colorModes.includes(mode)),
-        supportsColorTemperature: supportedColorModes.includes(LightEntityColorMode.COLOR_TEMP),
-      }),
-    );
+    if (supportsColorControl || supportsColorTemperature) {
+      this.addAspect(
+        new ColorControlAspect(homeAssistantClient, this.matter, entity, {
+          supportsColorControl,
+          supportsColorTemperature,
+        }),
+      );
+    }
 
-    if (supportedColorModes.some((mode) => brightnessModes.includes(mode))) {
+    if (supportsBrightness) {
       this.addAspect(
         new LevelControlAspect(homeAssistantClient, this.matter, entity, {
           getValue: (entity) => entity.attributes.brightness,
