@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.3 (2024-07-24)
+
+
+### 🐛 Bug Fixes
+
+* remove legacy peer deps ([07ca7a4](https://github.com/t0bst4r/matterbridge-home-assistant/commit/07ca7a4c4cead20b06d092dc5e3a3dafcca1bf6f))
+
+
+
 ## 2.0.2 (2024-07-24)
 
 
