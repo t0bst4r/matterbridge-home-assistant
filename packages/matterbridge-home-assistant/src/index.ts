@@ -32,7 +32,7 @@ export default function initializePlugin(
       'This is most probably caused by upgrading from version 1.x to 2.x',
       '',
       'Please see the documentation for further details about the structure of the config file: ',
-      'https://github.com/t0bst4r/matterbridge-home-assistant/tree/-/packages/matterbridge-home-assistant#configuration',
+      'https://github.com/t0bst4r/matterbridge-home-assistant/tree/main/packages/matterbridge-home-assistant#configuration',
       '',
     ].join('\n'),
   });
