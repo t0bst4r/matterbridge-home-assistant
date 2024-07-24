@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.0 (2024-07-24)
+
+
+### ✨ Features
+
+* support include or exclude by label or integration [#210](https://github.com/t0bst4r/matterbridge-home-assistant/issues/210) [#109](https://github.com/t0bst4r/matterbridge-home-assistant/issues/109) ([fed5c7c](https://github.com/t0bst4r/matterbridge-home-assistant/commit/fed5c7c300b40a546a3c5e067b6c4b7652ae4e7d))
+
+
+
 ## 2.0.3 (2024-07-24)
 
 
