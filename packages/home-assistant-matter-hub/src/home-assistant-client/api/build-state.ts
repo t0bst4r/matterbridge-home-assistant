@@ -8,20 +8,20 @@ import {
 } from '@/models/index.js';
 
 export function buildState(
+  entityIds: string[],
   states: HomeAssistantEntities,
   entityRegistry: HomeAssistantEntityRegistry,
 ): HomeAssistantMatterEntities {
   return Object.fromEntries(
-    Object.entries(states).map(([entityId, state]) => [entityId, combine(state, entityRegistry[entityId])]),
+    entityIds.map((entityId) => [entityId, combine(states[entityId], entityRegistry[entityId])]),
   );
 }
 
-function combine(
-  state: HomeAssistantEntity,
-  registry: HomeAssistantEntityRegistryEntry | undefined,
-): HomeAssistantMatterEntity {
+function combine(state: HomeAssistantEntity, registry?: HomeAssistantEntityRegistryEntry): HomeAssistantMatterEntity {
   return {
     ...state,
     hidden: !!registry?.hidden_by,
+    platform: registry?.platform ?? 'unknown',
+    labels: registry?.labels ?? [],
   };
 }
