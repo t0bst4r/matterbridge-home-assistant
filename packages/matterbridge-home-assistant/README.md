@@ -47,6 +47,7 @@ If you are getting the error message `Only supported EndpointInterface implement
   }
 }
 ```
+- run `npm run register` and `npm run start`
 
 **Important: ** this method does not allow installing or updating matterbridge plugins using the UI!
 
