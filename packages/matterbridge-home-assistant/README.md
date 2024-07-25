@@ -39,7 +39,7 @@ If you are getting the error message `Only supported EndpointInterface implement
 {
   "dependencies": {
     "matterbridge": "^1.4.0",
-    "matterbridge-home-assistant": ^2.0.3"
+    "matterbridge-home-assistant": "^2.0.3"
   },
   "scripts": {
     "register": "matterbridge -add ./node_modules/matterbridge-home-assistant",
