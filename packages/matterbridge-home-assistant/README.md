@@ -20,14 +20,35 @@ connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https:
 
 ## Installation
 
-### Manual Setup
+### Manual Setup / Global installation
 
-- Follow [those instructions](https://github.com/Luligu/matterbridge/?tab=readme-ov-file#installation) to set
-  up `matterbridge`.
-- Install the plugin `npm install -g matterbridge-home-assistant`
+- Install matterbridge and the plugin `npm install -g matterbridge matterbridge-home-assistant`
 - Make sure the plugin is configured properly (see [Configuration](#configuration)).
 - Activate the plugin `matterbridge -add matterbridge-home-assistant`
 - Start matterbridge using `matterbridge -bridge`
+
+If you are getting the error message `Only supported EndpointInterface implementation is Endpoint`:
+- This is caused by npm's module resolution of globally installed modules and project-chip's way of doing an `instanceOf` check.
+- It happens when matterbridge and matterbridge-home-assistant are not installed in **one** install command as above.
+
+### Manual installation / using a package.json
+
+- create a new working directory
+- create a `package.json` with the following content
+```json
+{
+  "dependencies": {
+    "matterbridge": "^1.4.0",
+    "matterbridge-home-assistant": ^2.0.3"
+  },
+  "scripts": {
+    "register": "matterbridge -add ./node_modules/matterbridge-home-assistant",
+    "start": "matterbridge -bridge"
+  }
+}
+```
+
+**Important: ** this method does not allow installing or updating matterbridge plugins using the UI!
 
 ### Home Assistant Add-On
 
@@ -198,6 +219,10 @@ Both are only checked once during startup, so changes will apply after restartin
 `matterbridge-home-assistant` compares entity_ids to the include/exclude patterns and domains, but also considers the
 hidden state of an entity (can be found in the entity details in Home Assistant).
 Both are only checked once during startup, so changes will apply after restarting Matterbridge.
+
+### I am getting this error message `Only supported EndpointInterface implementation is Endpoint`:
+- This is caused by npm's module resolution of globally installed modules and project-chip's way of doing an `instanceOf` check.
+- It happens when matterbridge and matterbridge-home-assistant are not installed in **one** install command as above. See the [installation section](#installation) above.
 
 ## Contribution, Bug Reports and Enhancements
 
