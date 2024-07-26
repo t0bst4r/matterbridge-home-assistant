@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.1 (2024-07-26)
+
+
+### 🚀 Chore
+
+* add more detailed manual installation instructions ([#214](https://github.com/t0bst4r/matterbridge-home-assistant/issues/214)) ([b6d25fe](https://github.com/t0bst4r/matterbridge-home-assistant/commit/b6d25fe569ae6243860a25784271c423c0cf2aab))
+
+
+
 ## 2.1.0 (2024-07-24)
 
 
