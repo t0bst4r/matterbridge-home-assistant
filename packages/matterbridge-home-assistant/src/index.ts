@@ -1,4 +1,5 @@
 import { logger, MatterConnectorConfig } from 'home-assistant-matter-hub';
+import JSON5 from 'json5';
 import type { Matterbridge, PlatformConfig } from 'matterbridge';
 import type { AnsiLogger } from 'matterbridge/logger';
 import * as fs from 'node:fs';
@@ -41,14 +42,14 @@ export default function initializePlugin(
 
   if (envConfig) {
     try {
-      connectorConfig = JSON.parse(envConfig);
+      connectorConfig = JSON5.parse(envConfig);
     } catch (e) {
       log.error('Could not JSON.parse the config from environment variable.');
       throw e;
     }
   } else if (configFile) {
     try {
-      connectorConfig = JSON.parse(fs.readFileSync(configFile, 'utf8'));
+      connectorConfig = JSON5.parse(fs.readFileSync(configFile, 'utf8'));
     } catch (e) {
       log.error(`Could not JSON.parse the config file in ${configFile}`);
       throw e;
