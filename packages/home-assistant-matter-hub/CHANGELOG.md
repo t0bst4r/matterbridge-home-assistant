@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.1.2 (2024-07-27)
+
+
+### 🐛 Bug Fixes
+
+* revert conventional changelog to 7.x ([#222](https://github.com/t0bst4r/matterbridge-home-assistant/issues/222)) ([b1fd8a3](https://github.com/t0bst4r/matterbridge-home-assistant/commit/b1fd8a3b05e6fab891f0fa49fe76341d3a2a8459))
+
+
+
 ## 2.1.1 (2024-07-26)
 
 
