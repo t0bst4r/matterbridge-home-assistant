@@ -1,7 +1,6 @@
 import { DeviceTypeDefinition, MatterbridgeDevice } from 'matterbridge';
 
 import { AspectBase, BasicInformationAspect } from '@/aspects/index.js';
-import { logger } from '@/logging/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
 export interface DeviceBaseConfig {
@@ -17,8 +16,7 @@ export abstract class DeviceBase {
   protected constructor(entity: HomeAssistantMatterEntity, definition: DeviceTypeDefinition, config: DeviceBaseConfig) {
     this.entityId = entity.entity_id;
     this.matter = new MatterbridgeDevice(definition);
-    this.matter.log.setLogDebug(logger.isDebugEnabled());
-    this.matter.log.setLogName(this.entityId);
+    this.matter.log.logName = this.entityId;
 
     this.matter.createDefaultGroupsClusterServer();
     this.matter.createDefaultScenesClusterServer();

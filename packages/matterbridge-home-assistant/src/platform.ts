@@ -16,7 +16,7 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform implement
     private readonly platformConfig: HomeAssistantPlatformConfig,
   ) {
     super(matterbridge, log, platformConfig);
-    log.setLogName('HomeAssistantPlatform');
+    log.logName = 'HomeAssistantPlatform';
   }
 
   override async onStart(reason?: string) {
