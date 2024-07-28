@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.2.0 (2024-07-28)
+
+
+### ✨ Features
+
+* **docker:** allow specifiying matter and frontend ports ([#229](https://github.com/t0bst4r/matterbridge-home-assistant/issues/229)) ([2fd1b5a](https://github.com/t0bst4r/matterbridge-home-assistant/commit/2fd1b5a3920703459575e31d040c55bc3b8e3a46))
+
+
+
 ## 2.1.3 (2024-07-28)
 
 
