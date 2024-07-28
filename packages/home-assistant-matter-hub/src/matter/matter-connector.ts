@@ -36,6 +36,7 @@ export class MatterConnector {
     script: (entity) => new devices.SwitchDevice(this.client, entity, this.defaultDeviceConfig),
     automation: (entity) => new devices.SwitchDevice(this.client, entity, this.defaultDeviceConfig),
     binary_sensor: (entity) => new devices.BinarySensorDevice(entity, this.defaultDeviceConfig),
+    cover: (entity) => new devices.CoverDevice(this.client, entity, this.defaultDeviceConfig),
     // climate: (entity) => new ClimateDevice(this.client, entity),
   };
 
