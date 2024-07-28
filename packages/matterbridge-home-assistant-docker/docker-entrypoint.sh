@@ -4,9 +4,6 @@ cd /app || exit 1
 
 matterbridge -add matterbridge-home-assistant
 
-MATTERBRIDGE_OPTIONS=("-bridge" "-docker")
-if [ "$LOG_LEVEL" = "debug" ]; then
-  MATTERBRIDGE_OPTIONS+=("-debug")
-fi
+MATTERBRIDGE_OPTIONS=("-bridge" "-docker" "-logger $LOG_LEVEL")
 
 matterbridge "${MATTERBRIDGE_OPTIONS[@]}"

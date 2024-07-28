@@ -5,23 +5,22 @@ import type { AnsiLogger } from 'matterbridge/logger';
 import * as fs from 'node:fs';
 import * as ws from 'ws';
 
-import { consoleLogger } from './console-logger.js';
+import { NodeAnsiTransport } from './node-ansi-transport.js';
 import { HomeAssistantPlatform } from './platform.js';
 
 const configFile = process.env.MHA_CONFIG_FILE;
 const envConfig = process.env.MHA_CONFIG;
-const logLevel = process.env.LOG_LEVEL ?? 'info';
 
 const wnd = globalThis as Record<string, unknown>;
 wnd.WebSocket = ws.WebSocket;
-
-logger.add(consoleLogger(logLevel));
 
 export default function initializePlugin(
   matterbridge: Matterbridge,
   ansiLogger: AnsiLogger,
   platformConfig: PlatformConfig,
 ): HomeAssistantPlatform {
+  logger.add(new NodeAnsiTransport(ansiLogger));
+
   const log = logger.child({
     service: 'Matterbridge-Home-Assistant Plugin',
     hint: [

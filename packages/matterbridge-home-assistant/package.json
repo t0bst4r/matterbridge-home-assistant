@@ -27,7 +27,7 @@
     "build": "tsc",
     "reset-matterbridge": "matterbridge -factoryreset",
     "preserve": "matterbridge -add .",
-    "serve": "dotenvx run -f .env.local -- matterbridge -bridge -debug",
+    "serve": "dotenvx run -f .env.local -- matterbridge -bridge -logger debug",
     "reset": "matterbridge -factoryreset"
   },
   "dependencies": {
