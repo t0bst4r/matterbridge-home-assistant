@@ -6,7 +6,7 @@
   "packageRules": [
     {
       "matchPackageNames": ["conventional-changelog-conventionalcommits"],
-      "allowedVersions": "/^7\\..*$"
+      "allowedVersions": "/^7\\..*$/"
     }
   ]
 }
