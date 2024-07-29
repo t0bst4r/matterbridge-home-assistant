@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.3.1 (2024-07-29)
+
+
+### 🐛 Bug Fixes
+
+* **cover:** add identify aspect ([#233](https://github.com/t0bst4r/matterbridge-home-assistant/issues/233)) ([e82595e](https://github.com/t0bst4r/matterbridge-home-assistant/commit/e82595ef78899b963a0db0ee1f76bab0c33b90ea))
+
+
+
 ## 2.3.0 (2024-07-28)
 
 
