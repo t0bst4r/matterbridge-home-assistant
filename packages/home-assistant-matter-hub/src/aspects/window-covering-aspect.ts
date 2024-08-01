@@ -5,6 +5,9 @@ import { MatterbridgeDeviceCommands } from '@/aspects/utils/index.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
+const MATTER_CLOSED = 100_00;
+const MATTER_OPEN = 0;
+
 export class WindowCoveringAspect extends AspectBase {
   constructor(
     private readonly client: HomeAssistantClient,
@@ -25,19 +28,40 @@ export class WindowCoveringAspect extends AspectBase {
     )!;
   }
 
+  private invert(percentage: number): number {
+    return 100 - percentage;
+  }
+
   private readonly upOrOpen: MatterbridgeDeviceCommands['upOrOpen'] = async () => {
     await this.client.callService('cover', 'open_cover', {}, { entity_id: this.entityId });
-    this.device.setWindowCoveringStatus(WindowCovering.MovementStatus.Opening);
+    this.cluster.setTargetPositionLiftPercent100thsAttribute(MATTER_OPEN);
+    this.cluster.setOperationalStatusAttribute({
+      global: WindowCovering.MovementStatus.Opening,
+      lift: WindowCovering.MovementStatus.Opening,
+      tilt: undefined,
+    });
   };
 
   private readonly downOrClose: MatterbridgeDeviceCommands['downOrClose'] = async () => {
     await this.client.callService('cover', 'close_cover', {}, { entity_id: this.entityId });
-    this.device.setWindowCoveringStatus(WindowCovering.MovementStatus.Closing);
+    this.cluster.setTargetPositionLiftPercent100thsAttribute(MATTER_CLOSED);
+    this.cluster.setOperationalStatusAttribute({
+      global: WindowCovering.MovementStatus.Closing,
+      lift: WindowCovering.MovementStatus.Closing,
+      tilt: undefined,
+    });
   };
 
   private readonly stopMotion: MatterbridgeDeviceCommands['stopMotion'] = async () => {
     await this.client.callService('cover', 'stop_cover', {}, { entity_id: this.entityId });
-    this.device.setWindowCoveringStatus(WindowCovering.MovementStatus.Stopped);
+    this.cluster.setTargetPositionLiftPercent100thsAttribute(
+      this.cluster.getCurrentPositionLiftPercent100thsAttribute(),
+    );
+    this.cluster.setOperationalStatusAttribute({
+      global: WindowCovering.MovementStatus.Stopped,
+      lift: WindowCovering.MovementStatus.Stopped,
+      tilt: undefined,
+    });
   };
 
   private readonly goToLiftPercentage: MatterbridgeDeviceCommands['goToLiftPercentage'] = async (value) => {
@@ -46,7 +70,7 @@ export class WindowCoveringAspect extends AspectBase {
       'cover',
       'set_cover_position',
       {
-        position: value.request.liftPercent100thsValue / 100,
+        position: this.invert(value.request.liftPercent100thsValue / 100),
       },
       { entity_id: this.entityId },
     );
@@ -75,10 +99,13 @@ export class WindowCoveringAspect extends AspectBase {
         lift: WindowCovering.MovementStatus.Closing,
       });
     }
-
-    const position = state.attributes.current_position * 100;
-    if (cluster.getCurrentPositionLiftPercent100thsAttribute() !== position) {
-      cluster.setCurrentPositionLiftPercent100thsAttribute(position);
+    const position = state.attributes.current_position;
+    if (
+      position != null &&
+      !isNaN(position) &&
+      cluster.getCurrentPositionLiftPercent100thsAttribute() !== position * 100
+    ) {
+      cluster.setCurrentPositionLiftPercent100thsAttribute(this.invert(position) * 100);
     }
   }
 }
