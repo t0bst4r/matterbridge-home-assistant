@@ -1,5 +1,7 @@
-import { LevelControlCluster, MatterbridgeDevice } from 'matterbridge';
+import { ClusterServer, LevelControl, LevelControlCluster } from '@project-chip/matter.js/cluster';
+import { Device } from '@project-chip/matter.js/device';
 
+import { noopFn } from '@/aspects/utils/noop-fn.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
@@ -23,14 +25,36 @@ export class LevelControlAspect extends AspectBase {
 
   constructor(
     private readonly homeAssistantClient: HomeAssistantClient,
-    private readonly device: MatterbridgeDevice,
+    private readonly device: Device,
     entity: HomeAssistantMatterEntity,
     private readonly config: LevenControlAspectConfig,
   ) {
     super('LevelControlAspect', entity);
-    device.createDefaultLevelControlClusterServer();
-    device.addCommandHandler('moveToLevel', this.moveToLevel.bind(this));
-    device.addCommandHandler('moveToLevelWithOnOff', this.moveToLevel.bind(this));
+    device.addClusterServer(
+      ClusterServer(
+        LevelControlCluster.with(LevelControl.Feature.OnOff),
+        {
+          minLevel: config.getMinValue?.(entity),
+          maxLevel: config.getMaxValue?.(entity),
+          currentLevel: config.getValue(entity) ?? null,
+          onLevel: 0,
+          options: {
+            executeIfOff: false,
+            coupleColorTempToLevel: false,
+          },
+        },
+        {
+          moveToLevel: this.moveToLevel.bind(this),
+          move: noopFn(this.log, 'move'),
+          step: noopFn(this.log, 'step'),
+          stop: noopFn(this.log, 'stop'),
+          moveToLevelWithOnOff: this.moveToLevel.bind(this),
+          moveWithOnOff: noopFn(this.log, 'moveWithOnOff'),
+          stepWithOnOff: noopFn(this.log, 'stepWithOnOff'),
+          stopWithOnOff: noopFn(this.log, 'stopWithOnOff'),
+        },
+      ),
+    );
   }
 
   private moveToLevel: MatterbridgeDeviceCommands['moveToLevel'] = async ({ request: { level } }) => {

@@ -47,6 +47,7 @@ export class MatterConnector {
     [EntityDomain.automation]: (entity, config) => new devices.SwitchDevice(this.client, entity, config),
     [EntityDomain.binary_sensor]: (entity, config) => new devices.BinarySensorDevice(entity, config),
     [EntityDomain.cover]: (entity, config) => new devices.CoverDevice(this.client, entity, config),
+    [EntityDomain.fan]: (entity) => new devices.FanDevice(this.client, entity, this.defaultDeviceConfig),
     // climate: (entity) => new ClimateDevice(this.client, entity),
   };
 
@@ -116,13 +117,6 @@ export class MatterConnector {
       this.defaultDeviceConfig,
       this.deviceOverrides.domains?.[domain] ?? {},
       this.deviceOverrides.entities?.[entity.entity_id] ?? {},
-    );
-    this.log.debug(
-      '%s\n%s\n%s\n%s',
-      JSON.stringify(this.defaultDeviceConfig, undefined, 2),
-      JSON.stringify(this.deviceOverrides.domains?.[domain] ?? {}, undefined, 2),
-      JSON.stringify(this.deviceOverrides.entities?.[entity.entity_id] ?? {}, undefined, 2),
-      JSON.stringify(deviceConfig, undefined, 2),
     );
     const device = this.deviceFactories[domain](entity, deviceConfig);
 

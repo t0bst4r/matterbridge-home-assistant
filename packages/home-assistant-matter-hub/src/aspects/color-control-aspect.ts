@@ -1,5 +1,6 @@
+import { ColorControl, ColorControlCluster } from '@project-chip/matter.js/cluster';
+import { Device } from '@project-chip/matter.js/device';
 import type Color from 'color';
-import { ColorControl as MColorControl, ColorControlCluster, MatterbridgeDevice } from 'matterbridge';
 
 import {
   clusterWithColor,
@@ -23,16 +24,16 @@ export class ColorControlAspect extends AspectBase {
   private readonly supportsColorTemperature: boolean;
 
   get hsColorControlCluster() {
-    return this.device.getClusterServer(ColorControlCluster.with(MColorControl.Feature.HueSaturation));
+    return this.device.getClusterServer(ColorControlCluster.with(ColorControl.Feature.HueSaturation));
   }
 
   get tempColorControlCluster() {
-    return this.device.getClusterServer(ColorControlCluster.with(MColorControl.Feature.ColorTemperature));
+    return this.device.getClusterServer(ColorControlCluster.with(ColorControl.Feature.ColorTemperature));
   }
 
   constructor(
     private readonly homeAssistantClient: HomeAssistantClient,
-    private readonly device: MatterbridgeDevice,
+    private readonly device: Device,
     entity: HomeAssistantMatterEntity,
     config: ColorControlAspectConfig,
   ) {
@@ -43,15 +44,15 @@ export class ColorControlAspect extends AspectBase {
     if (this.supportsColorControl && this.supportsColorTemperature) {
       device.addClusterServer(
         clusterWithColorAndTemperature(
-          device,
+          this.log,
           this.moveToHueAndSaturation.bind(this),
           this.moveToColorTemperature.bind(this),
         ),
       );
     } else if (this.supportsColorControl) {
-      device.addClusterServer(clusterWithColor(this.moveToHueAndSaturation.bind(this)));
+      device.addClusterServer(clusterWithColor(this.log, this.moveToHueAndSaturation.bind(this)));
     } else if (this.supportsColorTemperature) {
-      device.addClusterServer(clusterWithTemperature(this.moveToColorTemperature.bind(this)));
+      device.addClusterServer(clusterWithTemperature(this.log, this.moveToColorTemperature.bind(this)));
     }
   }
 

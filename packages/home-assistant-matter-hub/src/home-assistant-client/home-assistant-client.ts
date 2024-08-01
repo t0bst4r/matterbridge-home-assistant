@@ -114,6 +114,9 @@ export class HomeAssistantClient {
     target?: HassServiceTarget,
     returnResponse?: boolean,
   ): Promise<T> {
-    return callService(this.connection, domain, service, serviceData, target, returnResponse) as Promise<T>;
+    return callService(this.connection, domain, service, serviceData, target, returnResponse).catch((e) => {
+      this.log.error(e);
+      throw e;
+    }) as Promise<T>;
   }
 }

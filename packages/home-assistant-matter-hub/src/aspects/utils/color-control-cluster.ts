@@ -1,11 +1,13 @@
 import { ClusterServer, ColorControl, ColorControlCluster } from '@project-chip/matter.js/cluster';
-import { MatterbridgeDevice } from 'matterbridge';
+import { Logger } from 'winston';
 
 import { MatterbridgeDeviceCommands } from '@/aspects/utils/matterbrigde-device-commands.js';
+import { noopFn } from '@/aspects/utils/noop-fn.js';
 
-const noop = async () => {};
-
-export function clusterWithColor(moveToHueAndSaturation: MatterbridgeDeviceCommands['moveToHueAndSaturation']) {
+export function clusterWithColor(
+  logger: Logger,
+  moveToHueAndSaturation: MatterbridgeDeviceCommands['moveToHueAndSaturation'],
+) {
   return ClusterServer(
     ColorControlCluster.with(ColorControl.Feature.HueSaturation),
     {
@@ -26,20 +28,23 @@ export function clusterWithColor(moveToHueAndSaturation: MatterbridgeDeviceComma
       currentSaturation: 0,
     },
     {
-      moveToHue: noop,
-      moveHue: noop,
-      stepHue: noop,
-      moveToSaturation: noop,
-      moveSaturation: noop,
-      stepSaturation: noop,
-      stopMoveStep: noop,
-      moveToHueAndSaturation: moveToHueAndSaturation,
+      moveToHue: noopFn(logger, 'moveToHue'),
+      moveHue: noopFn(logger, 'moveHue'),
+      stepHue: noopFn(logger, 'stepHue'),
+      moveToSaturation: noopFn(logger, 'moveToSaturation'),
+      moveSaturation: noopFn(logger, 'moveSaturation'),
+      stepSaturation: noopFn(logger, 'stepSaturation'),
+      stopMoveStep: noopFn(logger, 'stopMoveStep'),
+      moveToHueAndSaturation,
     },
     {},
   );
 }
 
-export function clusterWithTemperature(moveToColorTemperature: MatterbridgeDeviceCommands['moveToColorTemperature']) {
+export function clusterWithTemperature(
+  logger: Logger,
+  moveToColorTemperature: MatterbridgeDeviceCommands['moveToColorTemperature'],
+) {
   return ClusterServer(
     ColorControlCluster.with(ColorControl.Feature.ColorTemperature),
     {
@@ -62,21 +67,53 @@ export function clusterWithTemperature(moveToColorTemperature: MatterbridgeDevic
     },
     {
       moveToColorTemperature,
-      moveColorTemperature: noop,
-      stepColorTemperature: noop,
-      stopMoveStep: noop,
+      moveColorTemperature: noopFn(logger, 'moveColorTemperature'),
+      stepColorTemperature: noopFn(logger, 'stepColorTemperature'),
+      stopMoveStep: noopFn(logger, 'stopMoveStep'),
     },
-    {},
   );
 }
 
 export function clusterWithColorAndTemperature(
-  device: MatterbridgeDevice,
+  logger: Logger,
   moveToHueAndSaturation: MatterbridgeDeviceCommands['moveToHueAndSaturation'],
   moveToColorTemperature: MatterbridgeDeviceCommands['moveToColorTemperature'],
 ) {
-  const cluster = device.getDefaultColorControlClusterServer();
-  device.addCommandHandler('moveToHueAndSaturation', moveToHueAndSaturation);
-  device.addCommandHandler('moveToColorTemperature', moveToColorTemperature);
-  return cluster;
+  return ClusterServer(
+    ColorControlCluster.with(ColorControl.Feature.HueSaturation, ColorControl.Feature.ColorTemperature),
+    {
+      colorMode: ColorControl.ColorMode.CurrentHueAndCurrentSaturation,
+      options: {
+        executeIfOff: false,
+      },
+      numberOfPrimaries: null,
+      enhancedColorMode: ColorControl.EnhancedColorMode.CurrentHueAndCurrentSaturation,
+      colorCapabilities: {
+        xy: false,
+        hueSaturation: true,
+        colorLoop: false,
+        enhancedHue: false,
+        colorTemperature: true,
+      },
+      currentHue: 0,
+      currentSaturation: 0,
+      colorTemperatureMireds: 500,
+      colorTempPhysicalMinMireds: 147,
+      colorTempPhysicalMaxMireds: 500,
+    },
+    {
+      moveToHue: noopFn(logger, 'moveToHue'),
+      moveHue: noopFn(logger, 'moveHue'),
+      stepHue: noopFn(logger, 'stepHue'),
+      moveToSaturation: noopFn(logger, 'moveToSaturation'),
+      moveSaturation: noopFn(logger, 'moveSaturation'),
+      stepSaturation: noopFn(logger, 'stepSaturation'),
+      stopMoveStep: noopFn(logger, 'stopMoveStep'),
+      moveToHueAndSaturation,
+      moveToColorTemperature,
+      moveColorTemperature: noopFn(logger, 'moveColorTemperature'),
+      stepColorTemperature: noopFn(logger, 'stepColorTemperature'),
+    },
+    {},
+  );
 }
