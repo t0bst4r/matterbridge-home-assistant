@@ -13,30 +13,37 @@
     "test": "lerna run test",
     "build": "lerna run build",
     "release": "npm run build && lerna publish",
-    "run:matterbridge": "lerna run serve --scope=matterbridge-home-assistant"
+    "run:matterbridge": "lerna run serve --scope=matterbridge-home-assistant",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@types/node": "^20.14.12",
+    "@dotenvx/dotenvx": "^1.6.4",
     "@eslint/js": "^9.7.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@dotenvx/dotenvx": "^1.6.4",
+    "@types/node": "^20.14.12",
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "esbuild": "^0.23.0",
     "eslint": "^9.7.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.8.0",
+    "husky": "^9.1.4",
     "lerna": "^8.1.7",
+    "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
+    "tsc-alias": "^1.8.10",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.0-alpha.52",
-    "tsc-alias": "^1.8.10",
     "vitest": "^2.0.4"
   },
   "optionalDependencies": {
-    "@nx/nx-linux-x64-gnu": "^19.5.2",
     "@nx/nx-darwin-arm64": "^19.5.2",
+    "@nx/nx-linux-x64-gnu": "^19.5.2",
     "@rollup/rollup-darwin-arm64": "^4.19.0",
     "@rollup/rollup-linux-x64-gnu": "^4.19.0"
+  },
+  "lint-staged": {
+    "!(*.ts|*.js)": "npm run prettier --",
+    "*.{ts,js}": "npm run lint --"
   }
 }
