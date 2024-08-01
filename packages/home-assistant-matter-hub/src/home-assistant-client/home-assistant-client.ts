@@ -61,18 +61,6 @@ export class HomeAssistantClient {
     this.entityStates = Object.fromEntries(entities.map((e) => [e.entity_id, e]));
     this.log.debug('%s entities included', entityIds.length);
 
-    if (entityIds.length > 75) {
-      this.log.warn(
-        [
-          '%s entities were registered as Matter devices.',
-          'Please consider that some matter controllers (e.g. Alexa) cannot handle too much entities to be connected via one matter hub.',
-          'If you intended to use that much entities and your controller seems to work correct, you can ignore this warning.',
-          "If you are using a controller like Alexa which doesn't support that much entities, please reduce the number of included entities using the configuration.",
-        ].join('\n'),
-        entityIds.length,
-      );
-    }
-
     this.entityRegistry = await getRegistry(this.connection);
     this.log.debug('Registry refreshed');
 
@@ -82,6 +70,19 @@ export class HomeAssistantClient {
       ),
     );
     this.log.debug('State updated');
+
+    const entityCount = Object.keys(this.entities).length;
+    if (entityCount > 75) {
+      this.log.warn(
+        [
+          '%s entities have been registered as Matter devices.',
+          'Please note that some matter controllers (e.g. Alexa) cannot handle so many entities to be connected via one Matter hub.',
+          'If you intend to use so many entities and your controller seems to work correctly, you can ignore this warning.',
+          "If you are using a controller like Alexa that doesn't support that many entities, please reduce the number of entities included in the configuration.",
+        ].join('\n'),
+        entityCount,
+      );
+    }
 
     this.close = subscribeEntities(
       this.connection,
