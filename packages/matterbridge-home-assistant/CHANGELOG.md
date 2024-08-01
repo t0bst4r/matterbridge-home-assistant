@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.3.2 (2024-08-01)
+
+
+### 🐛 Bug Fixes
+
+* invert covers and make them nullsafe ([#234](https://github.com/t0bst4r/matterbridge-home-assistant/issues/234), [#235](https://github.com/t0bst4r/matterbridge-home-assistant/issues/235)) ([511574e](https://github.com/t0bst4r/matterbridge-home-assistant/commit/511574e63864166a7cc12fd3ab49ee0bcb5245af))
+
+
+
 ## 2.3.1 (2024-07-29)
 
 
