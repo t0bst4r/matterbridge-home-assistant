@@ -5,6 +5,7 @@ export * from './light-device.js';
 export * from './lock-device.js';
 export * from './switch-device.js';
 export * from './cover-device.js';
+export * from './fan-device.js';
 
 export enum EntityDomain {
   automation = 'automation',
@@ -17,4 +18,5 @@ export enum EntityDomain {
   scene = 'scene',
   script = 'script',
   switch = 'switch',
+  fan = 'fan',
 }

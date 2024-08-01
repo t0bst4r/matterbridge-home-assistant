@@ -237,6 +237,7 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 - Automations (`automation.`) are mapped to Switches and currently only support on-off control
 - Binary Sensor entities (`binary_sensor.`) provide their state (e.g. on / off)
 - Cover Devices (`cover.`) are currently all mapped to "Window Covering"
+- Fan Devices (`fan.`) are currently mapped to Dimmable Plugin Units, because most of the Matter controllers do not support fans.
 - Input-Boolean entities (`input_boolean.`) including on-off control
 - Light entities (`light.`) including on-off, brightness and hue & saturation control
 - Lock Devices (`lock.`) including Locking and Unlocking. Some Matter controllers (like Alexa) do not allow unlocking locks by default. It needs to be enabled in the Alexa App for each Lock.
