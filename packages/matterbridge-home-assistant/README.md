@@ -13,8 +13,8 @@ connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https:
 
 ## Breaking Changes: Migrating from 1.x to 2.x
 
-- In version 1.x this plugin was meant to be configured using multiple environment variables. Due to the growing number 
-  of configuration options, this has been changed. This plugin requires to be configured using a configuration JSON file 
+- In version 1.x this plugin was meant to be configured using multiple environment variables. Due to the growing number
+  of configuration options, this has been changed. This plugin requires to be configured using a configuration JSON file
   or one single environment variable containing the whole JSON configuration.
   **Please see the [configuration section](#configuration) below.**
 
@@ -28,6 +28,7 @@ connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https:
 - Start matterbridge using `matterbridge -bridge`
 
 If you are getting the error message `Only supported EndpointInterface implementation is Endpoint`:
+
 - This is caused by npm's module resolution of globally installed modules and project-chip's way of doing an `instanceOf` check.
 - It happens when matterbridge and matterbridge-home-assistant are not installed in **one** install command as above.
 
@@ -35,6 +36,7 @@ If you are getting the error message `Only supported EndpointInterface implement
 
 - create a new working directory
 - create a `package.json` with the following content
+
 ```json
 {
   "dependencies": {
@@ -47,6 +49,7 @@ If you are getting the error message `Only supported EndpointInterface implement
   }
 }
 ```
+
 - run `npm run register` and `npm run start`
 
 **Important: ** this method does not allow installing or updating matterbridge plugins using the UI!
@@ -125,60 +128,44 @@ configuration in it. See [config structure](#config-structure).
 ```json5
 {
   // optional:
-  "devices": {
+  devices: {
     // optional: override the vendorId for all devices
-    "vendorId": 0,
+    vendorId: 0,
     // optional: override the vendorName for all devices
-    "vendorName": "t0bst4r"
+    vendorName: 't0bst4r',
   },
   // required:
-  "homeAssistant": {
+  homeAssistant: {
     // required:
-    "url": "http://192.168.178.23:8123",
+    url: 'http://192.168.178.23:8123',
     // required:
-    "accessToken": "ey....yQ",
+    accessToken: 'ey....yQ',
     // optional:
-    "matcher": {
+    matcher: {
       // optional: include all entities of these domains:
-      "includeDomains": [
-        "light",
-      ],
+      includeDomains: ['light'],
       // optional: include all entities matching these entity_id patterns:
-      "includePatterns": [
-        "media_player.samsung_tv_*"
-      ],
+      includePatterns: ['media_player.samsung_tv_*'],
       // optional: include all entities having one of these labels.
       // IMPORTANT: you need to label the ENTITY, not the device.
       // It is important to use the slug of the label. When your label is "My Devices", the slug is most probably "my_devices".
-      "includeLabels": [
-        "My Devices"
-      ],
+      includeLabels: ['My Devices'],
       // optional: include all entities having one of the following platforms (= integration)
       // It is important to use the slug of the platform / integration.
-      "includePlatforms": [
-        "hue"
-      ],
+      includePlatforms: ['hue'],
       // optional: exclude all entities of these domains:
-      "excludeDomains": [
-        "lock",
-      ],
+      excludeDomains: ['lock'],
       // optional: exclude all entities matching these entity_id patterns:
-      "excludePatterns": [
-        "media_player.*echo*"
-      ],
+      excludePatterns: ['media_player.*echo*'],
       // optional: exclude all entities having one of these labels.
       // IMPORTANT: you need to label the ENTITY, not the device.
       // It is important to use the slug of the label. When your label is "My Devices", the slug is most probably "my_devices".
-      "excludeLabels": [
-        "My Devices"
-      ],
+      excludeLabels: ['My Devices'],
       // optional: exclude all entities having one of the following platforms (= integration)
       // It is important to use the slug of the platform / integration.
-      "excludePlatforms": [
-        "hue"
-      ],
-    }
-  }
+      excludePlatforms: ['hue'],
+    },
+  },
 }
 ```
 
@@ -224,6 +211,7 @@ hidden state of an entity (can be found in the entity details in Home Assistant)
 Both are only checked once during startup, so changes will apply after restarting Matterbridge.
 
 ### I am getting this error message `Only supported EndpointInterface implementation is Endpoint`:
+
 - This is caused by npm's module resolution of globally installed modules and project-chip's way of doing an `instanceOf` check.
 - It happens when matterbridge and matterbridge-home-assistant are not installed in **one** install command as above. See the [installation section](#installation) above.
 

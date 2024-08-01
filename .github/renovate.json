@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", "group:all"],
   "automerge": true,
-  "schedule": ["every weekend"],
+  "schedule": ["before 4am on Monday"],
   "packageRules": [
     {
       "matchPackageNames": ["conventional-changelog-conventionalcommits"],
