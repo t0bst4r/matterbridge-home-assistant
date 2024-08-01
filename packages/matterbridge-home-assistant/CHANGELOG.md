@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.3.3 (2024-08-01)
+
+
+### 🐛 Bug Fixes
+
+* only include included entities into warnings ([#238](https://github.com/t0bst4r/matterbridge-home-assistant/issues/238)) ([4a0e8f2](https://github.com/t0bst4r/matterbridge-home-assistant/commit/4a0e8f29bc5872c9115a305f815abcb23eaaca70))
+
+
+
 ## 2.3.2 (2024-08-01)
 
 
