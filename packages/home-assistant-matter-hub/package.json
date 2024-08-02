@@ -18,7 +18,7 @@
   "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant/blob/-/packages/home-assistant-matter-hub/README.md",
   "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
   "name": "home-assistant-matter-hub",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "type": "module",

@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.3.5 (2024-08-02)
+
+
+### 🐛 Bug Fixes
+
+* **cover:** support configuration of single or all covers ([#234](https://github.com/t0bst4r/matterbridge-home-assistant/issues/234)) ([0a908da](https://github.com/t0bst4r/matterbridge-home-assistant/commit/0a908da30cb3a4f6dd26dda7fc780a0db8d487d1))
+
+
+
 ## 2.3.4 (2024-08-02)
 
 
