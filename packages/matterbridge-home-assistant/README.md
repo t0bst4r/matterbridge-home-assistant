@@ -29,7 +29,8 @@ connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https:
 
 If you are getting the error message `Only supported EndpointInterface implementation is Endpoint`:
 
-- This is caused by npm's module resolution of globally installed modules and project-chip's way of doing an `instanceOf` check.
+- This is caused by npm's module resolution of globally installed modules and project-chip's way of doing
+  an `instanceOf` check.
 - It happens when matterbridge and matterbridge-home-assistant are not installed in **one** install command as above.
 
 ### Manual installation / using a package.json
@@ -166,11 +167,63 @@ configuration in it. See [config structure](#config-structure).
       excludePlatforms: ['hue'],
     },
   },
+  // optional: override settings per domain or per entity
+  overrides: {
+    // optional: override settings per domain
+    domains: {
+      // optional: currently only covers support overrides.
+      // See "Override settings for Domains or Entities" section
+      cover: {},
+    },
+    // optional: override settings per entity
+    entities: {
+      // optional: currently only covers support overrides.
+      // see "Override settings for Domains or Entities" section
+      'cover.my_cover': {},
+    },
+  },
 }
 ```
 
-**Entities must match any of `includePatterns` or `includeDomains` and must not match any of `excludeDomains`
-and `excludePatterns`.**
+**Entities must match any of the `include` matchers and must not match any of `exclude` matchers.**
+
+### Override settings for Domains or Entities
+
+Some domains can have optional special configurations which apply to either the whole domain, or to single entities.
+The settings for `overrides.domains` and `overrides.entities` share the same structure.
+
+<details>
+  <summary>Cover</summary>
+
+```json5
+{
+  // optional: override settings for the "Lift" feature of a cover
+  lift: {
+    // optional:
+    // Home Assistant uses 0% as "Closed" and 100% as "Opened"
+    // Matter uses 100% as "Closed" and 0% as "Opened"
+    // Therefore we need to invert the percentages to properly match both specifications.
+    // Saying "set the cover to 10%" to Alexa means it is 10% closed, or 90% open.
+    // This is enabled by default. If your Cover should NOT behave inverted, set this setting to `false`.
+    // Setting it to `false` will probably lead to strange behaviour when using the "Close/open the cover" sentence.
+    // To prevent this, use the next attribute (swapOpenAndClosePercentage).
+    // Both attributes (invertPercentage and swapOpenAndClosePercentage) could be combined to invert the WHOLE behaviour.
+    invertPercentage: true,
+
+    // optional:
+    // Some users don't want to invert the percentages, because they want it to behave "wrong" but more naturally:
+    // Saying "set the cover to 10%" should lead to 10% open, or 90% closed.
+    // Therefore the previous setting (invertPercentage) should be set to "false".
+    // On the other hand this leads Alexa to actually open the covers when just saying "Open the cover",
+    // because it sets the percentage to 100% to close it, but 100% means "open" in HA.
+    // For this case, I have added this attribute. It will just swap 0% and 100% (only those - all other values in between will not be inverted).
+    // Both attributes (invertPercentage and swapOpenAndClosePercentage) could be combined to invert the WHOLE behaviour.
+    swapOpenAndClosePercentage: true,
+  },
+}
+```
+
+</details>
 
 ## Commissioning / Pairing the device with your Matter controller
 
@@ -181,14 +234,16 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 
 ## Supported Entities
 
-- Light entities (`light.`) including on-off, brightness and hue & saturation control
-- Switch entities (`switch.`) including on-off control
+- Automations (`automation.`) are mapped to Switches and currently only support on-off control
+- Binary Sensor entities (`binary_sensor.`) provide their state (e.g. on / off)
+- Cover Devices (`cover.`) are currently all mapped to "Window Covering"
 - Input-Boolean entities (`input_boolean.`) including on-off control
+- Light entities (`light.`) including on-off, brightness and hue & saturation control
+- Lock Devices (`lock.`) including Locking and Unlocking. Some Matter controllers (like Alexa) do not allow unlocking locks by default. It needs to be enabled in the Alexa App for each Lock.
 - Media Players (`media_player.`) are mapped to Switches and currently only support on-off control
-- Climate Devices (`climate.`) currently work in progress, not released yet.
 - Scenes (`scene.`) are mapped to Switches and currently only support on-off control
 - Scripts (`script.`) are mapped to Switches and currently only support on-off control
-- Automations (`automation.`) are mapped to Switches and currently only support on-off control
+- Switch entities (`switch.`) including on-off control
 
 ## Frequently Asked Questions
 
