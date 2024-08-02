@@ -1,7 +1,8 @@
 import debounce from 'debounce-promise';
+import _ from 'lodash';
 
 import * as devices from '@/devices/index.js';
-import { DeviceBaseConfig } from '@/devices/index.js';
+import { DeviceBaseConfig, EntityDomain } from '@/devices/index.js';
 import { HomeAssistantClient, HomeAssistantClientConfig, UnsubscribeFn } from '@/home-assistant-client/index.js';
 import { logger } from '@/logging/index.js';
 import { MatterRegistry } from '@/matter/matter-registry.js';
@@ -10,33 +11,42 @@ import { HomeAssistantMatterEntities, HomeAssistantMatterEntity } from '@/models
 export { HomeAssistantClientConfig, PatternMatcherConfig } from '@/home-assistant-client/index.js';
 export { DeviceBaseConfig } from '@/devices/index.js';
 
+export interface DeviceOverrides {
+  domains?: Partial<Record<EntityDomain, unknown>>;
+  entities?: Partial<Record<string, unknown>>;
+}
+
 export interface MatterConnectorConfig {
-  readonly devices?: DeviceBaseConfig;
   readonly homeAssistant: HomeAssistantClientConfig;
   readonly registry: MatterRegistry;
+  readonly devices?: DeviceBaseConfig;
+  readonly overrides?: DeviceOverrides;
 }
 
 export class MatterConnector {
   public static async create(config: MatterConnectorConfig): Promise<MatterConnector> {
     const client = await HomeAssistantClient.create(config.homeAssistant);
-    const connector = new MatterConnector(client, config.registry, config.devices ?? {});
+    const connector = new MatterConnector(client, config.registry, config.devices ?? {}, config.overrides ?? {});
     await connector.init();
     return connector;
   }
 
   private readonly log = logger.child({ service: 'MatterConnector' });
 
-  private readonly deviceFactories: Record<string, (entity: HomeAssistantMatterEntity) => devices.DeviceBase> = {
-    light: (entity) => new devices.LightDevice(this.client, entity, this.defaultDeviceConfig),
-    switch: (entity) => new devices.SwitchDevice(this.client, entity, this.defaultDeviceConfig),
-    input_boolean: (entity) => new devices.SwitchDevice(this.client, entity, this.defaultDeviceConfig),
-    media_player: (entity) => new devices.SwitchDevice(this.client, entity, this.defaultDeviceConfig),
-    lock: (entity) => new devices.LockDevice(this.client, entity, this.defaultDeviceConfig),
-    scene: (entity) => new devices.SwitchDevice(this.client, entity, this.defaultDeviceConfig),
-    script: (entity) => new devices.SwitchDevice(this.client, entity, this.defaultDeviceConfig),
-    automation: (entity) => new devices.SwitchDevice(this.client, entity, this.defaultDeviceConfig),
-    binary_sensor: (entity) => new devices.BinarySensorDevice(entity, this.defaultDeviceConfig),
-    cover: (entity) => new devices.CoverDevice(this.client, entity, this.defaultDeviceConfig),
+  private readonly deviceFactories: Record<
+    EntityDomain,
+    (entity: HomeAssistantMatterEntity, config: DeviceBaseConfig & unknown) => devices.DeviceBase
+  > = {
+    [EntityDomain.light]: (entity, config) => new devices.LightDevice(this.client, entity, config),
+    [EntityDomain.switch]: (entity, config) => new devices.SwitchDevice(this.client, entity, config),
+    [EntityDomain.input_boolean]: (entity, config) => new devices.SwitchDevice(this.client, entity, config),
+    [EntityDomain.media_player]: (entity, config) => new devices.SwitchDevice(this.client, entity, config),
+    [EntityDomain.lock]: (entity, config) => new devices.LockDevice(this.client, entity, config),
+    [EntityDomain.scene]: (entity, config) => new devices.SwitchDevice(this.client, entity, config),
+    [EntityDomain.script]: (entity, config) => new devices.SwitchDevice(this.client, entity, config),
+    [EntityDomain.automation]: (entity, config) => new devices.SwitchDevice(this.client, entity, config),
+    [EntityDomain.binary_sensor]: (entity, config) => new devices.BinarySensorDevice(entity, config),
+    [EntityDomain.cover]: (entity, config) => new devices.CoverDevice(this.client, entity, config),
     // climate: (entity) => new ClimateDevice(this.client, entity),
   };
 
@@ -49,6 +59,7 @@ export class MatterConnector {
     private readonly client: HomeAssistantClient,
     private readonly registry: MatterRegistry,
     private readonly defaultDeviceConfig: DeviceBaseConfig,
+    private readonly deviceOverrides: DeviceOverrides,
   ) {}
 
   private async init(): Promise<void> {
@@ -93,14 +104,28 @@ export class MatterConnector {
       this.log.debug('Entity %s was hidden, but is not anymore', entity.entity_id);
     }
 
-    const domain = entity.entity_id.split('.')[0];
+    const domain = entity.entity_id.split('.')[0] as EntityDomain;
     if (!this.deviceFactories[domain]) {
       this.ignoreEntities.add(entity.entity_id);
       this.log.debug('Entity %s is not supported', entity.entity_id);
       return;
     }
 
-    const device = this.deviceFactories[domain](entity);
+    const deviceConfig = _.merge(
+      {},
+      this.defaultDeviceConfig,
+      this.deviceOverrides.domains?.[domain] ?? {},
+      this.deviceOverrides.entities?.[entity.entity_id] ?? {},
+    );
+    this.log.debug(
+      '%s\n%s\n%s\n%s',
+      JSON.stringify(this.defaultDeviceConfig, undefined, 2),
+      JSON.stringify(this.deviceOverrides.domains?.[domain] ?? {}, undefined, 2),
+      JSON.stringify(this.deviceOverrides.entities?.[entity.entity_id] ?? {}, undefined, 2),
+      JSON.stringify(deviceConfig, undefined, 2),
+    );
+    const device = this.deviceFactories[domain](entity, deviceConfig);
+
     try {
       await this.registry.register(device);
       this.devices.set(entity.entity_id, device);

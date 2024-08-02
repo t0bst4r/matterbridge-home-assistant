@@ -8,11 +8,21 @@ import { HomeAssistantMatterEntity } from '@/models/index.js';
 const MATTER_CLOSED = 100_00;
 const MATTER_OPEN = 0;
 
+export interface WindowCoveringAspectConfig {
+  lift?: {
+    /** @default true */
+    invertPercentage?: boolean;
+    /** @default false */
+    swapOpenAndClosePercentage?: boolean;
+  };
+}
+
 export class WindowCoveringAspect extends AspectBase {
   constructor(
     private readonly client: HomeAssistantClient,
     entity: HomeAssistantMatterEntity,
     private readonly device: MatterbridgeDevice,
+    private readonly config?: WindowCoveringAspectConfig,
   ) {
     super('WindowCoveringAspect', entity);
     this.device.createDefaultWindowCoveringClusterServer(entity.attributes.current_position * 100);
@@ -28,11 +38,25 @@ export class WindowCoveringAspect extends AspectBase {
     )!;
   }
 
-  private invert(percentage: number): number {
-    return 100 - percentage;
+  private convertLiftValue(percentage: number): number {
+    const invert = this.config?.lift?.invertPercentage ?? true;
+    let result = percentage;
+    if (invert) {
+      result = 100 - result;
+    }
+    const swap = this.config?.lift?.swapOpenAndClosePercentage ?? false;
+    if (swap) {
+      if (result >= 99.95) {
+        result = 0;
+      } else if (result <= 0.05) {
+        result = 100;
+      }
+    }
+    return result;
   }
 
   private readonly upOrOpen: MatterbridgeDeviceCommands['upOrOpen'] = async () => {
+    this.log.debug('FROM MATTER: Open');
     await this.client.callService('cover', 'open_cover', {}, { entity_id: this.entityId });
     this.cluster.setTargetPositionLiftPercent100thsAttribute(MATTER_OPEN);
     this.cluster.setOperationalStatusAttribute({
@@ -43,6 +67,7 @@ export class WindowCoveringAspect extends AspectBase {
   };
 
   private readonly downOrClose: MatterbridgeDeviceCommands['downOrClose'] = async () => {
+    this.log.debug('FROM MATTER: Close');
     await this.client.callService('cover', 'close_cover', {}, { entity_id: this.entityId });
     this.cluster.setTargetPositionLiftPercent100thsAttribute(MATTER_CLOSED);
     this.cluster.setOperationalStatusAttribute({
@@ -53,6 +78,7 @@ export class WindowCoveringAspect extends AspectBase {
   };
 
   private readonly stopMotion: MatterbridgeDeviceCommands['stopMotion'] = async () => {
+    this.log.debug('FROM MATTER: Stop Motion');
     await this.client.callService('cover', 'stop_cover', {}, { entity_id: this.entityId });
     this.cluster.setTargetPositionLiftPercent100thsAttribute(
       this.cluster.getCurrentPositionLiftPercent100thsAttribute(),
@@ -65,12 +91,15 @@ export class WindowCoveringAspect extends AspectBase {
   };
 
   private readonly goToLiftPercentage: MatterbridgeDeviceCommands['goToLiftPercentage'] = async (value) => {
-    this.cluster.setTargetPositionLiftPercent100thsAttribute(value.request.liftPercent100thsValue);
+    const position = value.request.liftPercent100thsValue;
+    const targetPosition = this.convertLiftValue(position / 100);
+    this.log.debug('FROM MATTER: Go to Lift Percentage Matter: %s, HA: %s', position, targetPosition);
+    this.cluster.setTargetPositionLiftPercent100thsAttribute(position);
     await this.client.callService(
       'cover',
       'set_cover_position',
       {
-        position: this.invert(value.request.liftPercent100thsValue / 100),
+        position: targetPosition,
       },
       { entity_id: this.entityId },
     );
@@ -99,13 +128,16 @@ export class WindowCoveringAspect extends AspectBase {
         lift: WindowCovering.MovementStatus.Closing,
       });
     }
+
     const position = state.attributes.current_position;
+    const targetPosition = this.convertLiftValue(position) * 100;
     if (
       position != null &&
       !isNaN(position) &&
-      cluster.getCurrentPositionLiftPercent100thsAttribute() !== position * 100
+      cluster.getCurrentPositionLiftPercent100thsAttribute() !== targetPosition
     ) {
-      cluster.setCurrentPositionLiftPercent100thsAttribute(this.invert(position) * 100);
+      this.log.debug('FROM HA: Set position to HA: %s, Matter: %s', position, targetPosition);
+      cluster.setCurrentPositionLiftPercent100thsAttribute(targetPosition);
     }
   }
 }
