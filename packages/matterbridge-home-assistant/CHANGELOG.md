@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.3.4 (2024-08-02)
+
+
+### 🐛 Bug Fixes
+
+* update renovate config and setup pre-commit hooks ([23cb179](https://github.com/t0bst4r/matterbridge-home-assistant/commit/23cb1790b31d59dd9dbff724ae3d2c55daebd0b0))
+
+
+
 ## 2.3.3 (2024-08-01)
 
 
