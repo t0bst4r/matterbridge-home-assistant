@@ -138,6 +138,10 @@ configuration in it. See [config structure](#config-structure).
   // required:
   homeAssistant: {
     // required:
+    // when home assistant and matterbridge both run in docker on the same host,
+    // using localhost or 127.0.0.1 will not work!
+    // use the external ip address or hostname instead
+    // e.g. 192.168.178.23 or my-raspi.lan
     url: 'http://192.168.178.23:8123',
     // required:
     accessToken: 'ey....yQ',
