@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.4.0 (2024-08-03)
+
+
+### ✨ Features
+
+* **fan:** add support for fans as dimmable switch ([#70](https://github.com/t0bst4r/matterbridge-home-assistant/issues/70)) ([38ee981](https://github.com/t0bst4r/matterbridge-home-assistant/commit/38ee98144d7a31f0d2da08473da03fa6ed3cd84f))
+
+
+
 ## 2.3.5 (2024-08-02)
 
 
