@@ -7,6 +7,11 @@
     "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git",
     "directory": "packages/home-assistant-matter-hub"
   },
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "keywords": [
     "matter",
     "home",
