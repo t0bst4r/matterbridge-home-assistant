@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.5.2 (2024-08-05)
+
+
+### 🐛 Bug Fixes
+
+* add publish config to scoped packages ([8551f4f](https://github.com/t0bst4r/matterbridge-home-assistant/commit/8551f4f26ecf27156f89acbf4b549ca0cf01f080))
+
+
+
 ## 2.5.1 (2024-08-05)
 
 
