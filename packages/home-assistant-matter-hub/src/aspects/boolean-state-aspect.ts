@@ -1,4 +1,5 @@
-import { BooleanStateCluster, MatterbridgeDevice } from 'matterbridge';
+import { BooleanStateCluster, ClusterServer } from '@project-chip/matter.js/cluster';
+import { Device } from '@project-chip/matter.js/device';
 
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
@@ -10,20 +11,18 @@ export interface BooleanStateAspectConfig {
 
 export class BooleanStateAspect extends AspectBase {
   constructor(
-    private readonly device: MatterbridgeDevice,
+    private readonly device: Device,
     entity: HomeAssistantMatterEntity,
     private readonly config?: BooleanStateAspectConfig,
   ) {
     super('BooleanStateAspect', entity);
-    device.createDefaultBooleanStateClusterServer(this.isOn(entity));
-  }
-
-  private get booleanStateCluster() {
-    return this.device.getClusterServer(BooleanStateCluster);
+    device.addClusterServer(
+      ClusterServer(BooleanStateCluster, { stateValue: this.isOn(entity) }, {}, { stateChange: true }),
+    );
   }
 
   async update(state: HomeAssistantMatterEntity): Promise<void> {
-    const booleanStateClusterServer = this.booleanStateCluster!;
+    const booleanStateClusterServer = this.device.getClusterServer(BooleanStateCluster)!;
     const isOn = this.isOn(state);
     if (booleanStateClusterServer.getStateValueAttribute() !== isOn) {
       this.log.debug('FROM HA: %s changed boolean state to %s', state.entity_id, state.state);

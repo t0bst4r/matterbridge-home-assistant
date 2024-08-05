@@ -1,19 +1,26 @@
-import { MatterbridgeDevice } from 'matterbridge';
+import { createDefaultIdentifyClusterServer } from '@project-chip/matter.js/cluster';
+import type { ClusterServerHandlers, Identify } from '@project-chip/matter.js/cluster';
+import { Device } from '@project-chip/matter.js/device';
 
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
 import { AspectBase } from './aspect-base.js';
 
+type IdentifyHandlers = Required<ClusterServerHandlers<typeof Identify.Complete>>;
+
 export class IdentifyAspect extends AspectBase {
-  constructor(device: MatterbridgeDevice, entity: HomeAssistantMatterEntity) {
+  constructor(device: Device, entity: HomeAssistantMatterEntity) {
     super('IdentifyAspect', entity);
-    device.createDefaultIdentifyClusterServer();
-    device.addCommandHandler('identify', this.onIdentify.bind(this));
+    device.addClusterServer(
+      createDefaultIdentifyClusterServer({
+        identify: this.onIdentify.bind(this),
+      }),
+    );
   }
 
-  private onIdentify() {
+  private onIdentify: IdentifyHandlers['identify'] = () => {
     this.log.debug('Identify called for %s', this.entityId);
-  }
+  };
 
   async update(): Promise<void> {}
 }

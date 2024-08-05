@@ -1,4 +1,4 @@
-import { DeviceTypes } from 'matterbridge';
+import { DeviceTypes } from '@project-chip/matter.js/device';
 
 import { IdentifyAspect, WindowCoveringAspect, WindowCoveringAspectConfig } from '@/aspects/index.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';

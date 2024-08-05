@@ -1,29 +1,53 @@
-import { DeviceBase, logger, MatterConnector, MatterConnectorConfig, MatterRegistry } from 'home-assistant-matter-hub';
-import { Matterbridge, MatterbridgeDynamicPlatform, PlatformConfig } from 'matterbridge';
+import {
+  DeviceBase,
+  HomeAssistantMatterEntity,
+  logger,
+  MatterConnector,
+  MatterRegistry,
+} from '@home-assistant-matter-hub/core';
+import type { Device, DeviceTypeDefinition } from '@project-chip/matter.js/device';
+import { Matterbridge, MatterbridgeDevice, MatterbridgeDynamicPlatform, PlatformConfig } from 'matterbridge';
 import type { AnsiLogger } from 'matterbridge/logger';
+import { createHash } from 'node:crypto';
 
-export interface HomeAssistantPlatformConfig extends PlatformConfig {
-  connector: Omit<MatterConnectorConfig, 'registry'>;
-}
+import { parseConfiguration } from './parse-configuration.js';
 
 export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform implements MatterRegistry {
   private logger = logger.child({ service: 'HomeAssistantPlatform' });
   private connector!: MatterConnector;
 
-  constructor(
-    matterbridge: Matterbridge,
-    log: AnsiLogger,
-    private readonly platformConfig: HomeAssistantPlatformConfig,
-  ) {
+  constructor(matterbridge: Matterbridge, log: AnsiLogger, platformConfig: PlatformConfig) {
     super(matterbridge, log, platformConfig);
     log.logName = 'HomeAssistantPlatform';
   }
 
+  private createDevice(
+    vendorName: string,
+  ): (entity: HomeAssistantMatterEntity, definition: DeviceTypeDefinition) => Device {
+    return (entity, definition) => {
+      const device = new MatterbridgeDevice(definition);
+
+      const productName = definition.name;
+      entity.matter.serialNumber = createHash('md5').update(entity.entity_id).digest('hex').substring(0, 30);
+      entity.matter.uniqueId = createHash('md5')
+        .update(entity.matter.deviceName + entity.matter.serialNumber + vendorName + productName)
+        .digest('hex');
+
+      device.log.logName = entity.entity_id;
+      device.uniqueId = entity.matter.uniqueId;
+      device.serialNumber = entity.matter.serialNumber;
+      device.deviceName = entity.matter.deviceName;
+      return device;
+    };
+  }
+
   override async onStart(reason?: string) {
+    const connectorConfig = parseConfiguration(this.logger);
+    DeviceBase.setDeviceConstructor(this.createDevice(connectorConfig.devices.vendorName));
     this.logger.debug('onStart called with reason: %s', reason ?? 'none');
 
     this.connector = await MatterConnector.create({
-      ...this.platformConfig.connector,
+      ...connectorConfig,
       registry: this,
     }).catch((error) => {
       this.logger.error(error);
@@ -39,10 +63,10 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform implement
   }
 
   async register(device: DeviceBase): Promise<void> {
-    await this.registerDevice(device.matter);
+    await this.registerDevice(device.matter as MatterbridgeDevice);
   }
 
   async unregister(device: DeviceBase): Promise<void> {
-    await this.unregisterDevice(device.matter);
+    await this.unregisterDevice(device.matter as MatterbridgeDevice);
   }
 }

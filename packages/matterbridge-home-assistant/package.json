@@ -31,20 +31,15 @@
     "reset": "matterbridge -factoryreset"
   },
   "dependencies": {
-    "home-assistant-matter-hub": "^2.4.0",
+    "@home-assistant-matter-hub/core": "^2.4.0",
     "json5": "^2.2.3",
-    "ws": "^8.18.0"
-  },
-  "peerDependencies": {
-    "@project-chip/matter-node.js": "^0.9.4",
-    "@project-chip/matter.js": "^0.9.4",
-    "matterbridge": "^1.4.0"
+    "ws": "^8.18.0",
+    "winston": "^3.13.1"
   },
   "devDependencies": {
-    "@project-chip/matter-node.js": "0.9.4",
-    "@project-chip/matter.js": "0.9.4",
+    "@project-chip/matter.js": "^0.9.4",
     "@types/ws": "^8.5.11",
-    "matterbridge": "1.4.1"
+    "matterbridge": "^1.4.1"
   },
   "nx": {
     "targets": {

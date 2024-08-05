@@ -6,30 +6,26 @@ import {
   clusterWithColor,
   clusterWithColorAndTemperature,
   clusterWithTemperature,
+  ColorControlHandlers,
 } from '@/aspects/utils/color-control-cluster.js';
 import { LightEntityColorMode } from '@/devices/index.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
 import { AspectBase } from './aspect-base.js';
-import { ColorConverter, MatterbridgeDeviceCommands } from './utils/index.js';
+import { ColorConverter } from './utils/color-converter.js';
 
 export interface ColorControlAspectConfig {
   supportsColorControl: boolean;
   supportsColorTemperature: boolean;
 }
 
+const HueSaturationCluster = ColorControlCluster.with(ColorControl.Feature.HueSaturation);
+const TemperatureCluster = ColorControlCluster.with(ColorControl.Feature.ColorTemperature);
+
 export class ColorControlAspect extends AspectBase {
   private readonly supportsColorControl: boolean;
   private readonly supportsColorTemperature: boolean;
-
-  get hsColorControlCluster() {
-    return this.device.getClusterServer(ColorControlCluster.with(ColorControl.Feature.HueSaturation));
-  }
-
-  get tempColorControlCluster() {
-    return this.device.getClusterServer(ColorControlCluster.with(ColorControl.Feature.ColorTemperature));
-  }
 
   constructor(
     private readonly homeAssistantClient: HomeAssistantClient,
@@ -65,14 +61,14 @@ export class ColorControlAspect extends AspectBase {
       state.attributes.color_temp_kelvin != null
     ) {
       const temperatureMireds = ColorConverter.temperatureKelvinToMireds(state.attributes.color_temp_kelvin);
-      const temperatureControlCluster = this.tempColorControlCluster!;
+      const temperatureControlCluster = this.device.getClusterServer(TemperatureCluster)!;
       if (temperatureControlCluster.getColorTemperatureMiredsAttribute() !== temperatureMireds) {
         this.log.debug('FROM HA: changed (matter) color temperature to %s mireds', this.entityId, temperatureMireds);
         temperatureControlCluster.setColorTemperatureMiredsAttribute(temperatureMireds);
       }
     } else if (this.supportsColorControl && color != null) {
       const [hue, saturation] = ColorConverter.toMatterHS(color);
-      const colorControlCluster = this.hsColorControlCluster!;
+      const colorControlCluster = this.device.getClusterServer(HueSaturationCluster)!;
       if (colorControlCluster.getCurrentHueAttribute() !== hue) {
         this.log.debug('FROM HA: %s changed (matter) hue to %s', this.entityId, hue);
         colorControlCluster.setCurrentHueAttribute(hue);
@@ -84,7 +80,7 @@ export class ColorControlAspect extends AspectBase {
     }
   }
 
-  private moveToColorTemperature: MatterbridgeDeviceCommands['moveToColorTemperature'] = async ({
+  private moveToColorTemperature: ColorControlHandlers['moveToColorTemperature'] = async ({
     request: { colorTemperatureMireds },
   }) => {
     if (!this.supportsColorTemperature) {
@@ -98,12 +94,12 @@ export class ColorControlAspect extends AspectBase {
       colorTemperatureKelvin,
     );
 
-    const colorControlCluster = this.tempColorControlCluster!;
+    const colorControlCluster = this.device.getClusterServer(TemperatureCluster)!;
     colorControlCluster?.setColorTemperatureMiredsAttribute(colorTemperatureMireds);
     await this.setHomeAssistantTemperature(colorTemperatureKelvin);
   };
 
-  private moveToHueAndSaturation: MatterbridgeDeviceCommands['moveToHueAndSaturation'] = async ({
+  private moveToHueAndSaturation: ColorControlHandlers['moveToHueAndSaturation'] = async ({
     request: { hue, saturation },
   }) => {
     if (!this.supportsColorControl) {
@@ -116,7 +112,7 @@ export class ColorControlAspect extends AspectBase {
       hue,
       saturation,
     );
-    const colorControlCluster = this.hsColorControlCluster!;
+    const colorControlCluster = this.device.getClusterServer(HueSaturationCluster)!;
     colorControlCluster?.setCurrentHueAttribute(hue);
     colorControlCluster?.setCurrentSaturationAttribute(saturation);
 

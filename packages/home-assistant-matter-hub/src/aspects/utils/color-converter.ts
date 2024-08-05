@@ -1,7 +1,4 @@
 import Color from 'color';
-// @ts-expect-error color-temperature does not have any typings
-import { colorTemperature2rgb } from 'color-temperature';
-import { xyColorToRgbColor } from 'matterbridge/utils';
 
 /*
  * Matter:
@@ -44,14 +41,47 @@ export abstract class ColorConverter {
   }
 
   /**
-   * Create a color object from `x` and `y` values set via Matter
+   * Create a color object from `x` and `y` values set via Matter.
+   * This function was inspired by color utils of Home Assistant Core (`homeassistant.util.color.color_xy_brightness_to_RGB`).
    * @param x X, Values between 0 and 1
    * @param y Y, Values between 0 and 1
    * @return Color
    */
   static fromXY(x: number, y: number): Color {
-    const { r, g, b } = xyColorToRgbColor(x, y);
-    return Color.rgb(r, g, b);
+    function toXYZ(x: number, y: number): [X: number, Y: number, Z: number] {
+      const Y = 1.0;
+      const X = (Y / y) * x;
+      const Z = (Y / y) * (1 - x - y);
+      return [X, Y, Z];
+    }
+
+    function toRGB_D65(X: number, Y: number, Z: number): [r: number, g: number, b: number] {
+      const r = X * 1.656492 - Y * 0.354851 - Z * 0.255038,
+        g = -X * 0.707196 + Y * 1.655397 + Z * 0.036152,
+        b = X * 0.051713 - Y * 0.121364 + Z * 1.01153;
+      return [r, g, b];
+    }
+
+    function applyReverseGammaCorrection(x: number): number {
+      if (x <= 0.0031308) {
+        return 12.92 * x;
+      } else {
+        return (1.0 + 0.055) * Math.pow(x, 1.0 / 2.4) - 0.055;
+      }
+    }
+
+    const XYZ = toXYZ(x, y);
+    let rgb = toRGB_D65(...XYZ)
+      .map(applyReverseGammaCorrection)
+      .map((v) => Math.max(v, 0));
+
+    const maxValue = Math.max(...rgb);
+    if (maxValue > 1) {
+      rgb = rgb.map((v) => v / maxValue);
+    }
+
+    const [r, g, b] = rgb.map((v) => Math.round(v * 255));
+    return this.fromRGB(r, g, b);
   }
 
   /**
@@ -63,11 +93,6 @@ export abstract class ColorConverter {
    */
   public static fromRGB(r: number, g: number, b: number): Color {
     return Color.rgb(r, g, b);
-  }
-
-  public static fromTemperatureKelvin(temperatureKelvin: number): Color {
-    const rgb = colorTemperature2rgb(temperatureKelvin);
-    return this.fromRGB(rgb.red, rgb.green, rgb.blue);
   }
 
   /**

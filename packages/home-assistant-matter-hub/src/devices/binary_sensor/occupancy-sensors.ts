@@ -1,4 +1,4 @@
-import { DeviceTypes } from 'matterbridge';
+import { DeviceTypes } from '@project-chip/matter.js/device';
 
 import { OccupancySensingAspect } from '@/aspects/index.js';
 

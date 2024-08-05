@@ -19,14 +19,14 @@ export interface DeviceOverrides {
 export interface MatterConnectorConfig {
   readonly homeAssistant: HomeAssistantClientConfig;
   readonly registry: MatterRegistry;
-  readonly devices?: DeviceBaseConfig;
+  readonly devices: DeviceBaseConfig;
   readonly overrides?: DeviceOverrides;
 }
 
 export class MatterConnector {
   public static async create(config: MatterConnectorConfig): Promise<MatterConnector> {
     const client = await HomeAssistantClient.create(config.homeAssistant);
-    const connector = new MatterConnector(client, config.registry, config.devices ?? {}, config.overrides ?? {});
+    const connector = new MatterConnector(client, config.registry, config.devices, config.overrides ?? {});
     await connector.init();
     return connector;
   }

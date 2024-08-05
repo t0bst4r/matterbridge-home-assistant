@@ -1,13 +1,20 @@
-import { ClusterServer, ColorControl, ColorControlCluster } from '@project-chip/matter.js/cluster';
+import {
+  ClusterServer,
+  ClusterServerHandlers,
+  ClusterServerObjForCluster,
+  ColorControl,
+  ColorControlCluster,
+} from '@project-chip/matter.js/cluster';
 import { Logger } from 'winston';
 
-import { MatterbridgeDeviceCommands } from '@/aspects/utils/matterbrigde-device-commands.js';
 import { noopFn } from '@/aspects/utils/noop-fn.js';
+
+export type ColorControlHandlers = Required<ClusterServerHandlers<typeof ColorControl.Complete>>;
 
 export function clusterWithColor(
   logger: Logger,
-  moveToHueAndSaturation: MatterbridgeDeviceCommands['moveToHueAndSaturation'],
-) {
+  moveToHueAndSaturation: ColorControlHandlers['moveToHueAndSaturation'],
+): ClusterServerObjForCluster<ColorControlCluster> {
   return ClusterServer(
     ColorControlCluster.with(ColorControl.Feature.HueSaturation),
     {
@@ -43,8 +50,8 @@ export function clusterWithColor(
 
 export function clusterWithTemperature(
   logger: Logger,
-  moveToColorTemperature: MatterbridgeDeviceCommands['moveToColorTemperature'],
-) {
+  moveToColorTemperature: ColorControlHandlers['moveToColorTemperature'],
+): ClusterServerObjForCluster<ColorControlCluster> {
   return ClusterServer(
     ColorControlCluster.with(ColorControl.Feature.ColorTemperature),
     {
@@ -76,9 +83,9 @@ export function clusterWithTemperature(
 
 export function clusterWithColorAndTemperature(
   logger: Logger,
-  moveToHueAndSaturation: MatterbridgeDeviceCommands['moveToHueAndSaturation'],
-  moveToColorTemperature: MatterbridgeDeviceCommands['moveToColorTemperature'],
-) {
+  moveToHueAndSaturation: ColorControlHandlers['moveToHueAndSaturation'],
+  moveToColorTemperature: ColorControlHandlers['moveToColorTemperature'],
+): ClusterServerObjForCluster<ColorControlCluster> {
   return ClusterServer(
     ColorControlCluster.with(ColorControl.Feature.HueSaturation, ColorControl.Feature.ColorTemperature),
     {
