@@ -1,7 +1,7 @@
 {
   "author": "https://github.com/t0bst4r",
   "license": "Apache-2.0",
-  "description": "Matterbridge Home Assistant plugin",
+  "description": "Use Home Assistant Matter Hub as a Matterbridge plugin",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git"
@@ -21,7 +21,7 @@
   ],
   "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant/blob/-/README.md",
   "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
-  "name": "matterbridge-home-assistant",
+  "name": "@home-assistant-matter-hub/matterbridge-plugin",
   "version": "2.5.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -29,13 +29,20 @@
   "scripts": {
     "test": "vitest run",
     "build": "tsc",
-    "reset-matterbridge": "matterbridge -factoryreset",
     "preserve": "matterbridge -add .",
     "serve": "dotenvx run -f .env.local -- matterbridge -bridge -logger debug",
     "reset": "matterbridge -factoryreset"
   },
   "dependencies": {
-    "@home-assistant-matter-hub/matterbridge-plugin": "^2.5.2"
+    "@home-assistant-matter-hub/core": "^2.5.2",
+    "json5": "^2.2.3",
+    "winston": "^3.13.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@project-chip/matter.js": "^0.9.4",
+    "@types/ws": "^8.5.11",
+    "matterbridge": "^1.4.1"
   },
   "nx": {
     "targets": {

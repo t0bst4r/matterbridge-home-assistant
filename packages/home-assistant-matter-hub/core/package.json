@@ -4,8 +4,7 @@
   "description": "Expose your Home Assistant instance as a Matter device hub.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git",
-    "directory": "packages/home-assistant-matter-hub"
+    "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git"
   },
   "private": false,
   "publishConfig": {
@@ -20,7 +19,7 @@
     "home-assistant",
     "homeassistant"
   ],
-  "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant/blob/-/packages/home-assistant-matter-hub/README.md",
+  "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant/blob/-/README.md",
   "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
   "name": "@home-assistant-matter-hub/core",
   "version": "2.5.2",
