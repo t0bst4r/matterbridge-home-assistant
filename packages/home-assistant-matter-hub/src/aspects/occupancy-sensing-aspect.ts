@@ -1,4 +1,5 @@
-import { MatterbridgeDevice, OccupancySensingCluster } from 'matterbridge';
+import { ClusterServer, OccupancySensing, OccupancySensingCluster } from '@project-chip/matter.js/cluster';
+import { Device } from '@project-chip/matter.js/device';
 
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
@@ -6,19 +7,25 @@ import { AspectBase } from './aspect-base.js';
 
 export class OccupancySensingAspect extends AspectBase {
   constructor(
-    private readonly device: MatterbridgeDevice,
+    private readonly device: Device,
     entity: HomeAssistantMatterEntity,
   ) {
     super('OccupancySensingAspect', entity);
-    device.createDefaultOccupancySensingClusterServer(this.isOccupied(entity));
-  }
-
-  private get occupancySensingCluster() {
-    return this.device.getClusterServer(OccupancySensingCluster);
+    device.addClusterServer(
+      ClusterServer(
+        OccupancySensingCluster,
+        {
+          occupancy: { occupied: this.isOccupied(entity) },
+          occupancySensorType: OccupancySensing.OccupancySensorType.PhysicalContact,
+          occupancySensorTypeBitmap: { pir: false, physicalContact: true, ultrasonic: false },
+        },
+        {},
+      ),
+    );
   }
 
   async update(state: HomeAssistantMatterEntity): Promise<void> {
-    const occupancySensingClusterSever = this.occupancySensingCluster!;
+    const occupancySensingClusterSever = this.device.getClusterServer(OccupancySensingCluster)!;
     const isOccupied = this.isOccupied(state);
     if (occupancySensingClusterSever.getOccupancyAttribute().occupied !== isOccupied) {
       this.log.debug('FROM HA: %s changed occupancy state to %s', state.entity_id, state.state);

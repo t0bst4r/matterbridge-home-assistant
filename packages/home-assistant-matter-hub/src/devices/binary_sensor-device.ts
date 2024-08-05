@@ -1,4 +1,4 @@
-import { DeviceTypes } from 'matterbridge';
+import { DeviceTypes } from '@project-chip/matter.js/device';
 
 import { BooleanStateAspect, IdentifyAspect } from '@/aspects/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';

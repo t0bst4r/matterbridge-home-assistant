@@ -1,10 +1,11 @@
-import { MatterbridgeDevice, OnOffCluster } from 'matterbridge';
+import { ClusterServer, OnOffCluster } from '@project-chip/matter.js/cluster';
+import type { ClusterServerHandlers, OnOff } from '@project-chip/matter.js/cluster';
+import { Device } from '@project-chip/matter.js/device';
 
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
 import { AspectBase } from './aspect-base.js';
-import { MatterbridgeDeviceCommands } from './utils/index.js';
 
 export interface OnOffAspectConfig {
   isOn?: (state: HomeAssistantMatterEntity) => boolean;
@@ -18,48 +19,69 @@ export interface OnOffAspectConfig {
   };
 }
 
+type OnOffHandlers = Required<ClusterServerHandlers<typeof OnOff.Complete>>;
+
 export class OnOffAspect extends AspectBase {
   constructor(
     private readonly homeAssistantClient: HomeAssistantClient,
-    private readonly device: MatterbridgeDevice,
+    private readonly device: Device,
     entity: HomeAssistantMatterEntity,
     private readonly config?: OnOffAspectConfig,
   ) {
     super('OnOffAspect', entity);
-    device.createDefaultOnOffClusterServer();
-    device.addCommandHandler('on', this.turnOn.bind(this));
-    device.addCommandHandler('off', this.turnOff.bind(this));
+
+    device.addClusterServer(
+      ClusterServer(
+        OnOffCluster,
+        { onOff: this.isOn(entity) },
+        {
+          on: this.turnOn.bind(this),
+          off: this.turnOff.bind(this),
+          toggle: this.toggle.bind(this),
+        },
+      ),
+    );
   }
 
-  private get onOffCluster() {
-    return this.device.getClusterServer(OnOffCluster);
-  }
-
-  private turnOn: MatterbridgeDeviceCommands['on'] = async () => {
+  private turnOn = async (): Promise<void> => {
+    const cluster = this.device.getClusterServer(OnOffCluster)!;
     this.log.debug('FROM MATTER: changed on off state to ON', this.entityId);
-    this.onOffCluster!.setOnOffAttribute(true);
+    cluster!.setOnOffAttribute(true);
     const [domain, service] = this.config?.turnOn?.service?.split('.') ?? ['homeassistant', 'turn_on'];
     await this.homeAssistantClient.callService(domain, service, this.config?.turnOn?.data?.(true), {
       entity_id: this.entityId,
     });
   };
 
-  private turnOff: MatterbridgeDeviceCommands['off'] = async () => {
+  private turnOff = async (): Promise<void> => {
+    const cluster = this.device.getClusterServer(OnOffCluster)!;
     this.log.debug('FROM MATTER: %s changed on off state to OFF', this.entityId);
-    this.onOffCluster!.setOnOffAttribute(false);
+    cluster!.setOnOffAttribute(false);
     const [domain, service] = this.config?.turnOff?.service?.split('.') ?? ['homeassistant', 'turn_off'];
     await this.homeAssistantClient.callService(domain, service, this.config?.turnOn?.data?.(false), {
       entity_id: this.entityId,
     });
   };
 
-  async update(state: HomeAssistantMatterEntity): Promise<void> {
-    const onOffClusterServer = this.onOffCluster!;
-    const isOnFn = this.config?.isOn ?? ((entity: HomeAssistantMatterEntity) => entity.state !== 'off');
-    const isOn = isOnFn(state);
-    if (onOffClusterServer.getOnOffAttribute() !== isOn) {
-      this.log.debug('FROM HA: %s changed on-off state to %s', state.entity_id, state.state);
-      onOffClusterServer.setOnOffAttribute(isOn);
+  private toggle: OnOffHandlers['toggle'] = async (data) => {
+    if (data.attributes.onOff.getLocal()) {
+      await this.turnOff();
+    } else {
+      await this.turnOn();
     }
+  };
+
+  async update(state: HomeAssistantMatterEntity): Promise<void> {
+    const cluster = this.device.getClusterServer(OnOffCluster)!;
+    const isOn = this.isOn(state);
+    if (cluster.getOnOffAttribute() !== isOn) {
+      this.log.debug('FROM HA: %s changed on-off state to %s', state.entity_id, state.state);
+      cluster.setOnOffAttribute(isOn);
+    }
+  }
+
+  private isOn(state: HomeAssistantMatterEntity): boolean {
+    const isOnFn = this.config?.isOn ?? ((entity: HomeAssistantMatterEntity) => entity.state !== 'off');
+    return isOnFn(state);
   }
 }

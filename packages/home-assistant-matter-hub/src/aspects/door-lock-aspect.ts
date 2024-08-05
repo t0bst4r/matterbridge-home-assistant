@@ -1,38 +1,62 @@
-import { DoorLock, DoorLockCluster, MatterbridgeDevice } from 'matterbridge';
+import { ClusterServer, ClusterServerHandlers, DoorLock, DoorLockCluster } from '@project-chip/matter.js/cluster';
+import { Device } from '@project-chip/matter.js/device';
 
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
 import { AspectBase } from './aspect-base.js';
-import { MatterbridgeDeviceCommands } from './utils/index.js';
+
+type DoorLockHandlers = Required<ClusterServerHandlers<typeof DoorLock.Complete>>;
 
 export class DoorLockAspect extends AspectBase {
   constructor(
     private readonly homeAssistantClient: HomeAssistantClient,
-    private readonly device: MatterbridgeDevice,
+    private readonly device: Device,
     entity: HomeAssistantMatterEntity,
   ) {
     super('DoorLockAspect', entity);
-    device.createDefaultDoorLockClusterServer();
-    device.addCommandHandler('lockDoor', this.lock.bind(this));
-    device.addCommandHandler('unlockDoor', this.unlock.bind(this));
+    device.addClusterServer(
+      ClusterServer(
+        DoorLockCluster,
+        {
+          lockState: this.getMatterState(entity),
+          lockType: DoorLock.LockType.Deadbolt,
+          operatingMode: DoorLock.OperatingMode.Normal,
+          actuatorEnabled: true,
+          supportedOperatingModes: {
+            noRemoteLockUnlock: false,
+            normal: true,
+            passage: false,
+            privacy: false,
+            vacation: false,
+          },
+        },
+        {
+          lockDoor: this.lock.bind(this),
+          unlockDoor: this.unlock.bind(this),
+        },
+        {
+          doorLockAlarm: true,
+          lockOperation: true,
+          lockOperationError: true,
+        },
+      ),
+    );
   }
 
-  private get lockCluster() {
-    return this.device.getClusterServer(DoorLockCluster)!;
-  }
-
-  private readonly lock: MatterbridgeDeviceCommands['lockDoor'] = async () => {
+  private readonly lock: DoorLockHandlers['lockDoor'] = async () => {
+    const cluster = this.device.getClusterServer(DoorLockCluster)!;
     this.log.debug('FROM MATTER: %s changed lock state to "locked"', this.entityId);
-    this.lockCluster.setLockStateAttribute(DoorLock.LockState.Locked);
+    cluster.setLockStateAttribute(DoorLock.LockState.Locked);
     const [domain, service] = ['lock', 'lock'];
     await this.homeAssistantClient.callService(domain, service, undefined, {
       entity_id: this.entityId,
     });
   };
-  private readonly unlock: MatterbridgeDeviceCommands['unlockDoor'] = async () => {
+  private readonly unlock: DoorLockHandlers['unlockDoor'] = async () => {
+    const cluster = this.device.getClusterServer(DoorLockCluster)!;
     this.log.debug('FROM MATTER: %s changed lock state to "unlocked"', this.entityId);
-    this.lockCluster.setLockStateAttribute(DoorLock.LockState.Unlocked);
+    cluster.setLockStateAttribute(DoorLock.LockState.Unlocked);
     const [domain, service] = ['lock', 'unlock'];
     await this.homeAssistantClient.callService(domain, service, undefined, {
       entity_id: this.entityId,
@@ -47,11 +71,15 @@ export class DoorLockAspect extends AspectBase {
   };
 
   async update(state: HomeAssistantMatterEntity): Promise<void> {
-    const cluster = this.lockCluster;
-    const newState = this.mapHAState[state.state] ?? DoorLock.LockState.NotFullyLocked;
+    const cluster = this.device.getClusterServer(DoorLockCluster)!;
+    const newState = this.getMatterState(state);
     if (cluster.getLockStateAttribute() !== newState) {
       this.log.debug('FROM HA: %s changed lock state to %s', state.entity_id, state.state);
       cluster.setLockStateAttribute(newState);
     }
+  }
+
+  private getMatterState(state: HomeAssistantMatterEntity) {
+    return this.mapHAState[state.state] ?? DoorLock.LockState.NotFullyLocked;
   }
 }

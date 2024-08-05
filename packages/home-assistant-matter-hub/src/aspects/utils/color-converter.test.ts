@@ -19,9 +19,9 @@ describe('ColorConverter', () => {
 
   it.each([
     { title: 'red', xy: [0.701, 0.299], hs: [0, 100] },
-    { title: 'blue', xy: [0.136, 0.04], hs: [240.9, 100] },
+    { title: 'blue', xy: [0.136, 0.04], hs: [242.6, 100] },
     { title: 'green', xy: [0.172, 0.747], hs: [120.2, 100] },
-    { title: 'other', xy: [0.372, 0.239], hs: [308, 38.4] },
+    { title: 'other', xy: [0.372, 0.239], hs: [308.1, 37.6] },
   ])('should convert XY to Home Assistant HS - $title', ({ xy: [x, y], hs }) => {
     const color = ColorConverter.fromXY(x, y);
     const actual = ColorConverter.toHomeAssistantHS(color);

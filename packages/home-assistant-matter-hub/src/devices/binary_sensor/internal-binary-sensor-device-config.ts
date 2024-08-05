@@ -1,9 +1,9 @@
-import { DeviceTypeDefinition, MatterbridgeDevice } from 'matterbridge';
+import { DeviceTypeDefinition, Device } from '@project-chip/matter.js/device';
 
 import { AspectBase } from '@/aspects/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
 export interface InternalBinarySensorDeviceConfig {
   deviceType: DeviceTypeDefinition;
-  createAspects: (device: MatterbridgeDevice, entity: HomeAssistantMatterEntity) => AspectBase[];
+  createAspects: (device: Device, entity: HomeAssistantMatterEntity) => AspectBase[];
 }

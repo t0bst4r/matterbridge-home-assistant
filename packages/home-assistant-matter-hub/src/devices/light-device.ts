@@ -1,4 +1,4 @@
-import { DeviceTypeDefinition, DeviceTypes } from 'matterbridge';
+import { DeviceTypes, DeviceTypeDefinition } from '@project-chip/matter.js/device';
 
 import { ColorControlAspect, IdentifyAspect, LevelControlAspect, OnOffAspect } from '@/aspects/index.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
@@ -56,10 +56,12 @@ export class LightDevice extends DeviceBase {
     if (supportsBrightness) {
       this.addAspect(
         new LevelControlAspect(homeAssistantClient, this.matter, entity, {
-          getValue: (entity) => entity.attributes.brightness,
+          getMinValue: () => 0,
+          getMaxValue: () => 254,
+          getValue: (entity) => (entity.attributes.brightness / 255) * 254,
           moveToLevel: {
             service: 'light.turn_on',
-            data: (brightness) => ({ brightness }),
+            data: (brightness) => ({ brightness: (brightness / 254) * 255 }),
           },
         }),
       );
