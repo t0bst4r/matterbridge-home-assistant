@@ -13,7 +13,7 @@ This project provides an application to connect [Home Assistant](https://www.hom
 
 This project consists of two packages with different purposes. Both utilize [matterbridge](https://github.com/Luligu/matterbridge).
 
-1. `home-assistant-matter-hub` integrate Home Assistant with Matter. At the moment this package is not an application on its own. It is used by `matterbridge-home-assistant` to connect with home assistant.
+1. `@home-assistant-matter-hub/core` integrate Home Assistant with Matter. At the moment this package is not an application on its own. It is used by `matterbridge-home-assistant` to connect with home assistant.
 2. `matterbridge-home-assistant` provides a `matterbridge` plugin, which finally connects Home Assistant with any matter enabled controller
 
 ## Installation
