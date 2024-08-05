@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.5.0 (2024-08-05)
+
+
+### ✨ Features
+
+* refactored core implementation to not use matterbridge anymore ([ccb6656](https://github.com/t0bst4r/matterbridge-home-assistant/commit/ccb6656984e36f4e4a849177fe59cc6d78875f03))
+
+
+
 ## 2.4.0 (2024-08-03)
 
 

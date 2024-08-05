@@ -18,7 +18,7 @@
   "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant/blob/-/packages/matterbridge-home-assistant/README.md",
   "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
   "name": "matterbridge-home-assistant",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "type": "module",
@@ -31,10 +31,10 @@
     "reset": "matterbridge -factoryreset"
   },
   "dependencies": {
-    "@home-assistant-matter-hub/core": "^2.4.0",
+    "@home-assistant-matter-hub/core": "^2.5.0",
     "json5": "^2.2.3",
-    "ws": "^8.18.0",
-    "winston": "^3.13.1"
+    "winston": "^3.13.1",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@project-chip/matter.js": "^0.9.4",
