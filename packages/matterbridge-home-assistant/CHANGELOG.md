@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.5.1 (2024-08-05)
+
+
+### 🐛 Bug Fixes
+
+* updated documentation ([9599d4e](https://github.com/t0bst4r/matterbridge-home-assistant/commit/9599d4eb1cae699fec644c94e6b8ca03c384d886))
+
+
+
 ## 2.5.0 (2024-08-05)
 
 
