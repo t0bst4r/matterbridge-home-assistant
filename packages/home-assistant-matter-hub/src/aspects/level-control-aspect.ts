@@ -84,7 +84,11 @@ export class LevelControlAspect extends AspectBase {
     }
 
     const level = this.config.getValue(state);
-    if (level != null && cluster.getCurrentLevelAttribute() !== level) {
+    if (
+        level != null &&
+        !isNaN(level) &&
+        cluster.getCurrentLevelAttribute() !== level
+    ) {
       this.log.debug('FROM HA: %s changed value to %s', this.entityId, level);
       cluster.setCurrentLevelAttribute(level);
     }
