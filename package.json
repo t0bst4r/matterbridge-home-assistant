@@ -12,7 +12,7 @@
     "prettier:fix": "prettier . --write",
     "test": "lerna run test",
     "build": "lerna run build",
-    "release": "npm run build && lerna publish",
+    "release": "lerna publish",
     "run:matterbridge": "lerna run serve --scope=matterbridge-home-assistant",
     "prepare": "husky"
   },
