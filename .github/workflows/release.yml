@@ -75,12 +75,17 @@ jobs:
         run: npm run build
 
       # release
-      - name: 🚀 Publish
+      - name: 🚀 Publish Node
         id: publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+        run: |
+          echo "previous-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
+          npm run release
+          echo "released-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
+      - name: 🚀 Publish Docker
+        env:
           GITHUB_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
@@ -88,9 +93,7 @@ jobs:
           DOCKER_LOCAL_CACHE_TO: /tmp/.docker-cache-new
           DOCKER_PLATFORM: linux/amd64,linux/arm/v7,linux/arm64/v8
         run: |
-          echo "previous-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
-          npm run release
-          echo "released-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
+          npm run release-docker
 
       # tear down
       - name: 🚚 Swap docker build cache

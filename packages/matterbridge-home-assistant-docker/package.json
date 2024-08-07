@@ -6,7 +6,7 @@
   "version": "2.5.2",
   "scripts": {
     "build": "./build.sh",
-    "postpublish": "./publish.sh"
+    "release-docker": "./publish.sh"
   },
   "dependencies": {
     "matterbridge-home-assistant": "^2.5.2"
