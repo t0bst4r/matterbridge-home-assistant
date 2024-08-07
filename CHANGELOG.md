@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.5.6 (2024-08-07)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** use full sha for docker builds ([edd97c5](https://github.com/t0bst4r/matterbridge-home-assistant/commit/edd97c53c1705df2b39084ca9ef609c9a3db2825))
+
+
+
 ## 2.5.5 (2024-08-07)
 
 
