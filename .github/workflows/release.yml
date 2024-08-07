@@ -69,7 +69,7 @@ jobs:
           echo "previous-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
           npm run release
           echo "released-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
-          echo "released-sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+          echo "released-sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   release_docker:
     needs: [release_node]
