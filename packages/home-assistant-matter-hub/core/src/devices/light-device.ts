@@ -1,6 +1,7 @@
 import { DeviceTypes, DeviceTypeDefinition } from '@project-chip/matter.js/device';
 
 import { ColorControlAspect, IdentifyAspect, LevelControlAspect, OnOffAspect } from '@/aspects/index.js';
+import { ifNotNull } from '@/devices/utils/if-not-null.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
@@ -58,7 +59,7 @@ export class LightDevice extends DeviceBase {
         new LevelControlAspect(homeAssistantClient, this.matter, entity, {
           getMinValue: () => 0,
           getMaxValue: () => 254,
-          getValue: (entity) => (entity.attributes.brightness / 255) * 254,
+          getValue: (entity) => ifNotNull<number>(entity.attributes.brightness, (v) => (v / 255) * 254),
           moveToLevel: {
             service: 'light.turn_on',
             data: (brightness) => ({ brightness: (brightness / 254) * 255 }),

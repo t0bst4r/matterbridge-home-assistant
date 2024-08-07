@@ -2,6 +2,7 @@ import { DeviceTypes } from '@project-chip/matter.js/device';
 
 import { IdentifyAspect, LevelControlAspect, OnOffAspect } from '@/aspects/index.js';
 import { DeviceBase, DeviceBaseConfig } from '@/devices/device-base.js';
+import { ifNotNull } from '@/devices/utils/if-not-null.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
@@ -13,7 +14,7 @@ export class FanDevice extends DeviceBase {
     this.addAspect(new OnOffAspect(client, this.matter, entity));
     this.addAspect(
       new LevelControlAspect(client, this.matter, entity, {
-        getValue: (entity) => (entity.attributes.percentage ? (entity.attributes.percentage / 100) * 254 : undefined),
+        getValue: (entity) => ifNotNull<number>(entity.attributes.percentage, (p) => (p / 100) * 254),
         getMinValue: () => 0,
         getMaxValue: () => 254,
         moveToLevel: {
