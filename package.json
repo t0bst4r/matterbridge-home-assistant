@@ -13,6 +13,7 @@
     "test": "lerna run test",
     "build": "lerna run build",
     "release": "lerna publish",
+    "release-docker": "lerna run release-docker",
     "run:matterbridge": "lerna run serve --scope=matterbridge-home-assistant",
     "prepare": "husky"
   },
