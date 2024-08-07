@@ -4,8 +4,7 @@
   "description": "Matterbridge Home Assistant plugin",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git",
-    "directory": "packages/matterbridge-home-assistant"
+    "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git"
   },
   "keywords": [
     "matter",

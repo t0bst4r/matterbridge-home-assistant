@@ -15,6 +15,7 @@
     "release": "lerna publish",
     "release-docker": "lerna run release-docker",
     "run:matterbridge": "lerna run serve --scope=matterbridge-home-assistant",
+    "run:hub-server": "lerna run serve --scope=@home-assistant-matter-hub/server",
     "prepare": "husky"
   },
   "devDependencies": {
