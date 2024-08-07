@@ -1,7 +1,6 @@
 FROM node:20-slim
 
-ARG MATTERBRIDGE_VERSION
-ARG MATTERBRIDGE_HOME_ASSISTANT_VERSION
+ARG ARTIFACT_VERSION
 
 ENV MHA_CONFIG_FILE=""
 ENV MHA_CONFIG=""
@@ -25,8 +24,10 @@ WORKDIR /app
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod a+x docker-entrypoint.sh
 
-RUN npm install -g \
+RUN MATTERBRIDGE_VERSION=$(npm view matterbridge-home-assistant@$ARTIFACT_VERSION devDependencies.matterbridge) && \
+    echo "Matterbridge: ${MATTERBRIDGE_VERSION}" && \
+    npm install -g \
     matterbridge@$MATTERBRIDGE_VERSION \
-    matterbridge-home-assistant@$MATTERBRIDGE_HOME_ASSISTANT_VERSION
+    matterbridge-home-assistant@$ARTIFACT_VERSION
 
 CMD ["./docker-entrypoint.sh"]

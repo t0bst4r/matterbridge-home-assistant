@@ -11,6 +11,7 @@ node_modules/
 
 # Build Output
 lib/
+dist/
 
 # Developer Settings
 .env.*

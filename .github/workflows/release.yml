@@ -10,35 +10,11 @@ env:
   NODE_VERSION: '20.x'
 
 jobs:
-  validate:
-    name: 🛠️ Build
+  release:
+    name: 🚀 Release
     runs-on: ubuntu-latest
-    steps:
-      - name: ⤵️ Checkout
-        uses: actions/checkout@v4
-      - name: 🏗 Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '${{ env.NODE_VERSION }}'
-          cache: 'npm'
-      - name: 🚛 Install dependencies
-        run: npm ci
-      - name: ✏️ Lint
-        run: npm run lint
-      - name: 🛠️ Build
-        run: npm run build
-      - name: 🔎 Test
-        run: npm test
-
-  node:
-    name: 🚀 Release Node
-    needs: [validate]
-    runs-on: ubuntu-latest
-    outputs:
-      previous-version: ${{ steps.publish.outputs.previous-version }}
-      released-version: ${{ steps.publish.outputs.released-version }}
-      dist-tag: latest
     permissions:
+      packages: write
       contents: write
       issues: write
       pull-requests: write
@@ -52,35 +28,14 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions [Bot]"
-      - name: 🏗 Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '${{ env.NODE_VERSION }}'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org/'
-      - name: 🚛 Install dependencies
-        run: npm ci
-      - name: 🚀 Publish
-        id: publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "previous-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
-          npm run release
-          echo "released-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
 
-  docker:
-    name: 🚀 Release Docker
-    needs: [node]
-    if: needs.node.outputs.previous-version != needs.node.outputs.released-version
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-    steps:
-      - name: ⤵️ Checkout
-        uses: actions/checkout@v4
-      - name: 🏗 Set up build cache
+      # caching
+      - name: 🏗 Set up nx cache
+        uses: actions/cache@v4.0.2
+        with:
+          path: .nx
+          key: ${{ runner.os }}-nx-cache
+      - name: 🏗 Set up docker cache
         id: cache
         uses: actions/cache@v4.0.2
         with:
@@ -88,6 +43,14 @@ jobs:
           key: docker-${{ github.sha }}
           restore-keys: |
             docker
+
+      # setup
+      - name: 🏗 Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '${{ env.NODE_VERSION }}'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org/'
       - name: 🏗 Set up QEMU
         uses: docker/setup-qemu-action@v3.2.0
       - name: 🏗 Set up Docker Buildx
@@ -98,43 +61,47 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: ℹ️ Compose build flags
-        id: flags
+
+      # build
+      - name: 🚛 Install dependencies
+        run: npm ci
+      - name: ✏️ Lint
         run: |
-          echo "version=${{ needs.node.outputs.released-version }}" >> "$GITHUB_OUTPUT"
-          echo "matterbridge-version=$(yq -r '.devDependencies.matterbridge' packages/matterbridge-home-assistant/package.json)" >> "$GITHUB_OUTPUT"
-      - name: 🚀 Build
-        uses: docker/build-push-action@v6.5.0
-        with:
-          push: true
-          context: packages/matterbridge-home-assistant-docker
-          cache-from: |
-            type=local,src=/tmp/.docker-cache
-            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.version }}
-            ghcr.io/${{github.repository}}:latest
-          cache-to: type=local,mode=max,dest=/tmp/.docker-cache-new
-          tags: |
-            ghcr.io/${{github.repository}}:${{ steps.flags.outputs.version }}
-            ghcr.io/${{github.repository}}:latest
-          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
-          build-args: |
-            MATTERBRIDGE_HOME_ASSISTANT_VERSION=${{ steps.flags.outputs.version }}
-            MATTERBRIDGE_VERSION=${{ steps.flags.outputs.matterbridge-version }}
-      - name: 🚚 Swap build cache
+          npm run lint
+          npm run prettier
+      - name: 🔎 Test
+        run: npm test
+      - name: 🛠️ Build
+        run: npm run build
+
+      # release
+      - name: 🚀 Publish
+        id: publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          GITHUB_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          DOCKER_LOCAL_CACHE_FROM: /tmp/.docker-cache
+          DOCKER_LOCAL_CACHE_TO: /tmp/.docker-cache-new
+          DOCKER_PLATFORM: linux/amd64,linux/arm/v7,linux/arm64/v8
+        run: |
+          echo "previous-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
+          npm run release
+          echo "released-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
+
+      # tear down
+      - name: 🚚 Swap docker build cache
         run: |
           rm -rf /tmp/.docker-cache
           mv /tmp/.docker-cache-new /tmp/.docker-cache
-
-  dispatch:
-    name: 🚀 Repository Dispatch
-    needs: [node, docker]
-    runs-on: ubuntu-latest
-    if: needs.node.outputs.previous-version != needs.node.outputs.released-version
-    steps:
       - name: 🚀 Repository Dispatch
+        if: steps.publish.outputs.previous-version != steps.publish.outputs.released-version
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.ADDON_DISPATCH_TOKEN }}
           repository: t0bst4r/matterbridge-home-assistant-addon
           event-type: release
-          client-payload: '{"latest-version": "${{ needs.node.outputs.released-version }}"}'
+          client-payload: '{"latest-version": "${{ steps.publish.outputs.released-version }}"}'
