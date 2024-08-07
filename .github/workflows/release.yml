@@ -21,6 +21,7 @@ jobs:
     outputs:
       previous-version: ${{ steps.publish.outputs.previous-version }}
       released-version: ${{ steps.publish.outputs.released-version }}
+      released-sha: ${{ steps.publish.outputs.released-sha }}
     steps:
       - name: ⤵️ Checkout
         uses: actions/checkout@v4
@@ -68,6 +69,7 @@ jobs:
           echo "previous-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
           npm run release
           echo "released-version=$(yq -r '.version' lerna.json)" >> "$GITHUB_OUTPUT"
+          echo "released-sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
   release_docker:
     needs: [release_node]
@@ -79,6 +81,8 @@ jobs:
     steps:
       - name: ⤵️ Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release_node.outputs.released-sha }}
 
       # setup
       - name: 🏗 Set up Node
@@ -144,4 +148,4 @@ jobs:
           token: ${{ secrets.ADDON_DISPATCH_TOKEN }}
           repository: t0bst4r/matterbridge-home-assistant-addon
           event-type: release
-          client-payload: '{"latest-version": "${{ steps.publish.outputs.released-version }}"}'
+          client-payload: '{"latest-version": "${{ needs.release_node.outputs.released-version }}"}'
