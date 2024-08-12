@@ -6,6 +6,8 @@ export * from './lock-device.js';
 export * from './switch-device.js';
 export * from './cover-device.js';
 export * from './fan-device.js';
+export * from './sensor-device.js';
+export * from './utils/unsupported-device-class-error.js';
 
 export enum EntityDomain {
   automation = 'automation',
@@ -19,4 +21,5 @@ export enum EntityDomain {
   script = 'script',
   switch = 'switch',
   fan = 'fan',
+  sensor = 'sensor',
 }
