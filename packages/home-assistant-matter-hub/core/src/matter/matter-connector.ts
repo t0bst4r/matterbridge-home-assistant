@@ -48,6 +48,7 @@ export class MatterConnector {
     [EntityDomain.binary_sensor]: (entity, config) => new devices.BinarySensorDevice(entity, config),
     [EntityDomain.cover]: (entity, config) => new devices.CoverDevice(this.client, entity, config),
     [EntityDomain.fan]: (entity) => new devices.FanDevice(this.client, entity, this.defaultDeviceConfig),
+    [EntityDomain.sensor]: (entity, config) => new devices.SensorDevice(entity, config),
     // climate: (entity) => new ClimateDevice(this.client, entity),
   };
 
@@ -118,18 +119,18 @@ export class MatterConnector {
       this.deviceOverrides.domains?.[domain] ?? {},
       this.deviceOverrides.entities?.[entity.entity_id] ?? {},
     );
-    const device = this.deviceFactories[domain](entity, deviceConfig);
 
     try {
+      const device = this.deviceFactories[domain](entity, deviceConfig);
       await this.registry.register(device);
       this.devices.set(entity.entity_id, device);
+      await device.updateState(entity);
     } catch (e: unknown) {
       this.log.warn('Failed to register device for %s', entity.entity_id);
       this.log.error((e as object).toString());
       this.ignoreEntities.add(entity.entity_id);
       this.devices.delete(entity.entity_id);
     }
-    await device.updateState(entity);
   }
 
   private async update(entity: HomeAssistantMatterEntity) {

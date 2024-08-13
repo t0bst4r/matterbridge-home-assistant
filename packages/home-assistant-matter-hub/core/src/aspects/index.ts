@@ -8,3 +8,5 @@ export * from './level-control-aspect.js';
 export * from './occupancy-sensing-aspect.js';
 export * from './on-off-aspect.js';
 export * from './window-covering-aspect.js';
+export * from './humidity-measurement-aspect.js';
+export * from './temperature-measurement-aspect.js';
