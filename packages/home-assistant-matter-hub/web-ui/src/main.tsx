@@ -4,13 +4,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import './index.scss';
 import App from './pages/app/App.tsx';
-import { routes } from './router.tsx';
+import { informationRoutes, mainRoutes } from './router.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    children: routes.flat().map((route) => ({
+    children: [mainRoutes, informationRoutes].flat().map((route) => ({
       path: route.path,
       Component: route.component,
     })),

@@ -25,7 +25,7 @@ export const HomeCommissioned = (props: HomeCommissionedProps) => {
   return (
     <Box p={2}>
       <Typography variant="h5" component="h2">
-        Your Hub is already paired with the following controllers:
+        Your Hub is paired with the following controllers:
       </Typography>
       <List>
         {props.status.fabrics.map((fabric) => (

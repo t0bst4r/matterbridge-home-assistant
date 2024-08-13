@@ -1,6 +1,7 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { DrawerProps as MuiDrawerProps } from '@mui/material';
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -10,10 +11,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
-import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { routes } from '../../router.tsx';
+import { informationRoutes, mainRoutes, Route } from '../../router.tsx';
 import { OptionalTooltip } from '../OptionalTooltip/OptionalTooltip.tsx';
 
 export interface SideNavProps {
@@ -25,6 +25,35 @@ export interface SideNavProps {
 export const SideNav = (props: SideNavProps) => {
   const theme = useTheme();
 
+  function renderRoutes(routes: Route[]) {
+    return routes.map((item, index) => (
+      <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+        <OptionalTooltip title={item.title} enableTooltip={!props.open} placement="right" arrow>
+          <ListItemButton
+            component={Link}
+            to={item.path}
+            sx={{
+              minHeight: 48,
+              justifyContent: props.open ? 'initial' : 'center',
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: props.open ? 3 : 'auto',
+                justifyContent: 'center',
+              }}
+            >
+              <item.icon />
+            </ListItemIcon>
+            <ListItemText primary={item.title} sx={{ opacity: props.open ? 1 : 0 }} />
+          </ListItemButton>
+        </OptionalTooltip>
+      </ListItem>
+    ));
+  }
+
   return (
     <Drawer variant="permanent" open={props.open} width={props.width}>
       <DrawerHeader>
@@ -33,39 +62,11 @@ export const SideNav = (props: SideNavProps) => {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      {routes.map((navigationItems, idx) => (
-        <React.Fragment key={idx}>
-          <List>
-            {navigationItems.map((item, index) => (
-              <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-                <OptionalTooltip title={item.title} enableTooltip={!props.open} placement="right" arrow>
-                  <ListItemButton
-                    component={Link}
-                    to={item.path}
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: props.open ? 'initial' : 'center',
-                      px: 2.5,
-                    }}
-                  >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: props.open ? 3 : 'auto',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <item.icon />
-                    </ListItemIcon>
-                    <ListItemText primary={item.title} sx={{ opacity: props.open ? 1 : 0 }} />
-                  </ListItemButton>
-                </OptionalTooltip>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-        </React.Fragment>
-      ))}
+      <List>{renderRoutes(mainRoutes)}</List>
+      <Divider />
+      <Box flexGrow={1} />
+      <Divider />
+      <List>{renderRoutes(informationRoutes)}</List>
     </Drawer>
   );
 };

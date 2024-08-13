@@ -4,6 +4,7 @@
   "type": "module",
   "version": "1.0.0",
   "exports": {
+    "./readme.json": "./dist/docs/readme.json",
     "./faqs.json": "./dist/docs/faq.json"
   },
   "scripts": {

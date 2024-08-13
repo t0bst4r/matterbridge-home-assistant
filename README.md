@@ -11,37 +11,61 @@ This project provides an application to connect [Home Assistant](https://www.hom
 
 ## Project Structure
 
-This project consists of two packages with different purposes. Both utilize [matterbridge](https://github.com/Luligu/matterbridge).
+The GitHub Repository consists of two applications:
 
-1. `@home-assistant-matter-hub/core` integrate Home Assistant with Matter. At the moment this package is not an application on its own. It is used by `matterbridge-home-assistant` to connect with home assistant.
-2. `matterbridge-home-assistant` provides a `matterbridge` plugin, which finally connects Home Assistant with any matter enabled controller
+1. `matterbridge-home-assistant` (**deprecated**) is a [matterbridge](https://github.com/Luligu/matterbridge) plugin,
+   which connects Home Assistant with any matter enabled controller
+
+2. `home-assistant-matter-hub` is a standalone application which is currently in development. It integrates Home
+   Assistant with Matter and will replace `matterbridge-home-assistant` in the near future.
 
 ## Installation
 
-### Manual or Docker installation
+- As `home-assistant-matter-hub` is currently in development and not yet released, you cannot install it yet.
+  In the meantime you can install `matterbridge-home-assistant`, but be aware that it will be replaced later this year.
+  Then you'll need to reconfigure your matter controllers (like Alexa).
 
-Please follow the [installation instructions](./packages/matterbridge-home-assistant/README.md) to install
-`matterbridge-home-assistant`.
+- For `matterbridge-home-assistant` (**deprecated**) please follow
+  the [installation instructions](./packages/home-assistant-matter-hub/documentation/docs/installation/matterbridge/Installation_Instructions.md).
 
-### Home Assistant Addon Installation (Home Assistant OS only)
+## Pairing
 
-This project is also built into a native Home Assistant Addon. Please follow
-[these instructions](https://github.com/t0bst4r/matterbridge-home-assistant-addon) to install the Addon.
+- For `matterbridge-home-assistant` (**deprecated**) please follow
+  the [Pairing instructions](./packages/home-assistant-matter-hub/documentation/docs/installation/matterbridge/Pairing.md).
+
+## Supported Entities
+
+Since we need to implement support for each domain (or even device class) one by one, not all domains and device classes
+are supported yet.
+
+- Automations (`automation.`) are mapped to Switches and currently only support on-off control
+- Binary Sensor entities (`binary_sensor.`) provide their state (e.g. on / off)
+- Cover Devices (`cover.`) are currently all mapped to "Window Covering"
+- Fan Devices (`fan.`) are currently mapped to Dimmable Plugin Units, because most of the Matter controllers do not
+  support fans.
+- Input-Boolean entities (`input_boolean.`) including on-off control
+- Light entities (`light.`) including on-off, brightness and hue & saturation control
+- Lock Devices (`lock.`) including Locking and Unlocking. Some Matter controllers (like Alexa) do not allow unlocking
+  locks by default. It needs to be enabled in the Alexa App for each Lock.
+- Media Players (`media_player.`) are mapped to Switches and currently only support on-off control
+- Scenes (`scene.`) are mapped to Switches and currently only support on-off control
+- Scripts (`script.`) are mapped to Switches and currently only support on-off control
+- Switch entities (`switch.`) including on-off control
 
 ## Contribution, Bug Reports and Enhancements
 
 First off, thanks for taking the time to contribute! ❤️
 
-All types of contributions are encouraged and valued. See the [contribution guideline](CONTRIBUTING.md) for different
+All types of contributions are encouraged and valued. See the [contribution guideline](./CONTRIBUTING.md) for different
 ways to help and details about how this project handles them. Please make sure to read the relevant section before
 making your contribution. It will make it a lot easier for us maintainers and smooth out the experience for all
 involved.
 
-Please also review the [code of conduct](CODE_OF_CONDUCT.md).
+Please also review the [code of conduct](./CODE_OF_CONDUCT.md).
 
 The community looks forward to your contributions. 🎉
 
 ## Contributors
 
-[<img src="https://github.com/t0bst4r.png" width="50px" alt="t0bst4r" title="t0bst4r" />](https://github.com/t0bst4r)
-[<img src="https://github.com/bassrock.png" width="50px" alt="bassrock" title="bassrock" />](https://github.com/bassrock)
+[![t0bst4r](https://avatars.githubusercontent.com/u/82281152?s=50 't0bst4r')](https://github.com/t0bst4r)
+[![t0bst4r](https://avatars.githubusercontent.com/u/1010384?s=50 'bassrock')](https://github.com/bassrock)
