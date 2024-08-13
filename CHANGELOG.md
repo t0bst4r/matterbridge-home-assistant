@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.6.0 (2024-08-13)
+
+
+### ✨ Features
+
+* **sensor:** add humidity & temperature sensor ([f730905](https://github.com/t0bst4r/matterbridge-home-assistant/commit/f730905911ffd2a6d44af0ea0cfa5f60d61c28a1))
+
+
+
 ## 2.5.6 (2024-08-07)
 
 
