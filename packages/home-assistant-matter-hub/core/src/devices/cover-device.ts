@@ -1,10 +1,10 @@
 import { DeviceTypes } from '@project-chip/matter.js/device';
 
-import { IdentifyAspect, WindowCoveringAspect, WindowCoveringAspectConfig } from '@/aspects/index.js';
-import { HomeAssistantClient } from '@/home-assistant-client/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { DeviceBase, DeviceBaseConfig } from './device-base.js';
+
+import { IdentifyAspect, WindowCoveringAspect, WindowCoveringAspectConfig } from '../aspects/index.js';
+import { HomeAssistantClient } from '../home-assistant-client/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export interface CoverDeviceConfig extends WindowCoveringAspectConfig, DeviceBaseConfig {}
 

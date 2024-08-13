@@ -7,7 +7,7 @@ import {
   HomeAssistantEntityRegistryEntry,
   HomeAssistantMatterEntities,
   HomeAssistantMatterEntity,
-} from '@/models/index.js';
+} from '../../models/index.js';
 
 export function buildState(
   entityIds: string[],

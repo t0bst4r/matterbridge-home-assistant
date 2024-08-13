@@ -1,8 +1,5 @@
 import { DeviceTypes } from '@project-chip/matter.js/device';
 
-import { BooleanStateAspect, IdentifyAspect } from '@/aspects/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import {
   BinarySensorDeviceClass,
   contactDeviceClasses,
@@ -10,6 +7,9 @@ import {
   occupancyDeviceClasses,
 } from './binary_sensor/index.js';
 import { DeviceBase, DeviceBaseConfig } from './device-base.js';
+
+import { BooleanStateAspect, IdentifyAspect } from '../aspects/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 // TODO: There is also an on-off-sensor in matter,
 //  but OnOff CLIENT cluster seems to be harder to implement than ContactSensor with BooleanState SERVER cluster

@@ -6,9 +6,10 @@ import {
 } from '@project-chip/matter.js/cluster';
 import { Device } from '@project-chip/matter.js/device';
 
-import { AspectBase } from '@/aspects/aspect-base.js';
-import { HomeAssistantClient } from '@/home-assistant-client/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
+import { AspectBase } from './aspect-base.js';
+
+import { HomeAssistantClient } from '../home-assistant-client/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 type WindowCoveringHandlers = Required<ClusterServerHandlers<typeof WindowCovering.Complete>>;
 

@@ -1,10 +1,10 @@
 import { ClusterServer, ClusterServerHandlers, DoorLock, DoorLockCluster } from '@project-chip/matter.js/cluster';
 import { Device } from '@project-chip/matter.js/device';
 
-import { HomeAssistantClient } from '@/home-assistant-client/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { AspectBase } from './aspect-base.js';
+
+import { HomeAssistantClient } from '../home-assistant-client/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 type DoorLockHandlers = Required<ClusterServerHandlers<typeof DoorLock.Complete>>;
 

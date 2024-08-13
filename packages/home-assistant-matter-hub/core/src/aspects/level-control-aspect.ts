@@ -6,11 +6,11 @@ import {
 } from '@project-chip/matter.js/cluster';
 import { Device } from '@project-chip/matter.js/device';
 
-import { noopFn } from '@/aspects/utils/noop-fn.js';
-import { HomeAssistantClient } from '@/home-assistant-client/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { AspectBase } from './aspect-base.js';
+import { noopFn } from './utils/noop-fn.js';
+
+import { HomeAssistantClient } from '../home-assistant-client/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 type LevelControlHandlers = Required<ClusterServerHandlers<typeof LevelControl.Complete>>;
 

@@ -1,7 +1,7 @@
 import type { Logger } from 'winston';
 
-import { logger } from '@/logging/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
+import { logger } from '../logging/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export abstract class AspectBase {
   protected readonly log: Logger;

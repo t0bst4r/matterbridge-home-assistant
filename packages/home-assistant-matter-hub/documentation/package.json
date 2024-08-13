@@ -1,0 +1,21 @@
+{
+  "name": "@home-assistant-matter-hub/documentation",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "exports": {
+    "./faqs.json": "./dist/docs/faq.json"
+  },
+  "scripts": {
+    "build": "node build.js"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "{projectRoot}/dist"
+        ]
+      }
+    }
+  }
+}

@@ -2,9 +2,9 @@ import { BridgedDeviceBasicInformationCluster, ClusterServer } from '@project-ch
 import { VendorId } from '@project-chip/matter.js/datatype';
 import { Device } from '@project-chip/matter.js/device';
 
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { AspectBase } from './aspect-base.js';
+
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export interface BasicInformationAspectConfig {
   readonly vendorId: number;

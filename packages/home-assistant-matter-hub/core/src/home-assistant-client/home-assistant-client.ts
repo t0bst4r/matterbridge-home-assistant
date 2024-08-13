@@ -9,13 +9,13 @@ import {
   UnsubscribeFunc,
 } from 'home-assistant-js-websocket';
 
-import { subscribeEntities } from '@/home-assistant-client/api/subscribe-entities.js';
-import { logger } from '@/logging/index.js';
-import { HomeAssistantEntities, HomeAssistantEntityRegistry, HomeAssistantMatterEntities } from '@/models/index.js';
-
 import { buildState } from './api/build-state.js';
 import { getRegistry } from './api/entity-registry-collection.js';
+import { subscribeEntities } from './api/subscribe-entities.js';
 import { PatternMatcher, PatternMatcherConfig } from './util/pattern-matcher.js';
+
+import { logger } from '../logging/index.js';
+import { HomeAssistantEntities, HomeAssistantEntityRegistry, HomeAssistantMatterEntities } from '../models/index.js';
 
 export interface HomeAssistantClientConfig {
   url: string;

@@ -1,9 +1,9 @@
 import { ClusterServer, OccupancySensing, OccupancySensingCluster } from '@project-chip/matter.js/cluster';
 import { Device } from '@project-chip/matter.js/device';
 
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { AspectBase } from './aspect-base.js';
+
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export class OccupancySensingAspect extends AspectBase {
   constructor(

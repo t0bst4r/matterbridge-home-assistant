@@ -23,7 +23,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "build": "tsc",
+    "build": "tsc && node build.js",
     "reset-matterbridge": "matterbridge -factoryreset",
     "preserve": "matterbridge -add .",
     "serve": "dotenvx run -f .env.local -- matterbridge -bridge -logger debug",
@@ -32,11 +32,16 @@
   "dependencies": {
     "@home-assistant-matter-hub/core": "^2.6.1",
     "json5": "^2.2.3",
-    "winston": "^3.13.1",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "@project-chip/matter.js": "^0.9.4",
+    "color": "^4.2.3",
+    "debounce-promise": "^3.1.2",
+    "glob-to-regexp": "^0.4.1",
+    "home-assistant-js-websocket": "^9.4.0",
+    "lodash": "^4.17.21",
+    "winston": "^3.13.1"
   },
   "devDependencies": {
-    "@project-chip/matter.js": "^0.9.4",
     "@types/ws": "^8.5.11",
     "matterbridge": "^1.4.1"
   },

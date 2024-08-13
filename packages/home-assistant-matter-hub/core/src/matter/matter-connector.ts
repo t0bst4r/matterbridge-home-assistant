@@ -1,15 +1,16 @@
 import debounce from 'debounce-promise';
 import _ from 'lodash';
 
-import * as devices from '@/devices/index.js';
-import { DeviceBaseConfig, EntityDomain } from '@/devices/index.js';
-import { HomeAssistantClient, HomeAssistantClientConfig, UnsubscribeFn } from '@/home-assistant-client/index.js';
-import { logger } from '@/logging/index.js';
-import { MatterRegistry } from '@/matter/matter-registry.js';
-import { HomeAssistantMatterEntities, HomeAssistantMatterEntity } from '@/models/index.js';
+import { MatterRegistry } from './matter-registry.js';
 
-export { HomeAssistantClientConfig, PatternMatcherConfig } from '@/home-assistant-client/index.js';
-export { DeviceBaseConfig } from '@/devices/index.js';
+import * as devices from '../devices/index.js';
+import { DeviceBaseConfig, EntityDomain } from '../devices/index.js';
+import { HomeAssistantClient, HomeAssistantClientConfig, UnsubscribeFn } from '../home-assistant-client/index.js';
+import { logger } from '../logging/index.js';
+import { HomeAssistantMatterEntities, HomeAssistantMatterEntity } from '../models/index.js';
+
+export { HomeAssistantClientConfig, PatternMatcherConfig } from '../home-assistant-client/index.js';
+export { DeviceBaseConfig } from '../devices/index.js';
 
 export interface DeviceOverrides {
   domains?: Partial<Record<EntityDomain, unknown>>;

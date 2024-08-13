@@ -2,9 +2,9 @@ import { createDefaultIdentifyClusterServer } from '@project-chip/matter.js/clus
 import type { ClusterServerHandlers, Identify } from '@project-chip/matter.js/cluster';
 import { Device } from '@project-chip/matter.js/device';
 
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { AspectBase } from './aspect-base.js';
+
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 type IdentifyHandlers = Required<ClusterServerHandlers<typeof Identify.Complete>>;
 

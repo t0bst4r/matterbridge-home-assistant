@@ -16,6 +16,7 @@
     "release-docker": "lerna run release-docker",
     "run:matterbridge": "lerna run serve --scope=matterbridge-home-assistant",
     "run:hub-server": "lerna run serve --scope=@home-assistant-matter-hub/server",
+    "run:hub-ui": "lerna run dev --scope=@home-assistant-matter-hub/web-ui",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -23,19 +24,25 @@
     "@eslint/js": "^9.7.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/node": "^20.14.12",
+    "@types/eslint": "^9.6.0",
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "esbuild": "^0.23.0",
+    "esbuild-plugin-noexternal": "^0.1.6",
     "eslint": "^9.7.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.8.0",
     "husky": "^9.1.4",
     "lerna": "^8.1.7",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
-    "tsc-alias": "^1.8.10",
+    "sass-embedded": "^1.77.8",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.0-alpha.52",
+    "vite": "^5.4.0",
+    "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.0.4"
   },
   "optionalDependencies": {
@@ -43,6 +50,9 @@
     "@nx/nx-linux-x64-gnu": "^19.5.2",
     "@rollup/rollup-darwin-arm64": "^4.19.0",
     "@rollup/rollup-linux-x64-gnu": "^4.19.0"
+  },
+  "overrides": {
+    "eslint": "^9.7.0"
   },
   "lint-staged": {
     "!(*.ts|*.js)": "npm run prettier --",

@@ -1,7 +1,7 @@
 import globToRegExp from 'glob-to-regexp';
 
-import { logger } from '@/logging/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
+import { logger } from '../../logging/index.js';
+import { HomeAssistantMatterEntity } from '../../models/index.js';
 
 export interface PatternMatcherConfig {
   readonly includeDomains?: string[];

@@ -1,8 +1,8 @@
 import { createDefaultGroupsClusterServer, createDefaultScenesClusterServer } from '@project-chip/matter.js/cluster';
 import { Device, DeviceTypeDefinition } from '@project-chip/matter.js/device';
 
-import { AspectBase, BasicInformationAspect } from '@/aspects/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
+import { AspectBase, BasicInformationAspect } from '../aspects/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export interface DeviceBaseConfig {
   readonly vendorId: number;

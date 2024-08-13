@@ -2,10 +2,10 @@ import { ClusterServer, OnOffCluster } from '@project-chip/matter.js/cluster';
 import type { ClusterServerHandlers, OnOff } from '@project-chip/matter.js/cluster';
 import { Device } from '@project-chip/matter.js/device';
 
-import { HomeAssistantClient } from '@/home-assistant-client/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { AspectBase } from './aspect-base.js';
+
+import { HomeAssistantClient } from '../home-assistant-client/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export interface OnOffAspectConfig {
   isOn?: (state: HomeAssistantMatterEntity) => boolean;

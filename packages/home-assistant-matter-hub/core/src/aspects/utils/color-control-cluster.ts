@@ -7,7 +7,7 @@ import {
 } from '@project-chip/matter.js/cluster';
 import { Logger } from 'winston';
 
-import { noopFn } from '@/aspects/utils/noop-fn.js';
+import { noopFn } from './noop-fn.js';
 
 export type ColorControlHandlers = Required<ClusterServerHandlers<typeof ColorControl.Complete>>;
 

@@ -1,9 +1,9 @@
 import { DeviceTypes } from '@project-chip/matter.js/device';
 
-import { BooleanStateAspect } from '@/aspects/index.js';
-
 import { BinarySensorDeviceClass } from './binary_sensor-device-class.js';
 import type { InternalBinarySensorDeviceConfig } from './internal-binary-sensor-device-config.js';
+
+import { BooleanStateAspect } from '../../aspects/index.js';
 
 const invertedContactSensor: InternalBinarySensorDeviceConfig = {
   deviceType: DeviceTypes.CONTACT_SENSOR,

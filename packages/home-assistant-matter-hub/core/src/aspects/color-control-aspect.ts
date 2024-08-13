@@ -2,18 +2,18 @@ import { ColorControl, ColorControlCluster } from '@project-chip/matter.js/clust
 import { Device } from '@project-chip/matter.js/device';
 import type Color from 'color';
 
+import { AspectBase } from './aspect-base.js';
 import {
   clusterWithColor,
   clusterWithColorAndTemperature,
   clusterWithTemperature,
   ColorControlHandlers,
-} from '@/aspects/utils/color-control-cluster.js';
-import { LightEntityColorMode } from '@/devices/index.js';
-import { HomeAssistantClient } from '@/home-assistant-client/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
-import { AspectBase } from './aspect-base.js';
+} from './utils/color-control-cluster.js';
 import { ColorConverter } from './utils/color-converter.js';
+
+import { LightEntityColorMode } from '../devices/index.js';
+import { HomeAssistantClient } from '../home-assistant-client/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export interface ColorControlAspectConfig {
   supportsColorControl: boolean;

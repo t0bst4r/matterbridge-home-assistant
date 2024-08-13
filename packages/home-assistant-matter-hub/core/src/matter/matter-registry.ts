@@ -1,4 +1,4 @@
-import { DeviceBase } from '@/devices/index.js';
+import { DeviceBase } from '../devices/index.js';
 
 export interface MatterRegistry {
   register(device: DeviceBase): Promise<void>;

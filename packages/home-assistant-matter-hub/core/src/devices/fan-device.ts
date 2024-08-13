@@ -1,10 +1,11 @@
 import { DeviceTypes } from '@project-chip/matter.js/device';
 
-import { IdentifyAspect, LevelControlAspect, OnOffAspect } from '@/aspects/index.js';
-import { DeviceBase, DeviceBaseConfig } from '@/devices/device-base.js';
-import { ifNotNull } from '@/devices/utils/if-not-null.js';
-import { HomeAssistantClient } from '@/home-assistant-client/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
+import { DeviceBase, DeviceBaseConfig } from './device-base.js';
+import { ifNotNull } from './utils/if-not-null.js';
+
+import { IdentifyAspect, LevelControlAspect, OnOffAspect } from '../aspects/index.js';
+import { HomeAssistantClient } from '../home-assistant-client/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export class FanDevice extends DeviceBase {
   constructor(client: HomeAssistantClient, entity: HomeAssistantMatterEntity, config: DeviceBaseConfig) {

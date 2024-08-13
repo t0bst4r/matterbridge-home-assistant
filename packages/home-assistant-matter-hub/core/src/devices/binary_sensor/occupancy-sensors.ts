@@ -1,9 +1,9 @@
 import { DeviceTypes } from '@project-chip/matter.js/device';
 
-import { OccupancySensingAspect } from '@/aspects/index.js';
-
 import { BinarySensorDeviceClass } from './binary_sensor-device-class.js';
 import { InternalBinarySensorDeviceConfig } from './internal-binary-sensor-device-config.js';
+
+import { OccupancySensingAspect } from '../../aspects/index.js';
 
 const simpleOccupancySensor: InternalBinarySensorDeviceConfig = {
   deviceType: DeviceTypes.OCCUPANCY_SENSOR,
