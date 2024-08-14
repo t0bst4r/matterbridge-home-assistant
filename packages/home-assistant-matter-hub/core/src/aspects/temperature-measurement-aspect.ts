@@ -37,7 +37,7 @@ export class TemperatureMeasurementAspect extends AspectBase {
   }
 
   getTemperatureInCelsius(entity: HomeAssistantMatterEntity): number | null {
-    if (entity.state == null) {
+    if (entity.state == null || isNaN(+entity.state)) {
       return null;
     }
 

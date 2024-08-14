@@ -35,7 +35,7 @@ export class HumidityMeasurementAspect extends AspectBase {
   }
 
   getMeasuredValue(state: string) {
-    if (state != null) {
+    if (state != null && !isNaN(+state)) {
       return +state * 100;
     }
     return null;
