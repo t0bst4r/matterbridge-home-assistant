@@ -9,7 +9,7 @@ module.exports = [
   ...tseslint.configs.recommended,
   prettier,
   {
-    ignores: ['*.config.js', '**/lib/'],
+    ignores: ['.nx/', '*.config.js', '**/node_modules/', '**/lib/', '**/dist/'],
   },
   {
     rules: {
