@@ -1,0 +1,82 @@
+{
+  "author": {
+    "name": "Tobias Glatthar",
+    "email": "t0bst4r@outlook.com",
+    "url": "https://github.com/t0bst4r"
+  },
+  "license": "Apache-2.0",
+  "description": "Expose your Home Assistant Entities to any Matter enabled controller (like Alexa, Apple Home or Google Home)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git"
+  },
+  "docker": {
+    "tagName": "ghcr.io/t0bst4r/home-assistant-matter-hub"
+  },
+  "keywords": [
+    "matter",
+    "home",
+    "assistant",
+    "home assistant",
+    "home-assistant",
+    "homeassistant"
+  ],
+  "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant",
+  "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
+  "name": "home-assistant-matter-hub",
+  "version": "2.5.6",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "build-js": "tsc && node build.js",
+    "build-docker": "./docker-build.sh",
+    "build": "",
+    "release-docker": "./docker-release.sh",
+    "serve": "node lib/index.js"
+  },
+  "dependencies": {
+    "json5": "^2.2.3",
+    "@project-chip/matter.js": "^0.9.4",
+    "@project-chip/matter-node.js": "^0.9.4",
+    "color": "^4.2.3",
+    "debounce-promise": "^3.1.2",
+    "glob-to-regexp": "^0.4.1",
+    "home-assistant-js-websocket": "^9.4.0",
+    "lodash": "^4.17.21",
+    "winston": "^3.13.1"
+  },
+  "devDependencies": {
+    "@home-assistant-matter-hub/core": "*",
+    "@home-assistant-matter-hub/shared-interfaces": "*",
+    "@home-assistant-matter-hub/web-api": "*",
+    "@home-assistant-matter-hub/web-ui": "*"
+  },
+  "nx": {
+    "targets": {
+      "build-docker": {
+        "dependsOn": [
+          "build-js"
+        ]
+      },
+      "release-docker": {
+        "dependsOn": [
+          "build-js"
+        ]
+      },
+      "build": {
+        "dependsOn": [
+          "^build",
+          "build-js",
+          "build-docker"
+        ]
+      },
+      "serve": {
+        "dependsOn": [
+          "build-js"
+        ]
+      }
+    }
+  }
+}

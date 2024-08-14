@@ -2,6 +2,6 @@
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "singleQuote": true,
   "printWidth": 120,
-  "importOrder": ["<THIRD_PARTY_MODULES>", "^@\\/.*", "^\\.\\/", "^\\.\\.\\/"],
+  "importOrder": ["@project-chip/matter-node.js", "<THIRD_PARTY_MODULES>", "^@\\/.*", "^\\.\\/", "^\\.\\.\\/"],
   "importOrderSeparation": true
 }

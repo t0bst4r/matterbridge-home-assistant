@@ -52,6 +52,10 @@ are supported yet.
 - Scripts (`script.`) are mapped to Switches and currently only support on-off control
 - Switch entities (`switch.`) including on-off control
 
+## Frequently Asked Questions
+
+Please head over to the [FAQs](./packages/home-assistant-matter-hub/documentation/docs/faq).
+
 ## Contribution, Bug Reports and Enhancements
 
 First off, thanks for taking the time to contribute! ❤️
@@ -68,4 +72,5 @@ The community looks forward to your contributions. 🎉
 ## Contributors
 
 [![t0bst4r](https://avatars.githubusercontent.com/u/82281152?s=50 't0bst4r')](https://github.com/t0bst4r)
+[![genehand](https://avatars.githubusercontent.com/u/1693883?s=50 'genehand')](https://github.com/genehand)
 [![t0bst4r](https://avatars.githubusercontent.com/u/1010384?s=50 'bassrock')](https://github.com/bassrock)

@@ -1,7 +1,6 @@
+import { MatterDeviceRegistry } from '@home-assistant-matter-hub/shared-interfaces';
 import debounce from 'debounce-promise';
 import _ from 'lodash';
-
-import { MatterRegistry } from './matter-registry.js';
 
 import * as devices from '../devices/index.js';
 import { DeviceBaseConfig, EntityDomain } from '../devices/index.js';
@@ -19,7 +18,7 @@ export interface DeviceOverrides {
 
 export interface MatterConnectorConfig {
   readonly homeAssistant: HomeAssistantClientConfig;
-  readonly registry: MatterRegistry;
+  readonly registry: MatterDeviceRegistry;
   readonly devices: DeviceBaseConfig;
   readonly overrides?: DeviceOverrides;
 }
@@ -60,7 +59,7 @@ export class MatterConnector {
 
   private constructor(
     private readonly client: HomeAssistantClient,
-    private readonly registry: MatterRegistry,
+    private readonly registry: MatterDeviceRegistry,
     private readonly defaultDeviceConfig: DeviceBaseConfig,
     private readonly deviceOverrides: DeviceOverrides,
   ) {}

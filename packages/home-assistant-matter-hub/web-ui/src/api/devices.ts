@@ -1,6 +1,6 @@
-import { MatterDevice } from '@home-assistant-matter-hub/shared-models';
-
 import { RequestResponse } from './request.ts';
+
+import { MatterDevice } from '../../../shared-interfaces/src/models';
 
 const allDevices: MatterDevice[] = [
   {
@@ -8,7 +8,6 @@ const allDevices: MatterDevice[] = [
     entityId: 'light.schreibtisch',
     deviceType: 'MA-dimmablelight (0x0101)',
     friendlyName: 'Schreibtisch',
-    registered: true,
     currentState: {
       onOff: { state: 'On' },
       levelControl: {
@@ -19,16 +18,11 @@ const allDevices: MatterDevice[] = [
   {
     domain: 'light',
     entityId: 'light.schreibtisch_toby',
+    deviceType: 'MA-simplelight',
     friendlyName: 'Schreibtisch Toby',
-    registered: false,
-    comments: ['not included'],
-  },
-  {
-    domain: 'light',
-    entityId: 'light.schreibtisch_saskia',
-    friendlyName: 'Schreibtisch Saskia',
-    registered: false,
-    comments: ['not included'],
+    currentState: {
+      onOff: { state: 'On' },
+    },
   },
 ];
 

@@ -23,8 +23,12 @@ function combine(state: HomeAssistantEntity, registry?: HomeAssistantEntityRegis
   const uniqueId = createHash('md5').update(state.entity_id).digest('hex');
   return {
     ...state,
+    attributes: {
+      ...state.attributes,
+      friendly_name: state.attributes.friendly_name ?? state.entity_id,
+    },
+    domain: state.entity_id.split('.')[0],
     matter: {
-      deviceName: state.attributes.friendly_name ?? state.entity_id,
       uniqueId,
       serialNumber: uniqueId.substring(0, 30),
     },

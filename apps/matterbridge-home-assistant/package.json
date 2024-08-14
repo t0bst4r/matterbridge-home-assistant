@@ -1,0 +1,81 @@
+{
+  "author": "https://github.com/t0bst4r",
+  "license": "Apache-2.0",
+  "description": "Matterbridge Home Assistant plugin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t0bst4r/matterbridge-home-assistant.git"
+  },
+  "docker": {
+    "tagName": "ghcr.io/t0bst4r/matterbridge-home-assistant"
+  },
+  "keywords": [
+    "matter",
+    "home",
+    "assistant",
+    "home assistant",
+    "home-assistant",
+    "homeassistant"
+  ],
+  "homepage": "https://github.com/t0bst4r/matterbridge-home-assistant",
+  "bugs": "https://github.com/t0bst4r/matterbridge-home-assistant/issues",
+  "name": "matterbridge-home-assistant",
+  "version": "2.5.6",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "build-js": "tsc && node build.js",
+    "build-docker": "./docker-build.sh",
+    "build": "",
+    "release-docker": "./docker-release.sh",
+    "reset-matterbridge": "matterbridge -factoryreset",
+    "preserve": "matterbridge -add ",
+    "serve": "dotenvx run -f .env.local -- matterbridge -bridge -logger debug",
+    "reset": "matterbridge -factoryreset"
+  },
+  "dependencies": {
+    "json5": "^2.2.3",
+    "ws": "^8.18.0",
+    "@project-chip/matter.js": "^0.9.4",
+    "color": "^4.2.3",
+    "debounce-promise": "^3.1.2",
+    "glob-to-regexp": "^0.4.1",
+    "home-assistant-js-websocket": "^9.4.0",
+    "lodash": "^4.17.21",
+    "winston": "^3.13.1"
+  },
+  "devDependencies": {
+    "@home-assistant-matter-hub/core": "*",
+    "@home-assistant-matter-hub/shared-interfaces": "*",
+    "@types/ws": "^8.5.11",
+    "matterbridge": "^1.4.1"
+  },
+  "nx": {
+    "targets": {
+      "build-docker": {
+        "dependsOn": [
+          "build-js"
+        ]
+      },
+      "release-docker": {
+        "dependsOn": [
+          "build-js"
+        ]
+      },
+      "build": {
+        "dependsOn": [
+          "^build",
+          "build-js",
+          "build-docker"
+        ]
+      },
+      "serve": {
+        "dependsOn": [
+          "build-js"
+        ]
+      }
+    }
+  }
+}

@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@home-assistant-matter-hub/shared-models": "*",
+    "@home-assistant-matter-hub/shared-interfaces": "*",
     "@home-assistant-matter-hub/documentation": "*",
     "@fontsource/roboto": "^5.0.14",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",

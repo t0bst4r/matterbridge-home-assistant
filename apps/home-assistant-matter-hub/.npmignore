@@ -1,0 +1,16 @@
+# Source Code
+/test/
+/src/
+/src/**/*.test.ts
+/src/**/*.spec.ts
+
+# Configs
+/docker/
+.env.local
+tsconfig.dev.json
+tsconfig.json
+tsconfig.tsbuildinfo
+
+# Keep
+!/lib/
+

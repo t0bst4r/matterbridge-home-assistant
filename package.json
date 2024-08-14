@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "workspaces": [
-    "packages/**"
+    "packages/**",
+    "apps/**"
   ],
   "scripts": {
     "graph": "nx graph",
@@ -15,7 +16,7 @@
     "release": "lerna publish",
     "release-docker": "lerna run release-docker",
     "run:matterbridge": "lerna run serve --scope=matterbridge-home-assistant",
-    "run:hub-server": "lerna run serve --scope=@home-assistant-matter-hub/server",
+    "run:hub": "lerna run serve --scope=home-assistant-matter-hub",
     "run:hub-ui": "lerna run dev --scope=@home-assistant-matter-hub/web-ui",
     "prepare": "husky"
   },

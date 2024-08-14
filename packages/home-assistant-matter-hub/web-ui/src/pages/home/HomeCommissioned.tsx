@@ -2,7 +2,6 @@ import { faAmazon } from '@fortawesome/free-brands-svg-icons/faAmazon';
 import { faApple } from '@fortawesome/free-brands-svg-icons/faApple';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CommissionedStatus } from '@home-assistant-matter-hub/shared-models';
 import DeviceUnknownIcon from '@mui/icons-material/DeviceUnknown';
 import { Avatar, Box, ListItemAvatar } from '@mui/material';
 import List from '@mui/material/List';
@@ -11,8 +10,10 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { ReactNode } from 'react';
 
+import { MatterBridgeDevice } from '../../../../shared-interfaces/src/models';
+
 export interface HomeCommissionedProps {
-  status: CommissionedStatus;
+  bridge: MatterBridgeDevice;
 }
 
 const iconPerFabricType: Record<string, ReactNode> = {
@@ -28,7 +29,7 @@ export const HomeCommissioned = (props: HomeCommissionedProps) => {
         Your Hub is paired with the following controllers:
       </Typography>
       <List>
-        {props.status.fabrics.map((fabric) => (
+        {props.bridge.fabrics.map((fabric) => (
           <ListItem key={fabric.id}>
             <ListItemAvatar>
               <Avatar>{iconPerFabricType[fabric.name] ?? <DeviceUnknownIcon />}</Avatar>

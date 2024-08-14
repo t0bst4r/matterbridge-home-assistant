@@ -10,7 +10,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@home-assistant-matter-hub/shared-models": "*"
+    "@home-assistant-matter-hub/shared-interfaces": "*"
   },
   "peerDependencies": {
     "@project-chip/matter.js": "^0.9.4",

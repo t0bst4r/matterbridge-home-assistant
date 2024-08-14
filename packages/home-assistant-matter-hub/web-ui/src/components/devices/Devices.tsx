@@ -1,5 +1,3 @@
-import { MatterDevice } from '@home-assistant-matter-hub/shared-models';
-import MobileOffIcon from '@mui/icons-material/MobileOff';
 import {
   Box,
   capitalize,
@@ -18,12 +16,14 @@ import { useMemo } from 'react';
 
 import { DomainIcon } from './DomainIcon.tsx';
 
+import { MatterDevice } from '../../../../shared-interfaces/src/models';
+
 export interface DevicesProps {
   devices: MatterDevice[];
 }
 
 export const Devices = ({ devices }: DevicesProps) => {
-  const sortedDevices = useMemo(() => devices.sort((a, b) => (a.registered ? -1 : b.registered ? 1 : 0)), [devices]);
+  const sortedDevices = useMemo(() => devices.sort((a, b) => a.friendlyName.localeCompare(b.friendlyName)), [devices]);
   return (
     <TableContainer>
       <Table size="small">
@@ -39,20 +39,19 @@ export const Devices = ({ devices }: DevicesProps) => {
         </TableHead>
         <TableBody>
           {sortedDevices.map((device) => (
-            <StyledTableRow key={device.entityId} registered={`${device.registered}`}>
+            <StyledTableRow key={device.entityId} registered={'true'}>
               <TableCell>
-                <Tooltip
-                  title={device.registered ? capitalize(device.domain) : device.comments.map(capitalize).join(', ')}
-                  placement="right"
-                >
-                  <Box>{device.registered ? <DomainIcon domain={device.domain} /> : <MobileOffIcon />}</Box>
+                <Tooltip title={capitalize(device.domain)} placement="right">
+                  <Box>
+                    <DomainIcon domain={device.domain} />
+                  </Box>
                 </Tooltip>
               </TableCell>
               <TableCell>{device.entityId}</TableCell>
               <TableCell>{device.friendlyName}</TableCell>
-              <TableCell>{device.registered && device.deviceType}</TableCell>
-              <TableCell>{device.registered && Object.keys(device.currentState).map(capitalize).join(', ')}</TableCell>
-              <TableCell>{device.registered && JSON.stringify(device.currentState)}</TableCell>
+              <TableCell>{device.deviceType}</TableCell>
+              <TableCell>{Object.keys(device.currentState).map(capitalize).join(', ')}</TableCell>
+              <TableCell>{JSON.stringify(device.currentState)}</TableCell>
             </StyledTableRow>
           ))}
         </TableBody>
