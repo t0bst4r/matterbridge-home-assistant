@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.6.1 (2024-08-14)
+
+
+### 🐛 Bug Fixes
+
+* **matterbridge:** patch NodeAnsiLogger until fix is provided by matterbridge ([#262](https://github.com/t0bst4r/matterbridge-home-assistant/issues/262)) ([09b8914](https://github.com/t0bst4r/matterbridge-home-assistant/commit/09b8914922b35f1de9a95b46531cd377a3e66704))
+
+
+
 ## 2.6.0 (2024-08-13)
 
 
