@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.6.2 (2024-08-14)
+
+
+### 🐛 Bug Fixes
+
+* **sensor:** add NaN check to temperature and humidity sensors ([#264](https://github.com/t0bst4r/matterbridge-home-assistant/issues/264)) ([be15131](https://github.com/t0bst4r/matterbridge-home-assistant/commit/be151316a291eef9117ffab6365b5eb5930f09e1))
+
+
+
 ## 2.6.1 (2024-08-14)
 
 
