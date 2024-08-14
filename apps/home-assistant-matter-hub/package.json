@@ -34,7 +34,7 @@
     "build-docker": "./docker-build.sh",
     "build": "",
     "release-docker": "./docker-release.sh",
-    "serve": "node lib/index.js"
+    "serve": "dotenvx run -f .env.local -- node lib/index.js"
   },
   "dependencies": {
     "json5": "^2.2.3",
@@ -63,6 +63,11 @@
       "release-docker": {
         "dependsOn": [
           "build-js"
+        ]
+      },
+      "build-js": {
+        "dependsOn": [
+          "^build"
         ]
       },
       "build": {

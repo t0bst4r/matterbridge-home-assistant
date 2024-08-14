@@ -10,7 +10,7 @@ export class LockDevice extends DeviceBase {
   constructor(homeAssistantClient: HomeAssistantClient, entity: HomeAssistantMatterEntity, config: DeviceBaseConfig) {
     super(entity, DeviceTypes.DOOR_LOCK, config);
 
-    this.addAspect(new IdentifyAspect(this.matter, entity));
-    this.addAspect(new DoorLockAspect(homeAssistantClient, this.matter, entity));
+    this.addAspect(new IdentifyAspect(this.endpoint, entity));
+    this.addAspect(new DoorLockAspect(homeAssistantClient, this.endpoint, entity));
   }
 }

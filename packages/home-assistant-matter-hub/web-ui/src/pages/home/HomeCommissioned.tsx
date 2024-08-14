@@ -29,7 +29,7 @@ export const HomeCommissioned = (props: HomeCommissionedProps) => {
         Your Hub is paired with the following controllers:
       </Typography>
       <List>
-        {props.bridge.fabrics.map((fabric) => (
+        {props.bridge.fabrics?.map((fabric) => (
           <ListItem key={fabric.id}>
             <ListItemAvatar>
               <Avatar>{iconPerFabricType[fabric.name] ?? <DeviceUnknownIcon />}</Avatar>

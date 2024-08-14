@@ -12,7 +12,7 @@ export class CoverDevice extends DeviceBase {
   constructor(client: HomeAssistantClient, entity: HomeAssistantMatterEntity, config: CoverDeviceConfig) {
     super(entity, DeviceTypes.WINDOW_COVERING, config);
 
-    this.addAspect(new IdentifyAspect(this.matter, entity));
-    this.addAspect(new WindowCoveringAspect(client, entity, this.matter, config));
+    this.addAspect(new IdentifyAspect(this.endpoint, entity));
+    this.addAspect(new WindowCoveringAspect(client, entity, this.endpoint, config));
   }
 }

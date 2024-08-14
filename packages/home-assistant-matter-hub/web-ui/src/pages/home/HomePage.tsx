@@ -16,7 +16,11 @@ export const HomePage = () => {
     <Container>
       <Stack spacing={4}>
         {bridge &&
-          (bridge.fabrics.length > 0 ? <HomeCommissioned bridge={bridge} /> : <HomeNotCommissioned bridge={bridge} />)}
+          (bridge.fabrics && bridge.fabrics.length > 0 ? (
+            <HomeCommissioned bridge={bridge} />
+          ) : (
+            <HomeNotCommissioned bridge={bridge} />
+          ))}
         {devices && <Devices devices={devices} />}
       </Stack>
     </Container>

@@ -1,9 +1,9 @@
 import { ClusterServer, TemperatureMeasurementCluster } from '@project-chip/matter.js/cluster';
 import { Device } from '@project-chip/matter.js/device';
 
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { AspectBase } from './aspect-base.js';
+
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 export class TemperatureMeasurementAspect extends AspectBase {
   private unitOfMeasurement: string | undefined;

@@ -9,5 +9,5 @@ export interface MatterBridgeDevice {
   name: string;
   qrPairingCode?: string;
   manualPairingCode?: string;
-  fabrics: MatterFabric[];
+  fabrics?: MatterFabric[];
 }

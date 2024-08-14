@@ -13,7 +13,7 @@ function getAllBridges(registry: MatterBridgeRegistry, res: Response) {
     name: bridge.name,
     manualPairingCode: bridge.manualPairingCode,
     qrPairingCode: bridge.qrPairingCode,
-    fabrics: bridge.fabrics.map((fabric) => ({
+    fabrics: bridge.fabrics?.map((fabric) => ({
       id: fabric.id,
       name: fabric.name,
       activeSessions: fabric.activeSessions,

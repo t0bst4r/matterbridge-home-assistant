@@ -16,7 +16,7 @@ export const HomeNotCommissioned = (props: HomeNotCommissionedProps) => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={2} display="flex" justifyContent="center" alignItems="center">
             <Box maxWidth="196px">
-              <Commissioning commissioningCode={props.bridge.qrPairingCode} />
+              {props.bridge.qrPairingCode && <Commissioning commissioningCode={props.bridge.qrPairingCode} />}
             </Box>
           </Grid>
           <Grid item xs={12} md={8} display="flex" flexDirection="column" justifyContent="center">

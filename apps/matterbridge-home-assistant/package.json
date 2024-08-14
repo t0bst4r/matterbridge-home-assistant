@@ -64,6 +64,11 @@
           "build-js"
         ]
       },
+      "build-js": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
       "build": {
         "dependsOn": [
           "^build",

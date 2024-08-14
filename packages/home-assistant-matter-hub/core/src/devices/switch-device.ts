@@ -13,7 +13,7 @@ export interface SwitchDeviceConfig extends DeviceBaseConfig {
 export class SwitchDevice extends DeviceBase {
   constructor(homeAssistantClient: HomeAssistantClient, entity: HomeAssistantMatterEntity, config: SwitchDeviceConfig) {
     super(entity, DeviceTypes.ON_OFF_PLUGIN_UNIT, config);
-    this.addAspect(new IdentifyAspect(this.matter, entity));
-    this.addAspect(new OnOffAspect(homeAssistantClient, this.matter, entity, { isOn: config.isOn }));
+    this.addAspect(new IdentifyAspect(this.endpoint, entity));
+    this.addAspect(new OnOffAspect(homeAssistantClient, this.endpoint, entity, { isOn: config.isOn }));
   }
 }

@@ -1,12 +1,12 @@
 import { Device, DeviceTypeDefinition, DeviceTypes } from '@project-chip/matter.js/device';
 
-import { IdentifyAspect, HumidityMeasurementAspect, TemperatureMeasurementAspect } from '@/aspects/index.js';
-import { AspectBase } from '@/aspects/index.js';
-import { DeviceBase, DeviceBaseConfig } from '@/devices/index.js';
-import { HomeAssistantMatterEntity } from '@/models/index.js';
-
 import { EntityDomain } from './index.js';
 import { UnsupportedDeviceClassError } from './utils/unsupported-device-class-error.js';
+
+import { IdentifyAspect, HumidityMeasurementAspect, TemperatureMeasurementAspect } from '../aspects/index.js';
+import { AspectBase } from '../aspects/index.js';
+import { DeviceBase, DeviceBaseConfig } from '../devices/index.js';
+import { HomeAssistantMatterEntity } from '../models/index.js';
 
 // https://www.home-assistant.io/integrations/sensor/
 enum SensorDeviceClass {
@@ -48,7 +48,7 @@ export class SensorDevice extends DeviceBase {
   constructor(entity: HomeAssistantMatterEntity, config: DeviceBaseConfig) {
     const deviceTypeConfig = SensorDevice.getConfig(entity);
     super(entity, deviceTypeConfig.deviceType, config);
-    this.addAspect(new IdentifyAspect(this.matter, entity));
-    deviceTypeConfig.createAspects(this.matter, entity).forEach((v) => this.addAspect(v));
+    this.addAspect(new IdentifyAspect(this.endpoint, entity));
+    deviceTypeConfig.createAspects(this.endpoint, entity).forEach((v) => this.addAspect(v));
   }
 }

@@ -10,9 +10,9 @@ export class ClimateDevice extends DeviceBase {
   constructor(homeAssistantClient: HomeAssistantClient, entity: HomeAssistantMatterEntity, config: DeviceBaseConfig) {
     super(entity, DeviceTypes.HEATING_COOLING_UNIT, config);
 
-    this.addAspect(new IdentifyAspect(this.matter, entity));
+    this.addAspect(new IdentifyAspect(this.endpoint, entity));
     this.addAspect(
-      new LevelControlAspect(homeAssistantClient, this.matter, entity, {
+      new LevelControlAspect(homeAssistantClient, this.endpoint, entity, {
         getValue: (entity) => entity.attributes.temperature,
         getMinValue: (entity) => entity.attributes.min_temp,
         getMaxValue: (entity) => entity.attributes.max_temp,

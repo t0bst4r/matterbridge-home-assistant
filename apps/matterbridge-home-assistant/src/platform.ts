@@ -1,5 +1,5 @@
 import { DeviceBase, HomeAssistantMatterEntity, logger, MatterConnector } from '@home-assistant-matter-hub/core';
-import { MatterDevice, MatterDeviceRegistry } from '@home-assistant-matter-hub/shared-interfaces';
+import { MatterDevice, MatterDeviceRegistry, MatterEndpointDevice } from '@home-assistant-matter-hub/shared-interfaces';
 import type { Device, DeviceTypeDefinition } from '@project-chip/matter.js/device';
 import { Matterbridge, MatterbridgeDevice, MatterbridgeDynamicPlatform, PlatformConfig } from 'matterbridge';
 import type { AnsiLogger } from 'matterbridge/logger';
@@ -59,13 +59,13 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform implement
     if (this.config.unregisterOnShutdown === true) await this.unregisterAllDevices();
   }
 
-  async register(device: MatterDevice): Promise<void> {
-    await this.registerDevice((device as DeviceBase).matter as MatterbridgeDevice);
+  async register(device: MatterEndpointDevice): Promise<void> {
+    await this.registerDevice(device.endpoint as MatterbridgeDevice);
     this.devices.push(device);
   }
 
-  async unregister(device: MatterDevice): Promise<void> {
-    await this.unregisterDevice((device as DeviceBase).matter as MatterbridgeDevice);
+  async unregister(device: MatterEndpointDevice): Promise<void> {
+    await this.unregisterDevice(device.endpoint as MatterbridgeDevice);
     this.devices.splice(this.devices.indexOf(device), 1);
   }
 }

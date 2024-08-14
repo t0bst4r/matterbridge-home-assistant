@@ -11,10 +11,10 @@ export class FanDevice extends DeviceBase {
   constructor(client: HomeAssistantClient, entity: HomeAssistantMatterEntity, config: DeviceBaseConfig) {
     super(entity, DeviceTypes.DIMMABLE_PLUGIN_UNIT, config);
 
-    this.addAspect(new IdentifyAspect(this.matter, entity));
-    this.addAspect(new OnOffAspect(client, this.matter, entity));
+    this.addAspect(new IdentifyAspect(this.endpoint, entity));
+    this.addAspect(new OnOffAspect(client, this.endpoint, entity));
     this.addAspect(
-      new LevelControlAspect(client, this.matter, entity, {
+      new LevelControlAspect(client, this.endpoint, entity, {
         getValue: (entity) => ifNotNull<number>(entity.attributes.percentage, (p) => (p / 100) * 254),
         getMinValue: () => 0,
         getMaxValue: () => 254,

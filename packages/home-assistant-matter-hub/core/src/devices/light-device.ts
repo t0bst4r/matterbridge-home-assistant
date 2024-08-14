@@ -42,12 +42,12 @@ export class LightDevice extends DeviceBase {
 
     super(entity, deviceType, config);
 
-    this.addAspect(new IdentifyAspect(this.matter, entity));
-    this.addAspect(new OnOffAspect(homeAssistantClient, this.matter, entity));
+    this.addAspect(new IdentifyAspect(this.endpoint, entity));
+    this.addAspect(new OnOffAspect(homeAssistantClient, this.endpoint, entity));
 
     if (supportsColorControl || supportsColorTemperature) {
       this.addAspect(
-        new ColorControlAspect(homeAssistantClient, this.matter, entity, {
+        new ColorControlAspect(homeAssistantClient, this.endpoint, entity, {
           supportsColorControl,
           supportsColorTemperature,
         }),
@@ -56,7 +56,7 @@ export class LightDevice extends DeviceBase {
 
     if (supportsBrightness) {
       this.addAspect(
-        new LevelControlAspect(homeAssistantClient, this.matter, entity, {
+        new LevelControlAspect(homeAssistantClient, this.endpoint, entity, {
           getMinValue: () => 0,
           getMaxValue: () => 254,
           getValue: (entity) => ifNotNull<number>(entity.attributes.brightness, (v) => (v / 255) * 254),

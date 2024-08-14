@@ -35,7 +35,7 @@ export class BinarySensorDevice extends DeviceBase {
   constructor(entity: HomeAssistantMatterEntity, config: DeviceBaseConfig) {
     const deviceTypeConfig = BinarySensorDevice.getConfig(entity);
     super(entity, deviceTypeConfig.deviceType, config);
-    this.addAspect(new IdentifyAspect(this.matter, entity));
-    deviceTypeConfig.createAspects(this.matter, entity).forEach(this.addAspect.bind(this));
+    this.addAspect(new IdentifyAspect(this.endpoint, entity));
+    deviceTypeConfig.createAspects(this.endpoint, entity).forEach(this.addAspect.bind(this));
   }
 }

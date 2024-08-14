@@ -1,28 +1,64 @@
 import '@project-chip/matter-node.js';
 
 import { logger } from '@home-assistant-matter-hub/core';
-import { Environment } from '@project-chip/matter.js/environment';
+import {
+  BridgedDeviceBasicInformationCluster,
+  ClusterServer,
+  createDefaultGroupsClusterServer,
+  createDefaultIdentifyClusterServer,
+  createDefaultOnOffClusterServer,
+  createDefaultScenesClusterServer,
+} from '@project-chip/matter.js/cluster';
+import { Device, DeviceTypes } from '@project-chip/matter.js/device';
+import { Environment, StorageService } from '@project-chip/matter.js/environment';
+import { Logger } from '@project-chip/matter.js/log';
 
-import { ConsoleTransport } from './logging/transports.js';
-import { StorageManager } from './storage/storage-manager.js';
+import { MatterLoggerTransport } from './logging/transports.js';
+import { MatterServer } from './matter/matter-server.js';
 
-logger.add(ConsoleTransport);
+logger.add(new MatterLoggerTransport());
 const log = logger.child({ service: 'home-assistant-matter-hub' });
 
+Logger.level = process.env.LOG_LEVEL ?? 'info';
+
 const environment = Environment.default;
-const storage = await StorageManager.create(environment);
+const storageService = environment.get(StorageService);
+const storageManager = await storageService.open('HomeAssistantMatterHub');
 
-log.info('Starting home assistant matter-hub');
-log.info('Storage location: %s', storage.location);
+log.info('Starting home-assistant-matter-hub');
+log.info('Storage location: %s', storageService.location);
 
-const bridges = storage.get().bridges ?? [];
-if (bridges.length === 0) {
-  bridges.push({
-    id: 'Home-Assistant-Matter-Hub',
-    name: 'Home-Assistant-Matter-Hub',
-    fabrics: [],
-  });
-  await storage.set({ bridges });
-}
+const server = new MatterServer(storageManager);
+const bridge = await server.createBridge({
+  id: '1',
+  name: 'Test Bridge',
+});
 
-log.info('Starting %s bridge(s)', bridges.length);
+await bridge.register({
+  entityId: 'entity.id',
+  friendlyName: 'friendly-name',
+  domain: 'entity',
+  deviceType: DeviceTypes.ON_OFF_PLUGIN_UNIT.name,
+  currentState: {},
+  endpoint: ((): Device => {
+    const device = new Device(DeviceTypes.ON_OFF_PLUGIN_UNIT);
+    device.addClusterServer(createDefaultIdentifyClusterServer({ identify: () => console.log('identify') }));
+    device.addClusterServer(createDefaultGroupsClusterServer());
+    device.addClusterServer(createDefaultScenesClusterServer());
+    device.addClusterServer(createDefaultOnOffClusterServer());
+    device.addClusterServer(
+      ClusterServer(
+        BridgedDeviceBasicInformationCluster,
+        {
+          reachable: true,
+          nodeLabel: 'Test',
+        },
+        {},
+        { reachableChanged: true },
+      ),
+    );
+    return device;
+  })(),
+});
+
+await server.start();
