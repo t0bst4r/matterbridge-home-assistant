@@ -1,7 +1,8 @@
 import { createDefaultGroupsClusterServer, createDefaultScenesClusterServer } from '@project-chip/matter.js/cluster';
-import { Device, DeviceTypeDefinition } from '@project-chip/matter.js/device';
+import { DeviceTypeDefinition } from '@project-chip/matter.js/device';
 
 import { AspectBase, BasicInformationAspect } from '@/aspects/index.js';
+import { MatterDevice } from '@/devices/matter-device.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
 export interface DeviceBaseConfig {
@@ -9,16 +10,17 @@ export interface DeviceBaseConfig {
   readonly vendorName: string;
 }
 
-export type DeviceConstructor = (entity: HomeAssistantMatterEntity, definition: DeviceTypeDefinition) => Device;
+export type DeviceConstructor = (entity: HomeAssistantMatterEntity, definition: DeviceTypeDefinition) => MatterDevice;
 
 export abstract class DeviceBase {
   public static setDeviceConstructor(ctr: DeviceConstructor): void {
     this.deviceConstructor = ctr;
   }
+
   private static deviceConstructor: DeviceConstructor;
 
   public readonly entityId: string;
-  public readonly matter: Device;
+  public readonly matter: MatterDevice;
   private readonly aspects: AspectBase[] = [];
 
   protected constructor(entity: HomeAssistantMatterEntity, definition: DeviceTypeDefinition, config: DeviceBaseConfig) {
