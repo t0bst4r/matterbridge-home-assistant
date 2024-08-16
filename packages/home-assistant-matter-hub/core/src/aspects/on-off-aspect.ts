@@ -55,7 +55,7 @@ export class OnOffAspect extends AspectBase {
 
   private turnOff = async (): Promise<void> => {
     const cluster = this.device.getClusterServer(OnOffCluster)!;
-    this.log.debug('FROM MATTER: %s changed on off state to OFF', this.entityId);
+    this.log.debug('FROM MATTER: changed on off state to OFF');
     cluster!.setOnOffAttribute(false);
     const [domain, service] = this.config?.turnOff?.service?.split('.') ?? ['homeassistant', 'turn_off'];
     await this.homeAssistantClient.callService(domain, service, this.config?.turnOn?.data?.(false), {
@@ -75,7 +75,7 @@ export class OnOffAspect extends AspectBase {
     const cluster = this.device.getClusterServer(OnOffCluster)!;
     const isOn = this.isOn(state);
     if (cluster.getOnOffAttribute() !== isOn) {
-      this.log.debug('FROM HA: %s changed on-off state to %s', state.entity_id, state.state);
+      this.log.debug('FROM HA: changed on-off state to %s', state.state);
       cluster.setOnOffAttribute(isOn);
     }
   }

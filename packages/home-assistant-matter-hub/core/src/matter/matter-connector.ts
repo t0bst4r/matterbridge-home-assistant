@@ -2,7 +2,7 @@ import debounce from 'debounce-promise';
 import _ from 'lodash';
 
 import * as devices from '@/devices/index.js';
-import { DeviceBaseConfig, EntityDomain } from '@/devices/index.js';
+import { ClimateDevice, DeviceBaseConfig, EntityDomain } from '@/devices/index.js';
 import { HomeAssistantClient, HomeAssistantClientConfig, UnsubscribeFn } from '@/home-assistant-client/index.js';
 import { logger } from '@/logging/index.js';
 import { MatterRegistry } from '@/matter/matter-registry.js';
@@ -49,7 +49,7 @@ export class MatterConnector {
     [EntityDomain.cover]: (entity, config) => new devices.CoverDevice(this.client, entity, config),
     [EntityDomain.fan]: (entity) => new devices.FanDevice(this.client, entity, this.defaultDeviceConfig),
     [EntityDomain.sensor]: (entity, config) => new devices.SensorDevice(entity, config),
-    // climate: (entity) => new ClimateDevice(this.client, entity),
+    [EntityDomain.climate]: (entity, config) => new ClimateDevice(this.client, entity, config),
   };
 
   private readonly ignoreEntities = new Set<string>();
