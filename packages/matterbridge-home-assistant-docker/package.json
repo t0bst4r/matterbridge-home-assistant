@@ -3,12 +3,12 @@
   "author": "https://github.com/t0bst4r",
   "name": "matterbridge-home-assistant-docker",
   "description": "ghcr.io/t0bst4r/matterbridge-home-assistant",
-  "version": "2.6.2",
+  "version": "2.7.0",
   "scripts": {
     "build": "./build.sh",
     "release-docker": "./publish.sh"
   },
   "dependencies": {
-    "matterbridge-home-assistant": "^2.6.2"
+    "matterbridge-home-assistant": "^2.7.0"
   }
 }

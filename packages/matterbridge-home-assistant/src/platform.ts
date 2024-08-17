@@ -5,7 +5,8 @@ import {
   MatterConnector,
   MatterRegistry,
 } from '@home-assistant-matter-hub/core';
-import type { Device, DeviceTypeDefinition } from '@project-chip/matter.js/device';
+import type { MatterDevice } from '@home-assistant-matter-hub/core';
+import type { DeviceTypeDefinition } from '@project-chip/matter.js/device';
 import { Matterbridge, MatterbridgeDevice, MatterbridgeDynamicPlatform, PlatformConfig } from 'matterbridge';
 import type { AnsiLogger } from 'matterbridge/logger';
 import { createHash } from 'node:crypto';
@@ -23,7 +24,7 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform implement
 
   private createDevice(
     vendorName: string,
-  ): (entity: HomeAssistantMatterEntity, definition: DeviceTypeDefinition) => Device {
+  ): (entity: HomeAssistantMatterEntity, definition: DeviceTypeDefinition) => MatterDevice {
     return (entity, definition) => {
       const device = new MatterbridgeDevice(definition);
 
@@ -37,7 +38,12 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform implement
       device.uniqueId = entity.matter.uniqueId;
       device.serialNumber = entity.matter.serialNumber;
       device.deviceName = entity.matter.deviceName;
-      return device;
+      return Object.assign(device, {
+        async executeCommandHandler(action: string, ...args: unknown[]): Promise<void> {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await device._executeHandler(action as any, ...args);
+        },
+      });
     };
   }
 
@@ -63,10 +69,10 @@ export class HomeAssistantPlatform extends MatterbridgeDynamicPlatform implement
   }
 
   async register(device: DeviceBase): Promise<void> {
-    await this.registerDevice(device.matter as MatterbridgeDevice);
+    await this.registerDevice(device.matter as unknown as MatterbridgeDevice);
   }
 
   async unregister(device: DeviceBase): Promise<void> {
-    await this.unregisterDevice(device.matter as MatterbridgeDevice);
+    await this.unregisterDevice(device.matter as unknown as MatterbridgeDevice);
   }
 }

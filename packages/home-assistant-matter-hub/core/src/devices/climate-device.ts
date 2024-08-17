@@ -1,6 +1,8 @@
 import { DeviceTypes } from '@project-chip/matter.js/device';
 
-import { IdentifyAspect, LevelControlAspect } from '@/aspects/index.js';
+import { IdentifyAspect } from '@/aspects/index.js';
+import { ThermostatAspect } from '@/aspects/thermostat-aspect.js';
+import { HvacMode } from '@/devices/climate/hvac-mode.js';
 import { HomeAssistantClient } from '@/home-assistant-client/index.js';
 import { HomeAssistantMatterEntity } from '@/models/index.js';
 
@@ -8,18 +10,15 @@ import { DeviceBase, DeviceBaseConfig } from './device-base.js';
 
 export class ClimateDevice extends DeviceBase {
   constructor(homeAssistantClient: HomeAssistantClient, entity: HomeAssistantMatterEntity, config: DeviceBaseConfig) {
-    super(entity, DeviceTypes.HEATING_COOLING_UNIT, config);
+    super(entity, DeviceTypes.THERMOSTAT, config);
+
+    const supportedModes = entity.attributes.hvac_modes as HvacMode[];
 
     this.addAspect(new IdentifyAspect(this.matter, entity));
     this.addAspect(
-      new LevelControlAspect(homeAssistantClient, this.matter, entity, {
-        getValue: (entity) => entity.attributes.temperature,
-        getMinValue: (entity) => entity.attributes.min_temp,
-        getMaxValue: (entity) => entity.attributes.max_temp,
-        moveToLevel: {
-          service: 'climate.set_temperature',
-          data: (temperature) => ({ temperature }),
-        },
+      new ThermostatAspect(homeAssistantClient, this.matter, entity, {
+        supportsHeating: [HvacMode.heat, HvacMode.heat_cool].some((mode) => supportedModes.includes(mode)),
+        supportsCooling: [HvacMode.cool, HvacMode.heat_cool].some((mode) => supportedModes.includes(mode)),
       }),
     );
   }

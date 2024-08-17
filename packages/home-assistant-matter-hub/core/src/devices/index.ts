@@ -1,4 +1,5 @@
 export * from './device-base.js';
+export * from './matter-device.js';
 export * from './binary_sensor-device.js';
 export * from './climate-device.js';
 export * from './light-device.js';
@@ -12,6 +13,7 @@ export * from './utils/unsupported-device-class-error.js';
 export enum EntityDomain {
   automation = 'automation',
   binary_sensor = 'binary_sensor',
+  climate = 'climate',
   cover = 'cover',
   input_boolean = 'input_boolean',
   light = 'light',

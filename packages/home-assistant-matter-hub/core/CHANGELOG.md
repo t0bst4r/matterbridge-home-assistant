@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.7.0 (2024-08-16)
+
+
+### ✨ Features
+
+* **climate:** enable basic support for climate devices ([#47](https://github.com/t0bst4r/matterbridge-home-assistant/issues/47)) ([6ffebb3](https://github.com/t0bst4r/matterbridge-home-assistant/commit/6ffebb33ea0a0567a71f3f0ac517151b7a7d5b41))
+
+
+
 ## 2.6.2 (2024-08-14)
 
 
