@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.7.1 (2024-08-17)
+
+
+### 🚀 Chore
+
+* expose SSL port in Dockerfile and enable SSL in matterbridge o… ([#265](https://github.com/t0bst4r/matterbridge-home-assistant/issues/265)) ([dc2b5e4](https://github.com/t0bst4r/matterbridge-home-assistant/commit/dc2b5e40d38642eae3054e6391764fa829721eaf))
+
+
+
 ## 2.7.0 (2024-08-16)
 
 
