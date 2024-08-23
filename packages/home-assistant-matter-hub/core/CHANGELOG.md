@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.7.2 (2024-08-23)
+
+
+### 🚀 Chore
+
+* **deps:** update all dependencies ([2c27241](https://github.com/t0bst4r/matterbridge-home-assistant/commit/2c272413c771d574bc7be714c4c28711661a99dc))
+
+
+
 ## 2.7.1 (2024-08-17)
 
 
