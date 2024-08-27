@@ -11,12 +11,34 @@ connect [HomeAssistant](https://www.home-assistant.io/) with [Matterbridge](http
 
 ---
 
-## Breaking Changes: Migrating from 1.x to 2.x
+## Public Announcement - Feature Freeze
 
-- In version 1.x this plugin was meant to be configured using multiple environment variables. Due to the growing number
-  of configuration options, this has been changed. This plugin requires to be configured using a configuration JSON file
-  or one single environment variable containing the whole JSON configuration.
-  **Please see the [configuration section](#configuration) below.**
+As the development of this project is conducted in my spare time alongside work and family commitments, my availability
+to implement new features or address bugs is limited. Additionally, I must make architectural and strategic decisions
+for this project, which sometimes necessitate significant refactoring efforts.
+
+In light of this, I am officially announcing a "feature freeze" as I prepare for a major update to the application.
+During this period, no new features will be implemented, and only critical bugs — those that render the application
+non-functional — will be addressed until the ongoing refactoring is complete. **This process is expected to take
+approximately 1 to 2 months.**
+
+Key changes included in this update will be as follows:
+
+- The application will no longer be based on `matterbridge`; a new user interface will be developed, replacing the
+  existing one.
+- The application will be renamed from `matterbridge-home-assistant` to `home-assistant-matter-hub` and relocated to a
+  new GitHub repository (which is not yet publicly accessible).
+- Users will need to uninstall their current instance of `matterbridge-home-assistant` and install the new
+  `home-assistant-matter-hub` (which will be made available soon). This transition will also require re-pairing with
+  your Matter controllers.
+
+All updates on this will be posted in the
+corresponding [discussion in GitHub](https://github.com/t0bst4r/matterbridge-home-assistant/discussions/271). Make sure
+to subscribe to this announcement thread.
+
+Thank you for your understanding and continued support.
+
+---
 
 ## Installation
 
@@ -213,7 +235,6 @@ The settings for `overrides.domains` and `overrides.entities` share the same str
     // To prevent this, use the next attribute (swapOpenAndClosePercentage).
     // Both attributes (invertPercentage and swapOpenAndClosePercentage) could be combined to invert the WHOLE behaviour.
     invertPercentage: true,
-
     // optional:
     // Some users don't want to invert the percentages, because they want it to behave "wrong" but more naturally:
     // Saying "set the cover to 10%" should lead to 10% open, or 90% closed.
@@ -241,10 +262,12 @@ This code can be used to connect your Matter controller (like Alexa, Apple Home 
 - Automations (`automation.`) are mapped to Switches and currently only support on-off control
 - Binary Sensor entities (`binary_sensor.`) provide their state (e.g. on / off)
 - Cover Devices (`cover.`) are currently all mapped to "Window Covering"
-- Fan Devices (`fan.`) are currently mapped to Dimmable Plugin Units, because most of the Matter controllers do not support fans.
+- Fan Devices (`fan.`) are currently mapped to Dimmable Plugin Units, because most of the Matter controllers do not
+  support fans.
 - Input-Boolean entities (`input_boolean.`) including on-off control
 - Light entities (`light.`) including on-off, brightness and hue & saturation control
-- Lock Devices (`lock.`) including Locking and Unlocking. Some Matter controllers (like Alexa) do not allow unlocking locks by default. It needs to be enabled in the Alexa App for each Lock.
+- Lock Devices (`lock.`) including Locking and Unlocking. Some Matter controllers (like Alexa) do not allow unlocking
+  locks by default. It needs to be enabled in the Alexa App for each Lock.
 - Media Players (`media_player.`) are mapped to Switches and currently only support on-off control
 - Scenes (`scene.`) are mapped to Switches and currently only support on-off control
 - Scripts (`script.`) are mapped to Switches and currently only support on-off control
@@ -272,8 +295,10 @@ Both are only checked once during startup, so changes will apply after restartin
 
 ### I am getting this error message `Only supported EndpointInterface implementation is Endpoint`:
 
-- This is caused by npm's module resolution of globally installed modules and project-chip's way of doing an `instanceOf` check.
-- It happens when matterbridge and matterbridge-home-assistant are not installed in **one** install command as above. See the [installation section](#installation) above.
+- This is caused by npm's module resolution of globally installed modules and project-chip's way of doing
+  an `instanceOf` check.
+- It happens when matterbridge and matterbridge-home-assistant are not installed in **one** install command as above.
+  See the [installation section](#installation) above.
 
 ## Contribution, Bug Reports and Enhancements
 
