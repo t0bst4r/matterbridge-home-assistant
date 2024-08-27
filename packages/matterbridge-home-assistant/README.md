@@ -3,7 +3,7 @@
 ---
 
 This **Matterbridge Home Assistant** package provides bindings to
-connect [HomeAssistant](https://www.home-assistant.io/) to [Matterbridge](https://github.com/Luligu/matterbridge/).
+connect [HomeAssistant](https://www.home-assistant.io/) with [Matterbridge](https://github.com/Luligu/matterbridge/).
 
 ---
 
